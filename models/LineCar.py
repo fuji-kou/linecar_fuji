@@ -19,9 +19,9 @@ from time import sleep
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 Servo_pin = 18
-GPIO.setup(self.Servo_pin, GPIO.OUT)
+GPIO.setup(Servo_pin, GPIO.OUT)
 #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
-#self.Servo = GPIO.PWM(self.Servo_pin, 50)     
+Servo = GPIO.PWM(Servo_pin, 50)     
 #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
 Servo.start(0)
 
@@ -62,16 +62,16 @@ class LineCar(object):
         if self.socket is not None:
             self.socket.close()
         
-    #改善    
-    def mv_wheel(self, velocity):      
-        command = 'v{0}\n'.format(velocity).encode()
-        self.serial.write(command)
+#     #改善    
+#     def mv_wheel(self, velocity):      
+#         command = 'v{0}\n'.format(velocity).encode()
+#         self.serial.write(command)
                      
 
     #改善
     def mv_angle(angle):    #ラインカーに目標舵角を送信する．
-        self.duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
-        self.Servo.ChangeDutyCycle(duty)     #デューティ比を変更
+        duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
+        Servo.ChangeDutyCycle(duty)     #デューティ比を変更
         time.sleep(0.3)
  
 
@@ -83,14 +83,14 @@ class LineCar(object):
             self.socket.close()
 
 #改善
-    def mv_wheel(self, velocity):
-        """ラインカーに目標速度を送信する．
-        
-        Arguments:
-            velocity {[float]} -- 速度の入力値．[cm/s]
-        """        
-        command = 'v{0}\n'.format(velocity).encode()
-        self.serial.write(command)
+#     def mv_wheel(self, velocity):
+#         """ラインカーに目標速度を送信する．
+#         
+#         Arguments:
+#             velocity {[float]} -- 速度の入力値．[cm/s]
+#         """        
+#         command = 'v{0}\n'.format(velocity).encode()
+#         self.serial.write(command)
     
     #現在のサーボの角度を返す（改善）
     def currentdirection( self ):

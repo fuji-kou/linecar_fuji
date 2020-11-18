@@ -4,10 +4,9 @@ import pygame
 from pygame.locals import *
 import RPi.GPIO as GPIO     
 from time import sleep
-from models.LineCar import LineCar
+#from models.LineCar import LineCar
 
 
-"""
 GPIO.setmode(GPIO.BCM)      
 GPIO.setwarnings(False)             #GPIOからの警告を有効にする
 
@@ -21,17 +20,17 @@ GPIO.setup(Servo_pin, GPIO.OUT)
 sleep(1)
 
 p1 = GPIO.PWM(pwm, 100)            #pwmピンの設定
+Servo = GPIO.PWM(Servo_pin, 50) 
 Servo.start(0)                      
 
-def servo_angle(angle):
+def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
     print(duty)
-    
-"""
 
-m1 = LineCar()
-m1.mv_angle()
+
+#m1 = LineCar()
+#m1.mv_angle()
 def main():  
     #パイゲームとジョイスティックの初期化
     pygame.joystick.init()      
@@ -67,27 +66,30 @@ def main():
                     l_stick = joystick.get_axis(0)#Joystick.get_axis:操作レバーの現在の傾き位置を取得 0:レバーは中央
                     input_angle = -130*l_stick
                     if round(input_angle) >= 30:
-                        m1.mv_angle(30)
+                        #m1.mv_angle(30)
+                        mv_angle(30)
                     if round(input_angle) <= -30:
-                        m1.mv_angle(-30)
+                        #m1.mv_angle(-30)
+                        mv_angle(-30)
                     if round(input_angle) == 0:
-                        m1.mv_angle(0)
+                        #m1.mv_angle(0)
+                        mv_angle(0)
                     
-#                 if e.axis == 5:
-#                     l2trigger = joystick.get_axis(5)
-#                     GPIO.output(DIR, GPIO.HIGH)
-#                     p1.start(input_speed)         #速度設定0－100
-#                     if input_speed >= 5:
-#                         p1.start(5)
-#                     
+                if e.axis == 5:
+                    l2trigger = joystick.get_axis(5)
+                    GPIO.output(DIR, GPIO.HIGH)
+                    p1.start(input_speed)         #速度設定0－100
+                    if input_speed >= 5:
+                        p1.start(5)
+                     
 
             elif e.type == pygame.locals.JOYBUTTONDOWN:        #ボタン押す
                 if e.button == 10:                             #e.botton:ボタン番号
                     active = False
                     break
-#                 if e.button == 0:
-#                     GPIO.output(DIR, GPIO.LOW)        
-#                     input_speed = -1*input_speed
+                if e.button == 0:
+                    GPIO.output(DIR, GPIO.LOW)        
+                    input_speed = -1*input_speed
                      
             elif e.type == pygame.locals.JOYBUTTONUP: #ボタン離れる
                 
@@ -103,8 +105,8 @@ if __name__ == '__main__':
         joystick.init()                             #init instance
         main()
     except KeyboardInterrupt:          
-        m1.mv_angle(0)
-        Servo.stop()                   #サーボモータをストップ
-#         p1.start(0)
+        #m1.mv_angle(0)
+        mv_angle(0)
+        Servo.stop()                   #サーボモータをストップ         p1.start(0)
         GPIO.cleanup()                 #GPIOをクリーンアップ
         sys.exit()                     #プログラムを終了
