@@ -3,29 +3,34 @@ import cv2
 import glob
 from time import sleep
 from datetime import datetime
+import os
 
-TMP_FOLDER_PATH = "./tmp/"
-MTX_PATH = TMP_FOLDER_PATH + "mtx.csv"
-DIST_PATH = TMP_FOLDER_PATH + "dist.csv"
+TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
+#print(TMP_FOLDER_PATH)
+#print(os.path.exists(TMP_FOLDER_PATH))
+MTX_PATH = TMP_FOLDER_PATH + "//mtx.csv"
+DIST_PATH = TMP_FOLDER_PATH + "//dist.csv"
+#print(MTX_PATH)
+#print(os.path.exists(MTX_PATH))
 
-# メイン関数
+
 def main():
-    calcCamera() # カメラの歪みを計算
+    calcCamera()            # カメラの歪みを計算
 
-# カメラの歪みを計算する関数
+# カメラの歪みを計算
 def calcCamera():
-    square_size = 20.0      # 正方形のサイズ(mm)
-    pattern_size = (10, 7)  # 模様のサイズ
-    pattern_points = np.zeros( (np.prod(pattern_size), 3), np.float32 ) #チェスボード（X,Y,Z）座標の指定 (Z=0)
+    square_size = 20.0              # 正方形のサイズ(mm)
+    pattern_size = (9, 6)          # 模様のサイズ
+    pattern_points = np.zeros( (np.prod(pattern_size), 3), np.float32 )     #チェスボード（X,Y,Z）座標の指定 (Z=0)
     pattern_points[:,:2] = np.indices(pattern_size).T.reshape(-1, 2)
     pattern_points *= square_size
     obj_points = []
     img_points = []
     
-    files = glob.glob("image/*.jpg")
+    files = glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\img" + "\\*.jpg")
     for fn in files:
         # 画像の取得
-        im = cv2.imread(fn,0)
+        im = cv2.imread(fn,cv2.IMREAD_GRAYSCALE)
         print ("loading..." + fn)
         # チェスボードのコーナーを検出
         found, corner = cv2.findChessboardCorners(im, pattern_size)

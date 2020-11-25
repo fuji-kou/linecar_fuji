@@ -14,5 +14,4 @@ cv2.imwrite(image_path + "\\1.jpg", image)
 cv2.waitKey()
 
 cv2.destroyAllWindows()
-
-print(image.shape)
+#print(image.shape)

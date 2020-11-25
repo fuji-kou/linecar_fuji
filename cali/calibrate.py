@@ -4,10 +4,13 @@ import glob
 from time import sleep
 from datetime import datetime
 
-TMP_FOLDER_PATH = "./tmp/"
-MTX_PATH = TMP_FOLDER_PATH + "mtx.csv"
-DIST_PATH = TMP_FOLDER_PATH + "dist.csv"
-SAVE_FOLDER_PATH = "./result/"
+TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
+MTX_PATH = TMP_FOLDER_PATH + "\\mtx.csv"
+DIST_PATH = TMP_FOLDER_PATH + "\\dist.csv"
+#print(MTX_PATH)
+#print(DIST_PATH)
+SAVE_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\result"
+#print(SAVE_FOLDER_PATH)
 
 # メイン関数
 def main():
@@ -17,8 +20,8 @@ def main():
 def calibrateImage():
     mtx, dist = loadCalibrationFile(MTX_PATH, DIST_PATH)
 
-    for fn in glob.glob("./img/*"):
-        img = cv2.imread(fn)
+    for fn in glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\*.png"):
+        img = cv2.imread(fn,cv2.IMREAD_GRAYSCALE)
         resultImg = cv2.undistort(img, mtx, dist, None) # 内部パラメータを元に画像補正
         saveImgByTime(SAVE_FOLDER_PATH, resultImg)
         sleep(1)
@@ -35,8 +38,8 @@ def loadCalibrationFile(mtx_path, dist_path):
 # 画像を時刻で保存する関数
 def saveImgByTime(dirPath, img):
     # 時刻を取得
-    date = datetime.now().strftime("%Y%m%d_%H%M%S")
-    path = dirPath + date + ".png"
+    date = datetime.now().strftime("%Y%m%d_%H%M_%S")
+    path = dirPath + date + ".jpg"
     cv2.imwrite(path, img) # ファイル保存
     print("saved: ", path)
 
