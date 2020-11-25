@@ -12,7 +12,6 @@ size = (1280, 720)
 
 now = dt.datetime.now()
 time = now.strftime('%Y%m%d-%H%M%S')
-
 writer = cv2.VideoWriter('data/camera/video_{}.mp4'.format(time), fmt, fps, size)
  
 while True:
