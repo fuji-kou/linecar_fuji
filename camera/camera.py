@@ -3,17 +3,20 @@ import numpy as np
 import datetime
 
 camera = cv2.VideoCapture(0+cv2.CAP_DSHOW)
-print(camera.set(cv2.CAP_PROP_FPS, 60))
-camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 print(type(camera))
 # <class 'cv2.VideoCapture'>
 print(camera.isOpened())
 # True
 
+#FPS,解像度の設定
+camera.set(cv2.CAP_PROP_FPS, 60)
+camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+#cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('Y','U','Y','V'))
+
+
 #動画ファイル保存用の設定
 fps = int(camera.get(cv2.CAP_PROP_FPS))                    # カメラのFPSを取得
-print(fps)
 w = int(camera.get(cv2.CAP_PROP_FRAME_WIDTH))              # カメラの横幅を取得
 h = int(camera.get(cv2.CAP_PROP_FRAME_HEIGHT))             # カメラの縦幅を取得
 fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')        # 動画保存時のfourcc設定（mp4用)
