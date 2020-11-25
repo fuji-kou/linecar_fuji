@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import datetime
+import datetime as dt
  
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
  
@@ -10,13 +10,10 @@ fps = 60.0
 size = (1280, 720)
 
 
-#now = datetime.datetime.now()
-#filename = 'camera_log' + now.strftime('%Y%m%d_%H%M%S') + '.mp4'
-#f = open(filename, 'w')
-#writer = writer(f, lineterminator='\n') 
+now = dt.datetime.now()
+time = now.strftime('%Y%m%d-%H%M%S')
 
-
-writer = cv2.VideoWriter('data/camera/video.mp4', fmt, fps, size)
+writer = cv2.VideoWriter('data/camera/video_{}.mp4'.format(time), fmt, fps, size)
  
 while True:
     _, frame = cap.read()
@@ -27,7 +24,7 @@ while True:
      
     cv2.imshow('frame', frame)
     #Enterキーで終了
-    if cv2.waitKey(1) == 13:
+    if cv2.waitKey(1) == ord('q'):
         break
  
 #保存
