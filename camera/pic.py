@@ -32,4 +32,4 @@ def save_frame_camera_key(device_num, dir_path, basename, ext='jpg', delay=1, wi
     cv2.destroyWindow(window_name)
 
 
-save_frame_camera_key(0, 'data/img', 'camera_capture')
+save_frame_camera_key(0+cv2.CAP_DSHOW, "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\img\\", 'camera_capture')

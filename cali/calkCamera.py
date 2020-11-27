@@ -8,8 +8,8 @@ import os
 TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
 #print(TMP_FOLDER_PATH)
 #print(os.path.exists(TMP_FOLDER_PATH))
-MTX_PATH = TMP_FOLDER_PATH + "//mtx.csv"
-DIST_PATH = TMP_FOLDER_PATH + "//dist.csv"
+MTX_PATH = TMP_FOLDER_PATH + "//mtx2.csv"
+DIST_PATH = TMP_FOLDER_PATH + "//dist2.csv"
 #print(MTX_PATH)
 #print(os.path.exists(MTX_PATH))
 
@@ -19,7 +19,7 @@ def main():
 
 # カメラの歪みを計算
 def calcCamera():
-    square_size = 20.0              # 正方形のサイズ(mm)
+    square_size = 21.0              # 正方形のサイズ(mm)
     pattern_size = (9, 6)          # 模様のサイズ
     pattern_points = np.zeros( (np.prod(pattern_size), 3), np.float32 )     #チェスボード（X,Y,Z）座標の指定 (Z=0)
     pattern_points[:,:2] = np.indices(pattern_size).T.reshape(-1, 2)
@@ -27,7 +27,7 @@ def calcCamera():
     obj_points = []
     img_points = []
     
-    files = glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\img" + "\\*.jpg")
+    files = glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\img\\*.jpg")
     for fn in files:
         # 画像の取得
         im = cv2.imread(fn,cv2.IMREAD_GRAYSCALE)
@@ -40,7 +40,7 @@ def calcCamera():
             corners2 = cv2.cornerSubPix(im, corner, (5,5), (-1,-1), term)
             # マークをつけて画像保存
             img = cv2.drawChessboardCorners(im, pattern_size, corners2, found)
-            saveImgByTime(TMP_FOLDER_PATH, img)
+            saveImgByTime("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\calk2020_11_27\\", img)
             sleep(1)
         # コーナーがない場合のエラー処理
         if not found:
@@ -68,8 +68,8 @@ def saveCalibrationFile(mtx, dist, mtx_path, dist_path):
 # 画像を時刻で保存する関数
 def saveImgByTime(dirPath, img):
     # 時刻を取得
-    date = datetime.now().strftime("%Y%m%d_%H%M%S")
-    path = dirPath + date + ".png"
+    date = datetime.now().strftime("%Y%m%d_%H%M_%S")
+    path = dirPath + date + ".jpg"
     cv2.imwrite(path, img) # ファイル保存
     print("saved: ", path)
 

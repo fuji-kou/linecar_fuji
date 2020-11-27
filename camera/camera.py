@@ -5,8 +5,8 @@ import sys
 from time import sleep
 
 TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
-MTX_PATH = TMP_FOLDER_PATH + "\\mtx.csv"
-DIST_PATH = TMP_FOLDER_PATH + "\\dist.csv"
+MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
+DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
 
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
 
