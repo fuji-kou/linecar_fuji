@@ -28,9 +28,9 @@ def loadCalibrationFile(mtx_path, dist_path):
  
 # #保存
 fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-fps = 60.0
+fps = 10.0
 size = (1280, 720)
-SAVE_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\camera\\"
+SAVE_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\video\\"
 now = dt.datetime.now()
 time = now.strftime('%Y%m%d_%H%M_%S')
 writer = cv2.VideoWriter(SAVE_PATH + 'video_{}.mp4'.format(time), fmt, fps, size)
