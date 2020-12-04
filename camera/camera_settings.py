@@ -1,7 +1,5 @@
 import numpy as np
-import math
 import cv2
-import glob
 import datetime as dt
 
 TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
@@ -12,20 +10,10 @@ class camera():
     def __init__(self):
        #カメラキャプチャ
         selfcap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
-
         #FPS,解像度の設定
         cap.set(cv2.CAP_PROP_FPS, 30)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
-        # # #保存
-        # fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-        # fps = 10.0
-        # size = (1280, 720)
-        # SAVE_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\video\\"
-        # now = dt.datetime.now()
-        # time = now.strftime('%Y_%m%d_%H%M_%S')
-        # writer = cv2.VideoWriter(SAVE_PATH + 'video_{}.mp4'.format(time), fmt, fps, size)
 
     # キャリブレーションCSVファイルを読み込む関数
     def loadCalibrationFile(mtx_path, dist_path):
