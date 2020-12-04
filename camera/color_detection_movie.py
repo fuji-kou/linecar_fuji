@@ -1,9 +1,6 @@
 import numpy as np
 import math
 import cv2
-import glob
-#from time import sleep
-import time
 import datetime as dt
 from camera_settings import camera
 
