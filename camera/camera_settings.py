@@ -62,6 +62,7 @@ class camera():
         maxblob["height"] = data[:, 3][max_index]  # 高さ
         maxblob["area"] = data[:, 4][max_index]   # 面積
         maxblob["center"] = center[max_index]  # 中心座標
-        
+
 
         return maxblob
+

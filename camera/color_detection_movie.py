@@ -17,7 +17,6 @@ cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-
 # # #保存
 # fmt = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
 # fps = 10.0
@@ -26,8 +25,6 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 # now = dt.datetime.now()
 # time = now.strftime('%Y_%m%d_%H%M_%S')
 # writer = cv2.VideoWriter(SAVE_PATH + 'video_{}.mp4'.format(time), fmt, fps, size)
-
-
 
 def main():    
     # データ格納用のリスト
@@ -47,6 +44,7 @@ def main():
         #赤色検出
         mask = camera.red_detect(resultImg)
         w, h = mask.shape
+        
         empty_image = np.zeros((w,h), dtype = np.uint8)
         dif = mask - empty_image
         if dif.any() == 0:      #零行列の場合
@@ -59,8 +57,9 @@ def main():
             #面積最大ブロブの中心座標を取得
             tar_x = int(target["center"][0])
             tar_y = int(target["center"][1])
+
         
-            # フレームに面積最大ブロブの中心周囲を円で描く
+            #フレームに面積最大ブロブの中心周囲を円で描く
             cv2.circle(resultImg, (tar_x, tar_y), 30, (0, 200, 0),
                     thickness=3, lineType=cv2.LINE_AA)
 
@@ -78,14 +77,14 @@ def main():
             distance = math.sqrt(dif_x^2 + dif_y^2)
             print(distance)
 
-        # 結果表示
+        #結果表示
         cv2.imshow('Frame', resultImg)
         cv2.imshow("Mask", mask)
 
         #保存
         #writer.write(resultImg)
-        
-        # qキーが押されたら途中終了
+
+        #qキーが押されたら途中終了
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
 
