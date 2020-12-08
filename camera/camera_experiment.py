@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import cv2
-from camera_settings import camera
+from experiment_settings import camera
 import csv
 
 #カメラキャプチャ
@@ -60,7 +60,7 @@ def main():
             break
 
     #保存
-    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\12_08\\data_{distance}.csv", 'w') as f:
+    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\12_09\\data_{distance}.csv", 'w') as f:
         writer = csv.writer(f, lineterminator = '\n')
         for i in range(len(area_list)):
             writer.writerows([[area_list[i]]])
