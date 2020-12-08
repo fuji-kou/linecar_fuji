@@ -55,27 +55,42 @@ def main():
             target = camera.analysis_blob(mask)
             
             #面積最大ブロブの中心座標を取得
-            tar_x = int(target["center"][0])
-            tar_y = int(target["center"][1])
-
+            tar_x1 = int(target["center1"][0])
+            tar_y1 = int(target["center1"][1])
+            
+            tar_x2 = int(target["center2"][0])
+            tar_y2 = int(target["center2"][1])
         
             #フレームに面積最大ブロブの中心周囲を円で描く
-            cv2.circle(resultImg, (tar_x, tar_y), 30, (0, 200, 0),
+            cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
                     thickness=3, lineType=cv2.LINE_AA)
+            
+            if tar_x2 == 0:
+                pass
+            
+            else:
+                cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
+                        thickness=3, lineType=cv2.LINE_AA)                    
 
             #中心座標
             center_x = 640
             center_y = 360
 
             #中心ピクセルから認識した赤色の中心までを直線描画，cv2.line(画像,座標1,座標2,色,太さ)
-            cv2.line(resultImg,(tar_x, tar_y),(640,360),(0,255,0),3)
+            cv2.line(resultImg,(tar_x1, tar_y1),(640,360),(0,255,0),3)
+            cv2.line(resultImg,(tar_x2, tar_y2),(640,360),(0,200,0),3)
 
             #x座標とy座標をピクセルからcmに変換
-            dif_x = round(abs(center_x - tar_x) * (398/1280))
-            dif_y = round(abs(center_y - tar_y) * (107/360))
+            dif_x1 = round(abs(center_x - tar_x1) * (398/1280))
+            dif_y1 = round(abs(center_y - tar_y1) * (107/360))
 
-            distance = math.sqrt(dif_x^2 + dif_y^2)
-            print(distance)
+            dif_x2 = round(abs(center_x - tar_x2) * (398/1280))
+            dif_y2 = round(abs(center_y - tar_y2) * (107/360))            
+
+            distance1 = math.sqrt(dif_x1^2 + dif_y1^2)
+            distance2 = math.sqrt(dif_x2^2 + dif_y2^2)
+            print(distance1)
+            print(distance2)
 
         #結果表示
         cv2.imshow('Frame', resultImg)

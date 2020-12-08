@@ -21,6 +21,7 @@ def main():
     # データ格納用のリスト
     data = []
     area_list = []
+    distance = 20
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -59,7 +60,7 @@ def main():
             break
 
     #保存
-    with open("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\data.csv", 'w') as f:
+    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\12_08\\data_{distance}.csv", 'w') as f:
         writer = csv.writer(f, lineterminator = '\n')
         for i in range(len(area_list)):
             writer.writerows([[area_list[i]]])
