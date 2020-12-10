@@ -21,7 +21,7 @@ def main():
     # データ格納用のリスト
     data = []
     area_list = []
-    distance = 9999
+    distance = 32_2
 
     while(cap.isOpened()):
         ret, frame = cap.read()

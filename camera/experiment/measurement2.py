@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import cv2
-from experiment_settings import camera
+from experiment_settings2 import camera
 import csv
 
 #カメラキャプチャ
@@ -22,7 +22,7 @@ def main():
     data = []
 
     real_distance_list = []
-    distance = 65
+    distance = 111111
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -38,20 +38,32 @@ def main():
         if dif.any() == 0:      #零行列の場合
             pass
 
-        else:
             #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
             target = camera.analysis_blob(mask)
+            
             #面積最大ブロブの中心座標を取得
-            tar_x = int(target["center"][0])
-            tar_y = int(target["center"][1])            
+            tar_x1 = int(target["center1"][0])
+            tar_y1 = int(target["center1"][1])
+            
+            tar_x2 = int(target["center2"][0])
+            tar_y2 = int(target["center2"][1])
+        
             #フレームに面積最大ブロブの中心周囲を円で描く
-            cv2.circle(resultImg, (tar_x, tar_y), 30, (0, 200, 0),
+            cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
                     thickness=3, lineType=cv2.LINE_AA)
+            
+            if tar_x2 == 0:
+                pass
+            
+            else:
+                cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
+                        thickness=3, lineType=cv2.LINE_AA)                    
 
-            area = target['area']       #赤の面積
-            area = area/(1280*720)*100      #割合
-            area = round(159.55*area**(-0.525))
-            real_distance_list.append(area)
+
+                area = target['area1']       #赤の面積
+                area = area1/(1280*720)*100      #割合
+                area = round(159.55*area1**(-0.525))
+                real_distance_list.append(area)
             
         # 結果表示
         cv2.imshow('Frame', resultImg)
