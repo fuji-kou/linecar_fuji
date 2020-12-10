@@ -22,7 +22,7 @@ def main():
     data = []
 
     real_distance_list = []
-    distance = 6000
+    distance = 8888
 
     while(cap.isOpened()):
         ret, frame = cap.read()
