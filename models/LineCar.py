@@ -7,14 +7,23 @@ from time import sleep
 import sys
 from io import StringIO
 
-import RPi.GPIO as GPIO     
-from time import sleep
-
 sys.path.append('../')
 import linecar_settings as sets
 from controllers.FujitaControl import FujitaControl
-from controllers.PurePursuitControl import PurePursuitControl
-from controllers.FixedAngleTestControl import FixedAngleTestControl
+
+#ラズパイ
+import RPi.GPIO as GPIO     
+from time import sleep
+
+#GPIOと舵角センサー調整の儀式．   
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+Servo_pin = 18
+GPIO.setup(self.Servo_pin, GPIO.OUT)
+#PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
+#self.Servo = GPIO.PWM(self.Servo_pin, 50)     
+#パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
+Servo.start(0)
 
 
 class LineCar(object):    
@@ -24,36 +33,18 @@ class LineCar(object):
         # Select control method.
         self.controller = FujitaControl()
         # USB
-        self.serial = None
         self.socket = None
-        #GPIOと舵角センサー調整の儀式．   
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        self.Servo_pin = 18
-        GPIO.setup(self.Servo_pin, GPIO.OUT)
-        #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
-#         self.Servo = GPIO.PWM(self.Servo_pin, 50)     
-        #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
-        self.Servo.start(0)
         
         
 #     実験用のセットアップを行う．
 #     def setup4experiment(self):
-
-#         self.serial_start()
 #         self.socket_start()
 #         self.init_steering_angle()
-#     
+
 #     def setup4movement(self):
 #         """移動用のセットアップを行う．
 #         """        
-#         self.serial_start()
 #         self.init_steering_angle()
-
-#    本体とのシリアル通信を始める．
-#    def serial_start(self):        
-#        self.serial = serial.Serial(sets.COM_PORT, sets.BAUDRATE, timeout=sets.TIMEOUT)
-#        time.sleep(3)
 
     def socket_start(self):
         """GPSのデータ取得に使うソケットを開く．
@@ -67,8 +58,7 @@ class LineCar(object):
             
     def stop(self):    #終了処理
         self.p1.start(0)
-        # if self.serial is not None:
-        #     self.serial.close()
+
         if self.socket is not None:
             self.socket.close()
         
@@ -89,11 +79,10 @@ class LineCar(object):
         """終了処理
         """        
         self.p1.start(0)
-        if self.serial is not None:
-            self.serial.close()
         if self.socket is not None:
             self.socket.close()
 
+#改善
     def mv_wheel(self, velocity):
         """ラインカーに目標速度を送信する．
         
@@ -103,11 +92,11 @@ class LineCar(object):
         command = 'v{0}\n'.format(velocity).encode()
         self.serial.write(command)
     
-    #現在のサーボの角度を返す
+    #現在のサーボの角度を返す（改善）
     def currentdirection( self ):
         return self.direction
 
-
+#改善
 #     def get_current_angle(self):
 #         """ラインカーから現在の舵角を教えてもらう．
 #         

@@ -4,7 +4,6 @@ import csv
 import linecar_settings as sets
 from models.LineCar import LineCar
 from controllers.FujitaControl import FujitaControl
-from controllers.PurePursuitControl import PurePursuitControl
 
 
 def main():
