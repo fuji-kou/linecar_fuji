@@ -7,26 +7,29 @@ from time import sleep
 from models.LineCar import LineCar
 
 
+"""
+GPIO.setmode(GPIO.BCM)      
+GPIO.setwarnings(False)             #GPIOからの警告を有効にする
 
-# GPIO.setmode(GPIO.BCM)      
-# GPIO.setwarnings(False)             #GPIOからの警告を有効にする
+pwm = 23                           #pwmピンを23に設定
+DIR = 24                           #DIRピンを24に設定
+Servo_pin = 18
 
-# pwm = 23                           #pwmピンを23に設定
-# DIR = 24                           #DIRピンを24に設定
-# Servo_pin = 18
+GPIO.setup(pwm, GPIO.OUT)      #出力設定          
+GPIO.setup(DIR, GPIO.OUT)
+GPIO.setup(Servo_pin, GPIO.OUT)  
+sleep(1)
 
-# GPIO.setup(pwm, GPIO.OUT)      #出力設定          
-# GPIO.setup(DIR, GPIO.OUT)
-# GPIO.setup(Servo_pin, GPIO.OUT)  
-# sleep(1)
+p1 = GPIO.PWM(pwm, 100)            #pwmピンの設定
+Servo.start(0)                      
 
-# p1 = GPIO.PWM(pwm, 100)            #pwmピンの設定
-# Servo.start(0)                      
+def servo_angle(angle):
+    duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
+    Servo.ChangeDutyCycle(duty)     #デューティ比を変更
+    print(duty)
+    
+"""
 
-# def servo_angle(angle):
-#     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
-#     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
-#     print(duty)
 m1 = LineCar()
 m1.mv_angle()
 def main():  

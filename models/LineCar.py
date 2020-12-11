@@ -26,21 +26,20 @@ class LineCar(object):
         # USB
         self.serial = None
         self.socket = None
-        
-        #GPIOと舵角センサー調整の儀式．    
+        #GPIOと舵角センサー調整の儀式．   
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         self.Servo_pin = 18
         GPIO.setup(self.Servo_pin, GPIO.OUT)
-        #PWMの設定
-        self.Servo = GPIO.PWM(self.Servo_pin, 50)     #GPIO.PWM(ポート番号, 周波数[Hz])
-        
+        #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
+#         self.Servo = GPIO.PWM(self.Servo_pin, 50)     
         #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
-        self.Servo.start(0)       
-
+        self.Servo.start(0)
+        
+        
+#     実験用のセットアップを行う．
 #     def setup4experiment(self):
-#         """実験用のセットアップを行う．
-#         """        
+
 #         self.serial_start()
 #         self.socket_start()
 #         self.init_steering_angle()
@@ -51,9 +50,8 @@ class LineCar(object):
 #         self.serial_start()
 #         self.init_steering_angle()
 
-#    def serial_start(self):
-        """本体とのシリアル通信を始める．
-        """        
+#    本体とのシリアル通信を始める．
+#    def serial_start(self):        
 #        self.serial = serial.Serial(sets.COM_PORT, sets.BAUDRATE, timeout=sets.TIMEOUT)
 #        time.sleep(3)
 
@@ -82,8 +80,8 @@ class LineCar(object):
 
     #改善
     def mv_angle(angle):    #ラインカーに目標舵角を送信する．
-        duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
-        Servo.ChangeDutyCycle(duty)     #デューティ比を変更
+        self.duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
+        self.Servo.ChangeDutyCycle(duty)     #デューティ比を変更
         time.sleep(0.3)
  
 
@@ -105,22 +103,26 @@ class LineCar(object):
         command = 'v{0}\n'.format(velocity).encode()
         self.serial.write(command)
     
+    #現在のサーボの角度を返す
+    def currentdirection( self ):
+        return self.direction
 
-    def get_current_angle(self):
-        """ラインカーから現在の舵角を教えてもらう．
-        
-        Returns:
-            current_angle[int] -- ラインカーの現在の舵角．[mil]
-        """
-        self.serial.write(b'a?\n')
-        while True:
-            res = self.serial.readline().decode()
-            if 'A=' in res:
-                res = res.split(' ')[0]
-                res = res.lstrip('A=').rstrip('mil')
-                current_angle = int(res)
-                break      
-        return current_angle
+
+#     def get_current_angle(self):
+#         """ラインカーから現在の舵角を教えてもらう．
+#         
+#         Returns:
+#             current_angle[int] -- ラインカーの現在の舵角．[mil]
+#         """
+#         self.serial.write(b'a?\n')
+#         while True:
+#             res = self.serial.readline().decode()
+#             if 'A=' in res:
+#                 res = res.split(' ')[0]
+#                 res = res.lstrip('A=').rstrip('mil')
+#                 current_angle = int(res)
+#                 break      
+#         return current_angle
 
     def get_current_position(self):
         """現在地を取得する．
