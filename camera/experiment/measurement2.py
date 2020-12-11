@@ -61,16 +61,18 @@ def main():
                 cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
                         thickness=3, lineType=cv2.LINE_AA)                    
 
-
-            area1 = target['area1']       #赤の面積
-            area1 = area1/(1280*720)*100      #割合
-            area1 = round(159.55*area1**(-0.525))
+            #２つの計測対象の面積をリストに格納
+            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
+            (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
+            (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525)))
             real_distance_list1.append(area1)
-
-            area2 = target['area2']       #赤の面積
-            area2 = area2/(1280*720)*100      #割合
-            area2 = round(159.55*area2**(-0.525))
             real_distance_list2.append(area2)
+            
+
+            #area2 = target['area2']       #赤の面積
+            # area2 = area2/(1280*720)*100      #割合
+            # area2 = round(159.55*area2**(-0.525))
+            # real_distance_list2.append(area2)
             
         # 結果表示
         cv2.imshow('Frame', resultImg)
