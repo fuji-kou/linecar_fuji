@@ -69,17 +69,18 @@ class LineCar(object):
             
     def stop(self):    #終了処理
         self.p1.start(0)
-        if self.serial is not None:
-            self.serial.close()
+        # if self.serial is not None:
+        #     self.serial.close()
         if self.socket is not None:
             self.socket.close()
         
-        
+    #改善    
     def mv_wheel(self, velocity):      
         command = 'v{0}\n'.format(velocity).encode()
         self.serial.write(command)
                      
- 
+
+    #改善
     def mv_angle(angle):    #ラインカーに目標舵角を送信する．
         duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
         Servo.ChangeDutyCycle(duty)     #デューティ比を変更
@@ -89,7 +90,7 @@ class LineCar(object):
     def stop(self):
         """終了処理
         """        
-        self.mv_wheel(0)
+        self.p1.start(0)
         if self.serial is not None:
             self.serial.close()
         if self.socket is not None:
