@@ -38,6 +38,7 @@ def main():
         if dif.any() == 0:      #零行列の場合
             pass
 
+        else:
             #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
             target = camera.analysis_blob(mask)
             
@@ -60,10 +61,10 @@ def main():
                         thickness=3, lineType=cv2.LINE_AA)                    
 
 
-                area = target['area1']       #赤の面積
-                area = area1/(1280*720)*100      #割合
-                area = round(159.55*area1**(-0.525))
-                real_distance_list.append(area)
+            area1 = target['area1']       #赤の面積
+            area1 = area1/(1280*720)*100      #割合
+            area1 = round(159.55*area1**(-0.525))
+            real_distance_list.append(area1)
             
         # 結果表示
         cv2.imshow('Frame', resultImg)
