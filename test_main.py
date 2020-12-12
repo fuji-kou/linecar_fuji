@@ -31,7 +31,7 @@ def mv_angle(angle):
 def main():
     record = []
 
-    m1 = LineCar.LineCar()
+    m1 = LineCar()
     m1.setup4experiment()
     m1.controller.prepare()
     # 発進

@@ -71,7 +71,7 @@ def main():
                     GPIO.output(sets.DIR, GPIO.HIGH)
                     p1.start(input_speed)         #速度設定0－100
                     if input_speed >= 5:
-                        p1.start(5)
+                        p1.start(15)
                      
             elif e.type == pygame.locals.JOYBUTTONDOWN:        #ボタン押す
                 if e.button == 10:                             #e.botton:ボタン番号
