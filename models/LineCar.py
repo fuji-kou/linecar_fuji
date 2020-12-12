@@ -15,15 +15,15 @@ from controllers.FujitaControl import FujitaControl
 import RPi.GPIO as GPIO     
 from time import sleep
 
-#GPIOと舵角センサー調整の儀式．   
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-Servo_pin = 18
-GPIO.setup(Servo_pin, GPIO.OUT)
-#PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
-Servo = GPIO.PWM(Servo_pin, 50)     
-#パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
-Servo.start(0)
+# #GPIOと舵角センサー調整の儀式．   
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setwarnings(False)
+# Servo_pin = 18
+# GPIO.setup(Servo_pin, GPIO.OUT)
+# #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
+# Servo = GPIO.PWM(Servo_pin, 50)     
+# #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
+# Servo.start(0)
 
 
 class LineCar(object):    
@@ -32,8 +32,28 @@ class LineCar(object):
         self.gpsinfo = None
         # Select control method.
         self.controller = FujitaControl()
-        # USB
+         # USB
         self.socket = None
+        
+        #GPIOと舵角センサー調整の儀式．   
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        Servo_pin = 18
+        GPIO.setup(Servo_pin, GPIO.OUT)
+        #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
+        self.Servo = GPIO.PWM(Servo_pin, 50)     
+        #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
+        self.Servo.start(0)
+        
+        
+        #改善
+    def mv_angle(self, angle):    #ラインカーに目標舵角を送信する．
+        duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
+        self.Servo.ChangeDutyCycle(duty)     #デューティ比を変更
+        time.sleep(0.3)
+        
+ 
+
         
         
 #     実験用のセットアップを行う．
@@ -67,13 +87,6 @@ class LineCar(object):
 #         command = 'v{0}\n'.format(velocity).encode()
 #         self.serial.write(command)
                      
-
-    #改善
-    def mv_angle(angle):    #ラインカーに目標舵角を送信する．
-        duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
-        Servo.ChangeDutyCycle(duty)     #デューティ比を変更
-        time.sleep(0.3)
- 
 
     def stop(self):
         """終了処理
