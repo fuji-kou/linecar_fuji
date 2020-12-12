@@ -32,48 +32,35 @@ class LineCar(object):
         self.gpsinfo = None
         # Select control method.
         self.controller = FujitaControl()
-         # USB
+        # USB
         self.socket = None
-        
-        #GPIOの設定   
+        #　GPIOの設定   
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        #サーボモータ,モータのピンの設定
+        #　サーボモータ,モータのピンの設定
         Servo_pin = 18
         pwm = 23                           #pwmピンを23に設定
         DIR = 24                           #DIRピンを24に設定
         GPIO.setup(Servo_pin, GPIO.OUT)
         GPIO.setup(pwm, GPIO.OUT)      #出力設定          
         GPIO.setup(DIR, GPIO.OUT) 
-        
-        #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
+        #　PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
         self.Servo = GPIO.PWM(Servo_pin, 50)
         self.p1 = GPIO.PWM(pwm, 100)            
-        #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
+        #　パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
         self.Servo.start(0)
         
-    def mv_angle(self, angle):    #ラインカーに目標舵角を送信する．
-        duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
-        self.Servo.ChangeDutyCycle(duty)     #デューティ比を変更
-        time.sleep(0.3)
-        
- 
+    # 実験用のセットアップ(ok)
+    def setup4experiment(self):
+        self.socket_start()
+        self.init_steering_angle()
 
-        
-        
-#     実験用のセットアップを行う．
-#     def setup4experiment(self):
-#         self.socket_start()
-#         self.init_steering_angle()
+    # 移動用のセットアップ(ok)
+    def setup4movement(self):   
+        self.init_steering_angle()
 
-#     def setup4movement(self):
-#         """移動用のセットアップを行う．
-#         """        
-#         self.init_steering_angle()
-
+    # GPSのデータ取得に使うソケットを開く(ok)
     def socket_start(self):
-        """GPSのデータ取得に使うソケットを開く．
-        """        
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -81,59 +68,54 @@ class LineCar(object):
         except ConnectionRefusedError:
             self.socket = None
             
-    def stop(self):    #終了処理
-        self.p1.start(0)
-
-        if self.socket is not None:
-            self.socket.close()
-        
-#     #改善    
-#     def mv_wheel(self, velocity):      
-#         command = 'v{0}\n'.format(velocity).encode()
-#         self.serial.write(command)
-                     
-
+    # 舵角センサ調整儀式(ok?)
+    def init_steering_angle(self):
+        self.mv_angle(0)
+            
+    # #終了処理(ok)
     def stop(self):
-        """終了処理
-        """        
+        #GPIO.output(DIR, GPIO.LOW)
         self.p1.start(0)
         if self.socket is not None:
             self.socket.close()
-
-#改善
+         
+      # ラインカーに目標速度を送信(arduinoとの通信　直接指定すればok)   
 #     def mv_wheel(self, velocity):
-#         """ラインカーに目標速度を送信する．
-#         
+#         """
 #         Arguments:
 #             velocity {[float]} -- 速度の入力値．[cm/s]
 #         """        
 #         command = 'v{0}\n'.format(velocity).encode()
 #         self.serial.write(command)
     
-    #現在のサーボの角度を返す（改善）
-    def currentdirection( self ):
-        return self.direction
+#     #現在のサーボの角度を返す
+#     def currentdirection( self ):
+#         return self.direction
+  
+    def mv_angle(self, angle):    #ラインカーに目標舵角を送信する．
+        duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
+        self.Servo.ChangeDutyCycle(duty)     #デューティ比を変更
+        time.sleep(0.3)  
 
-#改善
-#     def get_current_angle(self):
-#         """ラインカーから現在の舵角を教えてもらう．
-#         
-#         Returns:
-#             current_angle[int] -- ラインカーの現在の舵角．[mil]
-#         """
-#         self.serial.write(b'a?\n')
-#         while True:
-#             res = self.serial.readline().decode()
-#             if 'A=' in res:
-#                 res = res.split(' ')[0]
-#                 res = res.lstrip('A=').rstrip('mil')
-#                 current_angle = int(res)
-#                 break      
-#         return current_angle
-
+    def get_current_angle(self):
+        """ラインカーから現在の舵角を教えてもらう．
+        
+        Returns:
+            current_angle[int] -- ラインカーの現在の舵角．[mil]
+        """
+        self.serial.write(b'a?\n')
+        while True:
+            res = self.serial.readline().decode()
+            if 'A=' in res:
+                res = res.split(' ')[0]
+                res = res.lstrip('A=').rstrip('mil')
+                current_angle = int(res)
+                break      
+        return current_angle
+    
+    # 現在地を取得
     def get_current_position(self):
-        """現在地を取得する．
-
+        """
         get_gpsinfo()の返す値のうちlat/lonだけをfloatで返す．
         
         Returns:
@@ -144,12 +126,10 @@ class LineCar(object):
 
         return current_position
 
+    # socketを介してRTK-GPSのデータを取得
     def _get_gpsinfo(self):
         # TODO; 実機と通信しながらデバッグ
-        """socketを介してRTK-GPSのデータを取得する．
-
-        外からは呼ばない（予定）
-        
+        """
         Returns:
             dlist{[str]} -- GPS関連の全部で15個の数値．
         """        
