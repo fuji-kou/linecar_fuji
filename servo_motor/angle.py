@@ -22,21 +22,20 @@ def mv_angle(angle):
 
 
 #動作テスト：サーボモータの角度をデューティ比で制御(デューティ比[0-100%])
-"""
+
 while True:
     try:
-        servo_angle(0)
-        time.sleep(1)
-        servo_angle(-30)               #サーボモータ -30°
-        time.sleep(1)
-        servo_angle(0)
-        time.sleep(1)
-        servo_angle(30)                #サーボモータ  30°
-        time.sleep(1)
+        mv_angle(0)
+        time.sleep(5)
+        mv_angle(-15)               #サーボモータ -30°
+        time.sleep(5)
+        mv_angle(0)
+        time.sleep(5)
+        mv_angle(15)                #サーボモータ  30°
+        time.sleep(5)
 
     except KeyboardInterrupt:          #Ctrl+Cキーが押された
-        servo_angle(0)
+        mv_angle(0)
         Servo.stop()                   #サーボモータをストップ
         GPIO.cleanup()                 #GPIOをクリーンアップ
         sys.exit()                     #プログラムを終了
-"""
