@@ -4,6 +4,11 @@
 # BAUDRATE = '38400'
 # TIMEOUT = 0.1
 
+# raspi(pin)
+Servo_pin = 18
+pwm = 23                           #pwmピンを23に設定
+DIR = 24                           #DIRピンを24に設定
+
 # socket
 ADDRESS = '127.0.0.1'
 PORT_NUM = 52002

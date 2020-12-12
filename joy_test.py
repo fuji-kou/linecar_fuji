@@ -49,7 +49,7 @@ def main():
                     
                 if e.axis == 5:
                     l2trigger = joystick.get_axis(5)
-                    #GPIO.output(DIR, GPIO.HIGH)
+                    GPIO.output(m1.DIR, GPIO.HIGH)
                     m1.p1.start(input_speed)         #速度設定0－100
                     if input_speed >= 5:
                         m1.p1.start(5)
@@ -59,7 +59,7 @@ def main():
                     active = False
                     break
                 if e.button == 0:
-                    GPIO.output(DIR, GPIO.LOW)        
+                    GPIO.output(m1.DIR, GPIO.LOW)        
                     input_speed = -1*input_speed
                      
             elif e.type == pygame.locals.JOYBUTTONUP: #ボタン離れる

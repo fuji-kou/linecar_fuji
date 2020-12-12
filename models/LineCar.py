@@ -15,17 +15,6 @@ from controllers.FujitaControl import FujitaControl
 import RPi.GPIO as GPIO     
 from time import sleep
 
-# #GPIOと舵角センサー調整の儀式．   
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setwarnings(False)
-# Servo_pin = 18
-# GPIO.setup(Servo_pin, GPIO.OUT)
-# #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
-# Servo = GPIO.PWM(Servo_pin, 50)     
-# #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
-# Servo.start(0)
-
-
 class LineCar(object):    
     def __init__(self):
         self.REFERENCE_POINT = sets.REFERENCE_POINT
@@ -34,21 +23,21 @@ class LineCar(object):
         self.controller = FujitaControl()
         # USB
         self.socket = None
-        #　GPIOの設定   
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        #　サーボモータ,モータのピンの設定
-        Servo_pin = 18
-        pwm = 23                           #pwmピンを23に設定
-        DIR = 24                           #DIRピンを24に設定
-        GPIO.setup(Servo_pin, GPIO.OUT)
-        GPIO.setup(pwm, GPIO.OUT)      #出力設定          
-        GPIO.setup(DIR, GPIO.OUT) 
-        #　PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
-        self.Servo = GPIO.PWM(Servo_pin, 50)
-        self.p1 = GPIO.PWM(pwm, 100)            
-        #　パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
-        self.Servo.start(0)
+#         #　GPIOの設定   
+#         GPIO.setmode(GPIO.BCM)
+#         GPIO.setwarnings(False)
+#         #　サーボモータ,モータのピンの設定
+#         Servo_pin = 18
+#         pwm = 23                           #pwmピンを23に設定
+#         DIR = 24                           #DIRピンを24に設定
+#         GPIO.setup(Servo_pin, GPIO.OUT)
+#         GPIO.setup(pwm, GPIO.OUT)      #出力設定          
+#         GPIO.setup(DIR, GPIO.OUT) 
+#         #　PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
+#         self.Servo = GPIO.PWM(Servo_pin, 50)
+#         self.p1 = GPIO.PWM(pwm, 100)            
+#         #　パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
+#         self.Servo.start(0)
         
     # 実験用のセットアップ(ok)
     def setup4experiment(self):
@@ -92,28 +81,34 @@ class LineCar(object):
 #     def currentdirection( self ):
 #         return self.direction
   
-    def mv_angle(self, angle):    #ラインカーに目標舵角を送信する．
-        duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
-        self.Servo.ChangeDutyCycle(duty)     #デューティ比を変更
-        time.sleep(0.3)  
-
-    def get_current_angle(self):
-        """ラインカーから現在の舵角を教えてもらう．
+#     # ラインカーに目標舵角を送信
+#     def mv_angle(self, angle):    
+#         duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180     # 角度からデューティ比を求める
+#         self.Servo.ChangeDutyCycle(duty)                   # デューティ比を変更
+#         time.sleep(0.3)
         
-        Returns:
-            current_angle[int] -- ラインカーの現在の舵角．[mil]
-        """
-        self.serial.write(b'a?\n')
-        while True:
-            res = self.serial.readline().decode()
-            if 'A=' in res:
-                res = res.split(' ')[0]
-                res = res.lstrip('A=').rstrip('mil')
-                current_angle = int(res)
-                break      
+    def get_current_angle(self):
+        
+
+
         return current_angle
+#     def get_current_angle(self):
+#         """ラインカーから現在の舵角を教えてもらう．
+#         
+#         Returns:
+#             current_angle[int] -- ラインカーの現在の舵角．[mil]
+#         """
+#         self.serial.write(b'a?\n')
+#         while True:
+#             res = self.serial.readline().decode()
+#             if 'A=' in res:
+#                 res = res.split(' ')[0]
+#                 res = res.lstrip('A=').rstrip('mil')
+#                 current_angle = int(res)
+#                 break      
+#         return current_angle
     
-    # 現在地を取得
+    # 現在地を取得ok
     def get_current_position(self):
         """
         get_gpsinfo()の返す値のうちlat/lonだけをfloatで返す．
@@ -126,7 +121,7 @@ class LineCar(object):
 
         return current_position
 
-    # socketを介してRTK-GPSのデータを取得
+    # socketを介してRTK-GPSのデータを取得ok
     def _get_gpsinfo(self):
         # TODO; 実機と通信しながらデバッグ
         """
