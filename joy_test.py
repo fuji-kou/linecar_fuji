@@ -6,24 +6,11 @@ import RPi.GPIO as GPIO
 from time import sleep
 from models import LineCar
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)             #GPIOからの警告を有効にする
-
-pwm = 23                           #pwmピンを23に設定
-DIR = 24                           #DIRピンを24に設定
-
-GPIO.setup(pwm, GPIO.OUT)      #出力設定          
-GPIO.setup(DIR, GPIO.OUT) 
-sleep(1)
-
-p1 = GPIO.PWM(pwm, 100)            #pwmピンの設定
-
 m1 = LineCar.LineCar()
 def main():  
     #パイゲームとジョイスティックの初期化
     pygame.joystick.init()      
     pygame.init()
-
     
     try:
         joystick = pygame.joystick.Joystick(0)      #joystick instanceの作成
@@ -62,12 +49,11 @@ def main():
                     
                 if e.axis == 5:
                     l2trigger = joystick.get_axis(5)
-                    GPIO.output(DIR, GPIO.HIGH)
-                    p1.start(input_speed)         #速度設定0－100
+                    #GPIO.output(DIR, GPIO.HIGH)
+                    m1.p1.start(input_speed)         #速度設定0－100
                     if input_speed >= 5:
-                        p1.start(5)
-                     
-
+                        m1.p1.start(5)
+                        
             elif e.type == pygame.locals.JOYBUTTONDOWN:        #ボタン押す
                 if e.button == 10:                             #e.botton:ボタン番号
                     active = False
@@ -77,11 +63,8 @@ def main():
                     input_speed = -1*input_speed
                      
             elif e.type == pygame.locals.JOYBUTTONUP: #ボタン離れる
-                
                 if e.button == 0:
                     x_button = False
-            
-   
 
 if __name__ == '__main__':
     pygame.joystick.init()

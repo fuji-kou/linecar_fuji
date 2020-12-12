@@ -35,18 +35,23 @@ class LineCar(object):
          # USB
         self.socket = None
         
-        #GPIOと舵角センサー調整の儀式．   
+        #GPIOの設定   
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
+        #サーボモータ,モータのピンの設定
         Servo_pin = 18
+        pwm = 23                           #pwmピンを23に設定
+        DIR = 24                           #DIRピンを24に設定
         GPIO.setup(Servo_pin, GPIO.OUT)
+        GPIO.setup(pwm, GPIO.OUT)      #出力設定          
+        GPIO.setup(DIR, GPIO.OUT) 
+        
         #PWMの設定:GPIO.PWM(ポート番号, 周波数[Hz])
-        self.Servo = GPIO.PWM(Servo_pin, 50)     
+        self.Servo = GPIO.PWM(Servo_pin, 50)
+        self.p1 = GPIO.PWM(pwm, 100)            
         #パルス出力開始。　servo.start( [デューティサイクル 0~100%] )とりあえずゼロ指定だとサイクルが生まれないので特に動かない？
         self.Servo.start(0)
         
-        
-        #改善
     def mv_angle(self, angle):    #ラインカーに目標舵角を送信する．
         duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
         self.Servo.ChangeDutyCycle(duty)     #デューティ比を変更
