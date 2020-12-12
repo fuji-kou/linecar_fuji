@@ -26,7 +26,7 @@ Servo.start(0)
 def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
-    print(duty)
+    print(angle)
 
 
 #m1 = LineCar()
