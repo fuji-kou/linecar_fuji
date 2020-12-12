@@ -14,7 +14,7 @@ Servo = GPIO.PWM(Servo_pin, 50)     #GPIO.PWM(ポート番号, 周波数[Hz])
 Servo.start(0)                      #Servo.start(デューティ比[0-100%])
 
 #角度からデューティ比を求める関数
-def servo_angle(angle):
+def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
     time.sleep(0.3)
