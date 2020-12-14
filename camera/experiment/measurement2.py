@@ -86,12 +86,13 @@ def main():
     with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data1_{distance}.csv", 'w') as f:
         writer = csv.writer(f, lineterminator = '\n')
         for i in range(len(real_distance_list1)):
-            writer.writerows([[real_distance_list1[i]]])
+            writer.writerows([[real_distance_list1[i], real_distance_list2[i]]])
+           
 
-    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data2_{distance}.csv", 'w') as f:
-        writer2 = csv.writer(f, lineterminator = '\n')
-        for i in range(len(real_distance_list2)):
-            writer2.writerows([[real_distance_list2[i]]])
+    # with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data2_{distance}.csv", 'w') as f:
+    #     writer2 = csv.writer(f, lineterminator = '\n')
+    #     for i in range(len(real_distance_list2)):
+    #         writer2.writerows([[real_distance_list2[i]]])
 
 
     cap.release()
