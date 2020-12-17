@@ -42,11 +42,11 @@ class LineCar(object):
     # 実験用のセットアップ(ok)
     def setup4experiment(self):
         self.socket_start()
-        self.init_steering_angle()
+        # self.init_steering_angle()
 
-    # 移動用のセットアップ(ok)
-    def setup4movement(self):   
-        self.init_steering_angle()
+#     # 移動用のセットアップ(ok)
+#     def setup4movement(self):   
+#         self.init_steering_angle()
 
     # GPSのデータ取得に使うソケットを開く(ok)
     def socket_start(self):
@@ -57,14 +57,14 @@ class LineCar(object):
         except ConnectionRefusedError:
             self.socket = None
             
-    # 舵角センサ調整儀式(ok?)
-    def init_steering_angle(self):
-        self.mv_angle(0)
+#     # 舵角センサ調整儀式(ok?)
+#     def init_steering_angle(self):
+#         self.mv_angle(0)
             
     # #終了処理(ok)
     def stop(self):
         #GPIO.output(DIR, GPIO.LOW)
-        self.p1.start(0)
+#         self.p1.start(0)
         if self.socket is not None:
             self.socket.close()
          
@@ -148,7 +148,8 @@ class LineCar(object):
             [type] -- [description]
         """        
         status = self.gpsinfo[0:7]
-        cur_angle = self.get_current_angle()
+        cur_angle = 1
+        #self.get_current_angle()
         ctrl_iv = self.controller.get_internal_variables()
 
         status.append(cur_angle)

@@ -26,32 +26,36 @@ Servo.start(0)
 def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
-    print(angle)
+
+
     
 def main():
     record = []
 
     m1 = LineCar()
     m1.setup4experiment()
+    mv_angle(0)
     m1.controller.prepare()
     # 発進
+    GPIO.output(sets.DIR, GPIO.HIGH)  
     p1.start(sets.SPEED)
     # 操作ループ
     while(True):
         try:
             now_latlon = m1.get_current_position()
-            #input_angle = m1.controller.get_input_angle()
+            input_angle = m1.controller.get_input_angle()
             #m1.mv_angle(round(input_angle, 1))
             record.append(m1.get_status())
-            if m1.controller.is_finished():
-                p1.start(0)
-                break
+#             if m1.controller.is_finished():
+#                 p1.start(0)
+#                 break
         except KeyboardInterrupt:
             m1.stop()
+            p1.start(0)
     # 終了処理
     m1.stop()
 
-    with open('./output.csv', 'w') as csv_out:
+    with open('home/pi/git/linecar_fuji/', 'w') as csv_out:
         writer = csv.writer(csv_out, lineterminator='\n')
         writer.writerows(record)
 
