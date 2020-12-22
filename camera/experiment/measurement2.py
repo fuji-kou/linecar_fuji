@@ -22,11 +22,12 @@ def main():
     data = []
     real_distance_list1 = []
     real_distance_list2 = []
-    distance = 400_780
-    #distance = 400_780_15
-    #distance = 400_780_45
+    #distance = 400_780
+    #distance = 10_780_15
+    #distance = 10_780_45
     #distance = 400_780_330
-    # #distance = 400_780_315       
+    #distance = 10_780_315
+    distance = 10_400        
 
 
     while(cap.isOpened()):
@@ -69,8 +70,8 @@ def main():
             (area1, area2) = (target['area1'], target['area2'])       #赤の面積
             (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
             #(area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
-            #(area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
-            (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
+            (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
+            #(area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
             real_distance_list1.append(area1)
             real_distance_list2.append(area2)
             
@@ -85,7 +86,7 @@ def main():
             break
 
     #保存
-    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data1_{distance}.csv", 'w') as f:
+    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data_{distance}.csv", 'w') as f:
         writer = csv.writer(f, lineterminator = '\n')
         for i in range(len(real_distance_list1)):
             writer.writerows([[real_distance_list1[i], real_distance_list2[i]]])
