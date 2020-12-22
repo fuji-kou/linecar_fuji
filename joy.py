@@ -5,32 +5,25 @@ from pygame.locals import *
 import RPi.GPIO as GPIO     
 from time import sleep
 #from models.LineCar import LineCar
-
+import linecar_settings as sets
 
 GPIO.setmode(GPIO.BCM)      
 GPIO.setwarnings(False)             #GPIOからの警告を有効にする
 
-pwm = 23                           #pwmピンを23に設定
-DIR = 24                           #DIRピンを24に設定
-Servo_pin = 18
-
-GPIO.setup(pwm, GPIO.OUT)      #出力設定          
-GPIO.setup(DIR, GPIO.OUT)
-GPIO.setup(Servo_pin, GPIO.OUT)  
+GPIO.setup(sets.pwm, GPIO.OUT)      #出力設定          
+GPIO.setup(sets.DIR, GPIO.OUT)
+GPIO.setup(sets.Servo_pin, GPIO.OUT)  
 sleep(1)
 
-p1 = GPIO.PWM(pwm, 100)            #pwmピンの設定
-Servo = GPIO.PWM(Servo_pin, 50) 
+p1 = GPIO.PWM(sets.pwm, 100)            #pwmピンの設定
+Servo = GPIO.PWM(sets.Servo_pin, 50) 
 Servo.start(0)                      
 
 def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
-    print(angle)
+    #print(angle)
 
-
-#m1 = LineCar()
-#m1.mv_angle()
 def main():  
     #パイゲームとジョイスティックの初期化
     pygame.joystick.init()      
@@ -53,13 +46,11 @@ def main():
     active = True
      
     while active:
-        
         if l2trigger > 0.2:
             input_speed = 10
         else:
             input_speed = 0
                 
-
         for e in pygame.event.get():      #イベントチェック
             if e.type == pygame.locals.JOYAXISMOTION:
                 if e.axis == 1:
@@ -77,18 +68,17 @@ def main():
                     
                 if e.axis == 5:
                     l2trigger = joystick.get_axis(5)
-                    GPIO.output(DIR, GPIO.HIGH)
+                    GPIO.output(sets.DIR, GPIO.HIGH)
                     p1.start(input_speed)         #速度設定0－100
                     if input_speed >= 5:
-                        p1.start(5)
+                        p1.start(15)
                      
-
             elif e.type == pygame.locals.JOYBUTTONDOWN:        #ボタン押す
                 if e.button == 10:                             #e.botton:ボタン番号
                     active = False
                     break
                 if e.button == 0:
-                    GPIO.output(DIR, GPIO.LOW)        
+                    GPIO.output(sets.DIR, GPIO.LOW)        
                     input_speed = -1*input_speed
                      
             elif e.type == pygame.locals.JOYBUTTONUP: #ボタン離れる
