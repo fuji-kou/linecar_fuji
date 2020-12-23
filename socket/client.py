@@ -31,9 +31,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     #s.connect(('127.0.0.1', 50007))
     s.connect(('192.168.43.198', 50007))
     # サーバにメッセージを送る
-    s.sendall(b'hello')
+    s.sendall(b'start')
     # ネットワークのバッファサイズは1024。サーバからの文字列を取得する
     data = s.recv(1024)
-    #
     print(repr(data))
-    p1.start(10)
+    p1.start(sets.SPEED)
+
