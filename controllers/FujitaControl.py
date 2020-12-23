@@ -43,21 +43,14 @@ class FujitaControl(Control):
 
         return self.input_angle
     
-#     def is_finished(self):
+    def is_finished(self):
 #         """終了判定はコントローラに依存すると思うのでこちらに
 #         
 #         Returns:
 #             [bool] -- 終わってたらTrueを返す．
-#         """        
-#         return self.distance_s2r > 20
-    def is_finished(self):
-        while True:
-            try:
-                return int(self.distance_s2r > 20) 
-            # there is no need to use another variable here, just return the conversion, 
-            # if it fail it will try again because it is inside this infinite loop
-            except ValueError:
-                print("Invalid Entry - try again")
+#         """
+        return self.distance_s2r > 20
+
 
 
     def get_internal_variables(self):
