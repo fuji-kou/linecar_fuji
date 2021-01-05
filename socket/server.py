@@ -15,6 +15,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:    #ソケット作
             while True:
                 # データを受け取る
                 data = conn.recv(1024)
+                print(b'Received: ' + data)
                 if not data:
                     break
                 print('data : {}, addr: {}'.format(data, addr))
