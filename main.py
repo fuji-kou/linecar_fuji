@@ -16,7 +16,7 @@ def main():
     m1.mv_wheel(sets.SPEED)
     # 操作ループ
     while(True):
-        try:
+        try:  
             now_latlon = m1.get_current_position()
             input_angle = m1.controller.get_input_angle()
             m1.mv_angle(round(input_angle, 1))
