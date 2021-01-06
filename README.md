@@ -1,1 +1,0 @@
-# linecar_fuji
