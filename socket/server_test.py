@@ -23,9 +23,38 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 def main():    
     # データ格納用のリスト
-    data = []
+    count = 0
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
+        #     # IPアドレスとポートを指定
+    sock.bind(('127.0.0.1', 50007))
+        #     #s.bind(('255.255.255.0', 50007))
+        #     #s.bind(('192.168.43.198', 50007))
+             #  接続(最大2)
+    sock.listen(2)
+        #     # connection するまで待つ
+            
+        #     # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
+    
+    conn, addr = sock.accept()
+
+
 
     while(cap.isOpened()):
+        
+        if conn == "":
+            pass
+        else:
+            if count == 0:
+                # データを受け取る
+                data = conn.recv(1024)
+                print(b'Received: ' + data)
+                conn.sendall(b'start!!!!')
+                count +=1
+                data = 0
+            print(1)
+            data = 10
+            if data == 10:
+                break
         ret, frame = cap.read()
         #キャリブレーション適用
         mtx, dist = camera.loadCalibrationFile(MTX_PATH, DIST_PATH)
@@ -61,6 +90,8 @@ def main():
                 cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
                         thickness=3, lineType=cv2.LINE_AA)                    
 
+            
+            
             # #中心座標
             # center_x = 640
             # center_y = 360
@@ -81,10 +112,7 @@ def main():
             # print(distance1)
             # print(distance2)
 
-        #結果表示
-        cv2.imshow('Frame', resultImg)
-        #cv2.imshow("Mask", mask)
-
+        
 
 
 
@@ -100,26 +128,7 @@ def main():
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
 
-        # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:    #ソケット作成
-        #     # IPアドレスとポートを指定
-        #     s.bind(('127.0.0.1', 50007))
-        #     #s.bind(('255.255.255.0', 50007))
-        #     #s.bind(('192.168.43.198', 50007))
-        #     #  接続(最大2)
-        #     s.listen(2)
-        #     # connection するまで待つ
-            
-        #     # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
-        #     conn, addr = s.accept()
-        #     with conn:
-        #         while True:
-        #             # データを受け取る
-        #             data = conn.recv(1024)
-        #             # if data == (b'connect'):
-        #             #     print(b'Received: ' + data)
-        #             #     conn.sendall(b'start!!!!')
-        #             if not data:
-        #                 break
+
 
 
         #             print('data : {}, addr: {}'.format(data, addr))
