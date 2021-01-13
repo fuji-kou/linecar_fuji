@@ -28,9 +28,9 @@ def mv_angle(angle):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # サーバを指定
 #同端末
-sock.connect(('127.0.0.1', 50007))
+#sock.connect(('127.0.0.1', 50007))
 #ファーウェイタブ（ラズパイとの通信）
-#s.connect(('192.168.43.198', 50007))
+sock.connect(('192.168.43.198', 50007))
 # サーバにメッセージを送る
 while True:
     sock.sendall(b'connect')
