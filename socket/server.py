@@ -31,9 +31,9 @@ def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
     # IPアドレスとポートを指定
     #同端末
-    sock.bind(('127.0.0.1', 50007))
+    #sock.bind(('127.0.0.1', 50007))
     #ファーウェイタブ（ラズパイとの通信）
-    #sock.bind(('192.168.43.198', 50007))
+    sock.bind(('192.168.43.198', 50007))
     #恐らく宮本研wi-hi（ラズパイとの通信）
     #sock.bind(('255.255.255.0', 50007))
 
