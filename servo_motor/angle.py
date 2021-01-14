@@ -14,7 +14,7 @@ Servo = GPIO.PWM(Servo_pin, 50)     #GPIO.PWM(ポート番号, 周波数[Hz])
 Servo.start(0)                      #Servo.start(デューティ比[0-100%])
 
 #角度からデューティ比を求める関数
-def servo_angle(angle):
+def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
     time.sleep(0.3)
@@ -22,21 +22,20 @@ def servo_angle(angle):
 
 
 #動作テスト：サーボモータの角度をデューティ比で制御(デューティ比[0-100%])
-"""
+
 while True:
     try:
-        servo_angle(0)
-        time.sleep(1)
-        servo_angle(-30)               #サーボモータ -30°
-        time.sleep(1)
-        servo_angle(0)
-        time.sleep(1)
-        servo_angle(30)                #サーボモータ  30°
-        time.sleep(1)
+        mv_angle(0)
+        time.sleep(5)
+        mv_angle(-15)               #サーボモータ -30°
+        time.sleep(5)
+        mv_angle(0)
+        time.sleep(5)
+        mv_angle(15)                #サーボモータ  30°
+        time.sleep(5)
 
     except KeyboardInterrupt:          #Ctrl+Cキーが押された
-        servo_angle(0)
+        mv_angle(0)
         Servo.stop()                   #サーボモータをストップ
         GPIO.cleanup()                 #GPIOをクリーンアップ
         sys.exit()                     #プログラムを終了
-"""

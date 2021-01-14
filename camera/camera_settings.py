@@ -59,14 +59,14 @@ class camera():
         if len(data2) == 0:
             pass
         if len(data2) == 1:
-            #camera1
+            #red1
             maxblob["upper_left1"] = (data2[-1][0], data2[-1][1]) # 左上座標
             maxblob["width1"] = data2[-1][2]  # 幅
             maxblob["height1"] = data2[-1][3]  # 高さ
             maxblob["area1"] = data2[-1][4]   # 面積
             maxblob["center1"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)  # 中心座標
 
-            #camera2
+            #red2
             maxblob["upper_left2"] = (0,0)# 左上座標
             maxblob["width2"] = 0  # 幅
             maxblob["height2"] = 0  # 高さ

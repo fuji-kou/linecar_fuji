@@ -44,12 +44,14 @@ class FujitaControl(Control):
         return self.input_angle
     
     def is_finished(self):
-        """終了判定はコントローラに依存すると思うのでこちらに
-        
-        Returns:
-            [bool] -- 終わってたらTrueを返す．
-        """        
+#         """終了判定はコントローラに依存すると思うのでこちらに
+#         
+#         Returns:
+#             [bool] -- 終わってたらTrueを返す．
+#         """
         return self.distance_s2r > 20
+
+
 
     def get_internal_variables(self):
         """この操舵メソッドの内部変数を返す．
