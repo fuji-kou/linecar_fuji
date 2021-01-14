@@ -103,8 +103,10 @@ def main():
             #real_distance_list2.append(area2)
             print(area1)
             print(area2)
-            if area1 > 100:
+            if area1 >= 100:
                 conn.sendall(b'Go!!!!')
+            if area1 < 100:
+                conn.sendall(b'Stop!!!!')
 
 
 

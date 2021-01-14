@@ -1,10 +1,23 @@
 import socket
 from time import sleep
-#import RPi.GPIO as GPIO
 import sys
 import os
+import RPi.GPIO as GPIO
 # sys.path.append('..')
 # import linecar_settings as sets
+
+# pin設定
+GPIO.setmode(GPIO.BCM)      
+GPIO.setwarnings(False)             #GPIOからの警告を有効にする
+
+GPIO.setup(sets.pwm, GPIO.OUT)      #出力設定          
+GPIO.setup(sets.DIR, GPIO.OUT)
+GPIO.setup(sets.Servo_pin, GPIO.OUT)  
+sleep(1)
+
+p1 = GPIO.PWM(sets.pwm, 100)            #pwmピンの設定
+Servo = GPIO.PWM(sets.Servo_pin, 50) 
+Servo.start(0)                      
 
 # servo
 def mv_angle(angle):
@@ -31,6 +44,11 @@ while True:
         #data = 0
     if data == (b'Go!!!!'):
         print(data)
+        p1.start(15)
+    if data == (b'Stop!!!!'):
+        print(data)
+        p1.start(0)
+
     if data == 0:
         break
 
