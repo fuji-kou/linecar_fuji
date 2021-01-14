@@ -91,18 +91,22 @@ def main():
             
             else:
                 cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
-                        thickness=3, lineType=cv2.LINE_AA)    
+                        thickness=3, lineType=cv2.LINE_AA)  
+
+            area1= target['area1']       #赤の面積
+            area1 = area1/(1280*720)*100      #割合
+            area1 = round(159.55*area1**(-0.525))  
 
             #２つの計測対象の面積をリストに格納
-            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
-            (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
-            (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
+            # (area1, area2) = (target['area1'], target['area2'])       #赤の面積
+            # (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
+            # (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
             #(area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
             #(area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
             #real_distance_list1.append(area1)
             #real_distance_list2.append(area2)
             print(area1)
-            print(area2)
+            #print(area2)
             if area1 >= 100:
                 conn.sendall(b'Go!!!!')
             if area1 < 100:
