@@ -4,7 +4,7 @@ import sys
 import os
 import RPi.GPIO as GPIO
 # sys.path.append('..')
-# import linecar_settings as sets
+import linecar_settings as sets
 
 # pin設定
 GPIO.setmode(GPIO.BCM)      
