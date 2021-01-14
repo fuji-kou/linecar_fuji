@@ -25,22 +25,20 @@ def main():
     # データ格納用のリスト
     count = 0
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
-        #     # IPアドレスとポートを指定
+    # IPアドレスとポートを指定
+    #同端末
     sock.bind(('127.0.0.1', 50007))
-        #     #s.bind(('255.255.255.0', 50007))
-        #     #s.bind(('192.168.43.198', 50007))
-             #  接続(最大2)
+    #ファーウェイタブ（ラズパイとの通信）
+    #sock.bind(('192.168.43.198', 50007))
+    #恐らく宮本研wi-hi（ラズパイとの通信）
+    #sock.bind(('255.255.255.0', 50007))
+
+    # 接続(最大2)
     sock.listen(2)
-        #     # connection するまで待つ
-            
-        #     # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
-    
+    # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
     conn, addr = sock.accept()
 
-
-
     while(cap.isOpened()):
-        
         if conn == "":
             pass
         else:

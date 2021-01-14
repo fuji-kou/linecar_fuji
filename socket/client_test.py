@@ -6,9 +6,6 @@ import os
 # sys.path.append('..')
 # import linecar_settings as sets
 
-
-#
-
 # servo
 def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
@@ -16,10 +13,12 @@ def mv_angle(angle):
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # サーバを指定
+# サーバを指定
+#同端末
 sock.connect(('127.0.0.1', 50007))
-    #s.connect(('192.168.43.198', 50007))
-    # サーバにメッセージを送る
+#ファーウェイタブ（ラズパイとの通信）
+#s.connect(('192.168.43.198', 50007))
+# サーバにメッセージを送る
 while True:
     sock.sendall(b'connect')
 
@@ -29,8 +28,8 @@ while True:
         
     if data == (b'start!!!!'):
         print(data)
-        date = 0
-    if date == 0:
+        data = 0
+    if data == 0:
         break
 
 
