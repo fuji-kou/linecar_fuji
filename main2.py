@@ -1,18 +1,19 @@
-import socket
 import numpy as np
 import csv
-
-import linecar_settings as sets
-import math
+import socket
 import cv2
 from camera_settings import camera
+
+import linecar_settings as sets
+from models.LineCar import LineCar
+from controllers.FujitaControl import FujitaControl
 
 #カメラキャプチャ
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
 
-TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
-MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
-DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
+TMP_FOLDER_PATH = ".cali/tmp/"
+MTX_PATH = TMP_FOLDER_PATH + "mtx2.csv"
+DIST_PATH = TMP_FOLDER_PATH + "dist2.csv"
 
 #FPS,解像度の設定
 cap.set(cv2.CAP_PROP_FPS, 30)
@@ -53,7 +54,7 @@ def camera_measurement():
             
         else:
             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
-                thickness=3, lineType=cv2.LINE_AA)  
+                    thickness=3, lineType=cv2.LINE_AA)  
 
         #面積最大ブロブの中心座標を取得
         if tar_x1 <= 640:
@@ -67,47 +68,47 @@ def camera_measurement():
         else:
             area1 = target['area1']
 
-        #実験用
-        # area1= target['area1']       #赤の面積
-        # area1 = area1/(1280*720)*100      #割合
-        # area1 = round(159.55*area1**(-0.525))  
-
-
         #２つの計測対象の面積をリストに格納
         #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
         (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
         (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
-        distance1 = area1
-        distance2 = area2
         # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
         # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
+
+        distance1 = area1
+        distance2 = area2
         #real_distance_list1.append(area1)
         #real_distance_list2.append(area2)
+
     #表示
     cv2.imshow('Frame', resultImg)
     return distance1 , distance2
-    
 
-def main():    
-    # データ格納用のリスト
+
+def main():
+    record = []
     real_distance_list1 = []
     real_distance_list2 = []
-    
 
     count = 0
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
     # IPアドレスとポートを指定
-    #同端末
-    sock.bind(('127.0.0.1', 50007))
     #ファーウェイタブ（ラズパイとの通信）
     #sock.bind(('192.168.43.198', 50007))
-    #恐らく宮本研wi-hi（ラズパイとの通信）
-    #sock.bind(('255.255.255.0', 50007))
+    #linecar用モバイルルータ
+    sock.bind(('192.168.179.2', 50007))    
 
     # 接続(最大2)
     sock.listen(2)
     # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
     conn, addr = sock.accept()
+
+    m1 = LineCar()
+    m1.setup4experiment()
+    m1.controller.prepare()
+    # 発進
+    m1.mv_wheel(sets.SPEED)
+
 
     while(cap.isOpened()):
         if conn == "":
@@ -120,24 +121,6 @@ def main():
                 conn.sendall(b'start!!!!')
                 count +=1
                 data = 0
-            #print(1)
-            #data = 10
-            #ループ抜けだし
-#            if data == 10:
-#                break
-        distance1,distance2 = camera_measurement()
-        print(distance1,distance2)
-        if distance1 >= 100:
-            conn.sendall(b'Go!!!!')
-        if distance2 >=100:
-            conn.sendall(b'Go')
-        if distance1 < 100:
-            conn.sendall(b'Stop!!!!')
-        if distance2 < 100:
-            conn.sendall(b'Stop')
-
-
-
 
             # #中心座標
             # center_x = 640
@@ -159,8 +142,7 @@ def main():
             # print(distance1)
             # print(distance2)
 
-        #結果表示
-        #cv2.imshow('Frame', resultImg)
+
         #cv2.imshow("Mask", mask)
 
         #保存
@@ -168,16 +150,53 @@ def main():
 
         #qキーが押されたら途中終了
         if cv2.waitKey(25) & 0xFF == ord('q'):
-            break
+            break  
 
-    #保存
+        # 操作ループ
+        while(True):
+            try:  
+                now_latlon = m1.get_current_position()
+                distance1,distance2 = camera_measurement()
+                if now_latlon[3] == 2:
+                    m1.mv_wheel(0)
+                    m1.mv_angle(0)
+                    conn.sendall(b'f_stop')
+
+                    
+                    print(distance1,distance2)
+                    if distance1 >= 100:
+                        conn.sendall(b'Go!!!!')
+                    if distance2 >=100:
+                        conn.sendall(b'Go')
+                    if distance1 < 100:
+                        conn.sendall(b'Stop!!!!')
+                    if distance2 < 100:
+                        conn.sendall(b'Stop')
+                else:
+                    m1.mv_wheel(sets.SPEED)
+                    input_angle = m1.controller.get_input_angle(now_latlon)
+                    m1.mv_angle(round(input_angle, 1))
+
+                record.append(m1.get_status())
+                #floutのとき
+
+
+
+                if m1.controller.is_finished():
+                    m1.mv_wheel(0)
+                    break
+            except KeyboardInterrupt:
+                m1.stop()
+
+    # 終了処理
+    m1.stop()
     cap.release()
-    cv2.destroyAllWindows()
-    #writer.release()
+    cv2.destroyAllWindows()     
+
+    with open('./output.csv', 'w') as csv_out:
+        writer = csv.writer(csv_out, lineterminator='\n')
+        writer.writerows(record)
+
 
 if __name__ == '__main__':
     main()
-
-
-
-
