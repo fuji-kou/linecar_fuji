@@ -2,7 +2,7 @@ import numpy as np
 import csv
 import socket
 import cv2
-from camera_settings import camera
+from camera.camera_settings import camera
 
 import linecar_settings as sets
 from models.LineCar import LineCar

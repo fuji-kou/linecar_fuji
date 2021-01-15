@@ -8,9 +8,9 @@ from camera_settings import camera
 #カメラキャプチャ
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
 
-TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
-MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
-DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
+TMP_FOLDER_PATH = "../cali/tmp/"
+MTX_PATH = TMP_FOLDER_PATH + "mtx2.csv"
+DIST_PATH = TMP_FOLDER_PATH + "dist2.csv"
 
 #FPS,解像度の設定
 cap.set(cv2.CAP_PROP_FPS, 30)
