@@ -56,9 +56,9 @@ def main():
     # 終了処理
     m1.stop()
 
-#    with open('/home/pi/git/linecar_fuji/', 'w') as csv_out:
-#        writer = csv.writer(csv_out, lineterminator='\n')
-#        writer.writerows(record)
+    with open('output.csv', 'w') as csv_out:
+        writer = csv.writer(csv_out, lineterminator='\n')
+        writer.writerows(record)
 
 
 if __name__ == '__main__':

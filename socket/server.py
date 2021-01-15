@@ -56,7 +56,7 @@ def main():
                 count +=1
                 data = 0
             #print(1)
-            data = 10
+            #data = 10
             #ループ抜けだし
 #            if data == 10:
 #                break
