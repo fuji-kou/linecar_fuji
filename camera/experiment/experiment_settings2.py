@@ -6,6 +6,7 @@ TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tm
 MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
 DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
 
+
 class camera():
     # キャリブレーションCSVファイルを読み込む関数
     def loadCalibrationFile(mtx_path, dist_path):

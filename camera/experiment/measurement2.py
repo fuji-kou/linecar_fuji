@@ -16,10 +16,11 @@ cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-
 def main():    
     # データ格納用のリスト
     data = []
+    # tar_x1 = []
+    # tar_x2 = []
     real_distance_list1 = []
     real_distance_list2 = []
     #distance = 400_780
@@ -27,12 +28,12 @@ def main():
     #distance = 10_780_45
     #distance = 400_780_330
     #distance = 10_780_315
-    distance = 10_400        
+    distance = 10_400      
 
 
     while(cap.isOpened()):
         ret, frame = cap.read()
-        #キャリブレーション適用
+        #キャリブレーション適用 
         mtx, dist = camera.loadCalibrationFile(MTX_PATH, DIST_PATH)
         resultImg = cv2.undistort(frame, mtx, dist, None)
         
@@ -48,13 +49,21 @@ def main():
             #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
             target = camera.analysis_blob(mask)
             
-            #面積最大ブロブの中心座標を取得
+            # #面積最大ブロブの中心座標を取得
             tar_x1 = int(target["center1"][0])
             tar_y1 = int(target["center1"][1])
             
             tar_x2 = int(target["center2"][0])
             tar_y2 = int(target["center2"][1])
-        
+            #面積最大ブロブの中心座標を取得
+            if tar_x1 <= 640:
+                (area1, area2) = (target['area1'], target['area2'])       #赤の面積
+            if tar_x1 > 640:
+                (area1, area2) = (target['area2'], target['area1'])       #赤の面積
+            else:
+                area1 = target['area1']
+          
+
             #フレームに面積最大ブロブの中心周囲を円で描く
             cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
                     thickness=3, lineType=cv2.LINE_AA)
@@ -64,10 +73,12 @@ def main():
             
             else:
                 cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
-                        thickness=3, lineType=cv2.LINE_AA)                    
+                        thickness=3, lineType=cv2.LINE_AA) 
+
+                  
 
             #２つの計測対象の面積をリストに格納
-            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
+            # (area1, area2) = (target['area1'], target['area2'])       #赤の面積
             (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
             (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
             #(area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
