@@ -1,3 +1,4 @@
+# coding: utf-8
 import numpy as np
 import csv
 import sys
@@ -44,7 +45,7 @@ def main():
         try:
             now_latlon = m1.get_current_position()
             input_angle = m1.controller.get_input_angle(now_latlon)
-            #m1.mv_angle(round(input_angle, 1))
+            mv_angle(round(input_angle, 1))
             record.append(m1.get_status())
             if m1.controller.is_finished():
                  p1.start(0)
@@ -54,11 +55,11 @@ def main():
             m1.stop()
             p1.start(0)
     # 終了処理
-    m1.stop()
+    #m1.stop()
 
-#    with open('/home/pi/git/linecar_fuji/', 'w') as csv_out:
-#        writer = csv.writer(csv_out, lineterminator='\n')
-#        writer.writerows(record)
+    with open('data.csv', 'w') as csv_out:
+        writer = csv.writer(csv_out, lineterminator='\n')
+        writer.writerows(record)
 
 
 if __name__ == '__main__':

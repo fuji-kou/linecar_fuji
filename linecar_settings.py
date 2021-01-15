@@ -10,8 +10,8 @@ pwm = 23                           #pwmピンを23に設定
 DIR = 24                           #DIRピンを24に設定
 
 # socket
-ADDRESS = '127.0.0.1'
-#ADDRESS = '192.168.43.199'
+#ADDRESS = '127.0.0.1'
+ADDRESS = '192.168.43.199'
 PORT_NUM = 52002
 BUFSIZE = 256
 
