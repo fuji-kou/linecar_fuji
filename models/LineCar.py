@@ -117,7 +117,7 @@ class LineCar(object):
             {[float]} -- lat, lon
         """        
         self.gpsinfo = self._get_gpsinfo()
-        current_position = [float(self.gpsinfo[2]), float(self.gpsinfo[3])]
+        current_position = [float(self.gpsinfo[2]), float(self.gpsinfo[3]),int(self.gpsinfo[5])]
 
         return current_position
 

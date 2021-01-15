@@ -19,6 +19,8 @@ cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
+print(cv2.CAP_PROP_FRAME_WIDTH)
+
 
 
 def main():    
@@ -31,9 +33,9 @@ def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
     # IPアドレスとポートを指定
     #同端末
-    #sock.bind(('127.0.0.1', 50007))
+    sock.bind(('127.0.0.1', 50007))
     #ファーウェイタブ（ラズパイとの通信）
-    sock.bind(('192.168.43.198', 50007))
+    #sock.bind(('192.168.43.198', 50007))
     #恐らく宮本研wi-hi（ラズパイとの通信）
     #sock.bind(('255.255.255.0', 50007))
 
@@ -54,7 +56,7 @@ def main():
                 count +=1
                 data = 0
             #print(1)
-            data = 10
+            #data = 10
             #ループ抜けだし
 #            if data == 10:
 #                break
@@ -91,18 +93,32 @@ def main():
             
             else:
                 cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
-                        thickness=3, lineType=cv2.LINE_AA)    
+                        thickness=3, lineType=cv2.LINE_AA)  
+
+            #面積最大ブロブの中心座標を取得
+            if tar_x1 <= 640:
+                (area1, area2) = (target['area1'], target['area2'])       #赤の面積
+            if tar_x1 > 640:
+                (area1, area2) = (target['area2'], target['area1'])       #赤の面積
+            else:
+                area1 = target['area1']
+
+            #実験用
+            # area1= target['area1']       #赤の面積
+            # area1 = area1/(1280*720)*100      #割合
+            # area1 = round(159.55*area1**(-0.525))  
+
 
             #２つの計測対象の面積をリストに格納
-            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
+            #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
             (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
             (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
-            #(area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
-            #(area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
-            #real_distance_list1.append(area1)
-            #real_distance_list2.append(area2)
+            # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
+            # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
+            real_distance_list1.append(area1)
+            real_distance_list2.append(area2)
             print(area1)
-            print(area2)
+            #print(area2)
             if area1 >= 100:
                 conn.sendall(b'Go!!!!')
             if area1 < 100:
@@ -131,13 +147,6 @@ def main():
             # print(distance1)
             # print(distance2)
 
-
-
-        
-
-
-
-
         #結果表示
         cv2.imshow('Frame', resultImg)
         #cv2.imshow("Mask", mask)
@@ -148,22 +157,6 @@ def main():
         #qキーが押されたら途中終了
         if cv2.waitKey(25) & 0xFF == ord('q'):
             break
-
-
-
-
-        #             print('data : {}, addr: {}'.format(data, addr))
-        #                 # クライアントにデータを返す(b -> byte でないといけない)
-        #                 #conn.sendall(b'Received: ' + data)
-        #                 #conn.sendall(b'start!!!!')
-
-
-        #             if data == (b'connect'):
-        #                 print(data)
-        #                 conn.sendall(b'start!!!!')
-
-
-
 
     #保存
     cap.release()
