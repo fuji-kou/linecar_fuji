@@ -10,16 +10,14 @@ from camera_settings import camera
 #カメラキャプチャ
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
 
-TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
-MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
-DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
+TMP_FOLDER_PATH = "../cali/tmp/"
+MTX_PATH = TMP_FOLDER_PATH + "mtx2.csv"
+DIST_PATH = TMP_FOLDER_PATH + "dist2.csv"
 
 #FPS,解像度の設定
 cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
-print(cv2.CAP_PROP_FRAME_WIDTH)
 
 
 
@@ -36,8 +34,8 @@ def main():
     sock.bind(('127.0.0.1', 50007))
     #ファーウェイタブ（ラズパイとの通信）
     #sock.bind(('192.168.43.198', 50007))
-    #恐らく宮本研wi-hi（ラズパイとの通信）
     #sock.bind(('255.255.255.0', 50007))
+    #sock.bind(('192.168.11.34',50007))
 
     # 接続(最大2)
     sock.listen(2)
