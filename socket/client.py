@@ -48,7 +48,13 @@ while True:
     if data == (b'Go!!!!'):
         print(data)
         #p1.start(15)
+    if data == (b'Go'):
+        print(data)
+        #p1.start(15)
     if data == (b'Stop!!!!'):
+        print(data)
+        #p1.start(0)
+    if data == (b'Stop'):
         print(data)
         #p1.start(0)
 
