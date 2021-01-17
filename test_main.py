@@ -57,11 +57,7 @@ def main():
     # 終了処理
     #m1.stop()
 
-<<<<<<< HEAD
-    with open('data.csv', 'w') as csv_out:
-=======
     with open('output.csv', 'w') as csv_out:
->>>>>>> 9c6c9c7070ccfe8761f1379da8242c6bcccea1d9
         writer = csv.writer(csv_out, lineterminator='\n')
         writer.writerows(record)
 

@@ -60,9 +60,9 @@ def camera_measurement():
             (area1, area2) = (target['area1'], target['area2'])       #赤の面積
         if tar_x1 > 640:
             (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-        if tar_x1 < tar_x2 < 640:
+        if tar_x1 <= tar_x2 <= 640:
             (area1, area2) = (target['area1'], target['area2'])
-        if 640 < tar_x2 < tar_x1:
+        if 640 <= tar_x2 <= tar_x1:
             (area1, area2) = (target['area2'], target['area1'])
         else:
             area1 = target['area1']
