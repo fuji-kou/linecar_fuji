@@ -28,7 +28,7 @@ def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
 
-
+mv_angle(0)
     
 def main():
     record = []
@@ -45,17 +45,18 @@ def main():
         try:
             now_latlon = m1.get_current_position()
             input_angle = m1.controller.get_input_angle(now_latlon)
-            mv_angle(round(input_angle, 1))
+            #mv_angle(round(input_angle, 1))
             record.append(m1.get_status())
+            print(record[-1])
             if m1.controller.is_finished():
                  p1.start(0)
-                 print(record[-1])
                  break
         except KeyboardInterrupt:
             m1.stop()
             p1.start(0)
-    # 終了処理
-    #m1.stop()
+    終了処理
+    m1.stop()
+    p1.start(0)
 
     with open('output.csv', 'w') as csv_out:
         writer = csv.writer(csv_out, lineterminator='\n')
