@@ -33,7 +33,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect(('192.168.43.198', 50007))
 #実機パソコン
 #sock.connect(('192.168.179.2', 50007))
-sock.connect(('192.168.11.34',50007))
+sock.connect(('192.168.11.34',50008))
 
 # サーバにメッセージを送る
 while True:
