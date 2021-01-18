@@ -55,7 +55,7 @@ def camera_measurement():
             pass
             
         else:
-            cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
+            cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
                 thickness=3, lineType=cv2.LINE_AA)  
 
         #面積最大ブロブの中心座標を取得
@@ -63,10 +63,6 @@ def camera_measurement():
             (area1, area2) = (target['area1'], target['area2'])       #赤の面積
         if tar_x1 > 640:
             (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-        if tar_x1 <= tar_x2 <= 640:
-            (area1, area2) = (target['area1'], target['area2'])
-        if 640 <= tar_x2 <= tar_x1:
-            (area1, area2) = (target['area2'], target['area1'])
         else:
             area1 = target['area1']
 
@@ -101,9 +97,9 @@ def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
     # IPアドレスとポートを指定
     #同端末
-    #sock.bind(('127.0.0.1', 50007))
+    sock.bind(('127.0.0.1', 50007))
     #ファーウェイタブ（ラズパイとの通信）
-    sock.bind(('192.168.43.198', 50007))
+    #sock.bind(('192.168.43.198', 50007))
     #sock.bind(('0.0.0.0', 50007))
     #恐らく宮本研wi-hi（ラズパイとの通信）
     #sock.bind(('255.255.255.0', 50007))
@@ -112,7 +108,7 @@ def main():
 
     # 接続(最大2)
     sock.listen(2)
-    # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
+    # 誰かがアクセスしてきたら、コネクションとアドレスを入れるq
     conn, addr = sock.accept()
 
     while(cap.isOpened()):
