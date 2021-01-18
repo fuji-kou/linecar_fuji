@@ -45,9 +45,9 @@ while True:
     #開始・floutからの復帰    
     if data == (b'start!!'):
         print(data)
+        sleep(2)
         mv_angle(0)
-        p1.start(sets.SPEED)
-        sleep(5)
+        p1.start(-sets.SPEED)
     if data == (b'Go1'):
         pass
     #離れすぎたら前に出る
@@ -69,13 +69,13 @@ while True:
         pass
     #範囲から出たとき
     if data == (b'turn_left2'):
-        mv_angle(10)
+        mv_angle(-20)
         p1.start(sets.turn_SPEED)
     if data == (b'turn_right1'):
         pass
     #範囲から出たとき
     if data == (b'turn_right2'):
-        mv_angle(-10)
+        mv_angle(20)
         p1.start(sets.turn_SPEED)
 
     if data == 0:
