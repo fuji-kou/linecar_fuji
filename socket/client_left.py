@@ -47,36 +47,43 @@ while True:
     #開始・floutからの復帰  
     if data == (b'start!!'):
         print(data)
+        sleep(2)
         mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.SPEED)
-        sleep(5)
+        
     #離れすぎたら前に出る
     if data == (b'Go1'):
         print(data)
         mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.SPEED)
     if data == (b'Go2'):
         pass
     #flout
     if data == (b'stop!!'):
         print(data)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
     #前出すぎたらストップ
     if data == (b'Stop1'):
         print(data)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
     if data == (b'Stop2'):
         pass
     #範囲から出たとき
     if data == (b'turn_left1'):
-        mv_angle(20)
+        mv_angle(-20)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
         sleep(5) 
     if data == (b'turn_left2'):
         pass
     #範囲から出たとき
     if data == (b'turn_right1'):
-        mv_angle(-20)
+        mv_angle(20)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
         sleep(5)
     if data == (b'turn_right2'):
