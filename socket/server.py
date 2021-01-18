@@ -85,8 +85,8 @@ def camera_measurement():
         #real_distance_list2.append(area2)
     #表示
     cv2.imshow('Frame', resultImg)
-    return distance1 , distance2
-    
+    #cv2.imshow("Mask", mask)
+    return distance1 , distance2 , tar_x1 , tar_x2
 
 def main():    
     # データ格納用のリスト
@@ -104,6 +104,8 @@ def main():
     #恐らく宮本研wi-hi（ラズパイとの通信）
     #sock.bind(('255.255.255.0', 50007))
 
+    #sock.bind(('0.0.0.0', 50009))
+
     # 接続(最大2)
     sock.listen(2)
     # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
@@ -117,7 +119,7 @@ def main():
                 # データを受け取る
                 data = conn.recv(1024)
                 print(b'Received: ' + data)
-                conn.sendall(b'start!!!!')
+                conn.sendall(b'start!!')
                 count +=1
                 data = 0
             #print(1)
@@ -125,39 +127,44 @@ def main():
             #ループ抜けだし
 #            if data == 10:
 #                break
-        distance1,distance2 = camera_measurement()
+        distance1,distance2,tar_x1,tar_x2 = camera_measurement()
         print(distance1,distance2)
         if distance1 >= 100:
-            conn.sendall(b'Go!!!!')
-        if distance2 >=100:
-            conn.sendall(b'Go')
+            conn.sendall(b'Go1')
+        if distance2 >= 100:
+            conn.sendall(b'Go2')
         if distance1 < 100:
-            conn.sendall(b'Stop!!!!')
+            conn.sendall(b'Stop1')
         if distance2 < 100:
-            conn.sendall(b'Stop')
+            conn.sendall(b'Stop2')
+        if tar_x1 < 540:
+            conn.sendall(b'turn_left1')
 
 
 
 
-            # #中心座標
-            # center_x = 640
-            # center_y = 360
 
-            # #中心ピクセルから認識した赤色の中心までを直線描画，cv2.line(画像,座標1,座標2,色,太さ)
-            # cv2.line(resultImg,(tar_x1, tar_y1),(640,360),(0,255,0),3)
-            # cv2.line(resultImg,(tar_x2, tar_y2),(640,360),(0,200,0),3)
 
-            # #x座標とy座標をピクセルからcmに変換
-            # dif_x1 = round(abs(center_x - tar_x1) * (398/1280))
-            # dif_y1 = round(abs(center_y - tar_y1) * (107/360))
 
-            # dif_x2 = round(abs(center_x - tar_x2) * (398/1280))
-            # dif_y2 = round(abs(center_y - tar_y2) * (107/360))            
+        # #中心座標
+        # center_x = 640
+        # center_y = 360
 
-            # distance1 = math.sqrt(dif_x1^2 + dif_y1^2)
-            # distance2 = math.sqrt(dif_x2^2 + dif_y2^2)
-            # print(distance1)
-            # print(distance2)
+        # #中心ピクセルから認識した赤色の中心までを直線描画，cv2.line(画像,座標1,座標2,色,太さ)
+        # cv2.line(resultImg,(tar_x1, tar_y1),(640,360),(0,255,0),3)
+        # cv2.line(resultImg,(tar_x2, tar_y2),(640,360),(0,200,0),3)
+
+        # #x座標とy座標をピクセルからcmに変換
+        # dif_x1 = round(abs(center_x - tar_x1) * (398/1280))
+        # dif_y1 = round(abs(center_y - tar_y1) * (107/360))
+
+        # dif_x2 = round(abs(center_x - tar_x2) * (398/1280))
+        # dif_y2 = round(abs(center_y - tar_y2) * (107/360))            
+
+        # distance1 = math.sqrt(dif_x1^2 + dif_y1^2)
+        # distance2 = math.sqrt(dif_x2^2 + dif_y2^2)
+        # print(distance1)
+        # print(distance2)
 
         #結果表示
         #cv2.imshow('Frame', resultImg)
