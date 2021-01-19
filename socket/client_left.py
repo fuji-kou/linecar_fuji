@@ -31,8 +31,11 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect(('127.0.0.1', 50006))
 #ファーウェイタブ（ラズパイとの通信）DELL
 #sock.connect(('192.168.43.198', 50006))
+
+
+sock.connect(('192.168.179.4', 50006))
 #実機HP_PC
-sock.connect(('192.168.179.2', 50008))#ポケットwihi
+#sock.connect(('192.168.179.2', 50008))#ポケットwihi
 #sock.connect(('192.168.11.34',50008))#恐らく宮本研wihi
 
 #sock.connect(('192.168.11.12',50008))
