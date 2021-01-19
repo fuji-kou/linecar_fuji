@@ -29,11 +29,11 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # サーバを指定
 #同端末
 #sock.connect(('127.0.0.1', 50007))
-#ファーウェイタブ（ラズパイとの通信）
-sock.connect(('192.168.43.198', 50007))
-#実機パソコン
-#sock.connect(('192.168.179.2', 50007))
-#sock.connect(('192.168.11.34',50008))
+#ファーウェイタブ（ラズパイとの通信）DELL
+#sock.connect(('192.168.43.198', 50007))
+#実機HP_PC
+sock.connect(('192.168.179.2', 50009)) #ポケットwihi
+#sock.connect(('192.168.11.34',50009))#恐らく宮本研wihi
 
 # サーバにメッセージを送る
 while True:
@@ -46,39 +46,47 @@ while True:
     if data == (b'start!!'):
         print(data)
         mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.SPEED)
-        sleep(5)
     if data == (b'Go1'):
         pass
     #離れすぎたら前に出る
     if data == (b'Go2'):
         print(data)
         mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.SPEED)
     #flout
     if data == (b'stop!!'):
         print(data)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
     if data == (b'Stop1'):
         pass
     #前出すぎたらストップ
     if data == (b'Stop2'):
         print(data)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
     if data == (b'turn_left1'):
         pass
     #範囲から出たとき
     if data == (b'turn_left2'):
+        print(data)
         mv_angle(10)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
     if data == (b'turn_right1'):
         pass
     #範囲から出たとき
     if data == (b'turn_right2'):
+        print(data)
         mv_angle(-10)
+        GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
 
     if data == 0:
+        mv_angle(0)
         break
 
 

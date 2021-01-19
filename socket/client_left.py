@@ -28,14 +28,14 @@ def mv_angle(angle):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # サーバを指定
 #同端末
-#sock.connect(('127.0.0.1', 50007))
-#ファーウェイタブ（ラズパイとの通信）my_PC
-sock.connect(('192.168.43.198', 50007))
-#実機パソコン
-#sock.connect(('192.168.179.2', 50007))
-#sock.connect(('192.168.11.34',50008))
+#sock.connect(('127.0.0.1', 50006))
+#ファーウェイタブ（ラズパイとの通信）DELL
+#sock.connect(('192.168.43.198', 50006))
+#実機HP_PC
+sock.connect(('192.168.179.2', 50008))#ポケットwihi
+#sock.connect(('192.168.11.34',50008))#恐らく宮本研wihi
 
-#sock.connect(('192.168.11.12',50009))
+#sock.connect(('192.168.11.12',50008))
 
 # サーバにメッセージを送る
 while True:
@@ -74,6 +74,7 @@ while True:
         pass
     #範囲から出たとき
     if data == (b'turn_left1'):
+        print(data)
         mv_angle(-20)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
@@ -82,6 +83,7 @@ while True:
         pass
     #範囲から出たとき
     if data == (b'turn_right1'):
+        print(data)
         mv_angle(20)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)

@@ -76,8 +76,8 @@ def camera_measurement():
         #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
         (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
         (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
-        distance1 = area1
-        distance2 = area2
+        distance_left = area1
+        distance_right = area2
         # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
         # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
         #real_distance_list1.append(area1)
@@ -85,7 +85,7 @@ def camera_measurement():
     #表示
     cv2.imshow('Frame', resultImg)
     #cv2.imshow("Mask", mask)
-    return distance1 , distance2 , tar_x1 , tar_x2
+    return distance_left , distance_right , tar_x1 , tar_x2
 
 def main():    
     # データ格納用のリスト
@@ -94,61 +94,70 @@ def main():
     
 
     count = 0
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
+    sock_left = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
+    sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
     # IPアドレスとポートを指定
-    #同端末
-    sock.bind(('127.0.0.1', 50007))
-    #ファーウェイタブ（ラズパイとの通信）
-    #sock.bind(('192.168.43.198', 50007))
-    #sock.bind(('0.0.0.0', 50007))
-    #恐らく宮本研wi-hi（ラズパイとの通信）
-    #sock.bind(('255.255.255.0', 50007))
-
-    #sock.bind(('0.0.0.0', 50009))
+    #同端末DELL
+    #sock_left.bind(('127.0.0.1', 50006))
+    #sock_right.bind(('127.0.0.1', 50007))
+    #ファーウェイタブ（ラズパイとの通信)DELL
+    #sock_left.bind(('192.168.43.198', 50006))
+    #sock_right.bind(('192.168.43.198', 50007))
+    #実機HP_PC
+    sock_left.connect(('192.168.179.2', 50008))
+    sock_right.connect(('192.168.179.2', 50009))
+    #sock_left.bind(('0.0.0.0', 50008))
+    #sock_right.bind(('0.0.0.0', 50009))
 
     # 接続(最大2)
-    sock.listen(2)
+    sock_left.listen(2)
+    sock_right.listen(2)
     # 誰かがアクセスしてきたら、コネクションとアドレスを入れるq
-    conn, addr = sock.accept()
+    conn_left, addr_left = sock_left.accept()
+    conn_right, addr_right = sock_right.accept()
 
     while(cap.isOpened()):
-        if conn == "":
+        if conn_left or conn_right == "":
             pass
         else:
             if count == 0:
                 # データを受け取る
-                data = conn.recv(1024)
-                print(b'Received: ' + data)
-                conn.sendall(b'start!!')
+                data_left = conn_left.recv(1024)
+                data_right = conn_left.recv(1024)
+                print(b'Received: ' + data_left)
+                print(b'Received: ' + data_right)
+                conn_left.sendall(b'start!!')
+                conn_right.sendall(b'start!!')
                 count +=1
-                data = 0
+                data_left = 0
+                data_right = 0
             #print(1)
             #data = 10
             #ループ抜けだし
 #            if data == 10:
 #                break
-        distance1,distance2,tar_x1,tar_x2 = camera_measurement()
-        print(distance1,distance2)
+        distance_left,distance_lright,tar_x1,tar_x2 = camera_measurement()
+        print(distance_left,distance_lright)
         #print(tar_x1,tar_x2)
-        if distance1 >= 100 and 400 <= tar_x1 <= 640:
-            conn.sendall(b'Go1')
-        if distance2 >= 100 and 640 <= tar_x1 <= 880:
-            conn.sendall(b'Go2')
+        if distance_left >= 100 and 400 <= tar_x1 <= 640:
+            conn_left.sendall(b'Go1')
+        if distance_lright >= 100 and 640 <= tar_x2 <= 880:
+            conn_right.sendall(b'Go2')
 
-        if distance1 < 100:
-            conn.sendall(b'Stop1')
-        if distance2 < 100:
-            conn.sendall(b'Stop2')
+        if distance_left < 100:
+            conn_left.sendall(b'Stop1')
+        if distance_lright < 100:
+            conn_right.sendall(b'Stop2')
 
-        if distance1 >= 100 and tar_x1 < 400:
-            conn.sendall(b'turn_left1')
-        if distance2 >= 100 and tar_x2 < 640:
-            conn.sendall(b'turn_left2')
+        if distance_left >= 100 and tar_x1 < 400:
+            conn_left.sendall(b'turn_left1')
+        if distance_lright >= 100 and tar_x2 < 640:
+            conn_right.sendall(b'turn_left2')
 
-        if distance1 >= 100 and tar_x1 > 640:
-            conn.sendall(b'turn_right1')
-        if distance2 >= 100 and tar_x2 > 880:
-            conn.sendall(b'turn_right2')
+        if distance_left >= 100 and tar_x1 > 640:
+            conn_left.sendall(b'turn_right1')
+        if distance_lright >= 100 and tar_x2 > 880:
+            conn_right.sendall(b'turn_right2')
 
 
 
@@ -171,10 +180,10 @@ def main():
         # dif_x2 = round(abs(center_x - tar_x2) * (398/1280))
         # dif_y2 = round(abs(center_y - tar_y2) * (107/360))            
 
-        # distance1 = math.sqrt(dif_x1^2 + dif_y1^2)
-        # distance2 = math.sqrt(dif_x2^2 + dif_y2^2)
-        # print(distance1)
-        # print(distance2)
+        # distance_left = math.sqrt(dif_x1^2 + dif_y1^2)
+        # distance_lright = math.sqrt(dif_x2^2 + dif_y2^2)
+        # print(distance_left)
+        # print(distance_lright)
 
         #結果表示
         #cv2.imshow('Frame', resultImg)
