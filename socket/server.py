@@ -75,11 +75,13 @@ def camera_measurement():
         #２つの計測対象の面積をリストに格納
         #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
         (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
+        #距離計算の選択
         (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
-        distance_left = area1
-        distance_right = area2
         # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
         # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
+        
+        distance_left = area1
+        distance_right = area2
         #real_distance_list1.append(area1)
         #real_distance_list2.append(area2)
     #表示
@@ -94,8 +96,9 @@ def main():
     
 
     count = 0
-    sock_left = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
-    sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
+    # ソケット作成
+    sock_left = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
+    sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
     # IPアドレスとポートを指定
     #同端末DELL
     #sock_left.bind(('127.0.0.1', 50006))
@@ -112,7 +115,7 @@ def main():
     # 接続(最大2)
     sock_left.listen(2)
     sock_right.listen(2)
-    # 誰かがアクセスしてきたら、コネクションとアドレスを入れるq
+    # 誰かがアクセスしてきたら、コネクションとアドレスを入れる
     conn_left, addr_left = sock_left.accept()
     conn_right, addr_right = sock_right.accept()
 
