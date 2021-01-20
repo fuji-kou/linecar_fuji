@@ -103,11 +103,15 @@ def main():
     #同端末DELL
     #sock_left.bind(('127.0.0.1', 50006))
     #sock_right.bind(('127.0.0.1', 50007))
+    #宮本研DELL
+    sock_left.bind(('192.168.11.12', 50006))
+    sock_right.bind(('192.168.11.12', 50007))
+
     #ファーウェイタブ（ラズパイとの通信)DELL
     #sock_left.bind(('192.168.43.198', 50006))
     #sock_right.bind(('192.168.43.198', 50007))
-    sock_left.connect(('0.0.0.0', 50006))
-    sock_right.connect(('0.0.0.0', 50007))
+    #sock_left.connect(('0.0.0.0', 50006))
+    #sock_right.connect(('0.0.0.0', 50007))
     
     #実機HP_PC
     #sock_left.connect(('192.168.179.2', 50008))
