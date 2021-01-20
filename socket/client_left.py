@@ -28,11 +28,11 @@ import linecar_settings as sets
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # サーバを指定
 #同端末
-sock.connect(('127.0.0.1', 50006))
+sock.connect(('127.0.0.1', 50008))
 #ファーウェイタブ（ラズパイとの通信）DELL
 #sock.connect(('192.168.43.198', 50006))
 #宮本研DELL 
-sock.connect(('192.168.11.12', 50006))
+#sock.connect(('192.168.11.12', 50006))
 
 
 #sock.connect(('192.168.179.4', 50006))
