@@ -66,12 +66,6 @@ def camera_measurement():
         else:
             area1 = target['area1']
 
-        #実験用
-        # area1= target['area1']       #赤の面積
-        # area1 = area1/(1280*720)*100      #割合
-        # area1 = round(159.55*area1**(-0.525))  
-
-
         #２つの計測対象の面積をリストに格納
         #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
         (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
@@ -101,18 +95,18 @@ def main():
     sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
     # IPアドレスとポートを指定
     #同端末
-    sock_left.bind(('127.0.0.1', 50008))
-    sock_right.bind(('127.0.0.1', 50009))
+    #sock_left.bind(('127.0.0.1', 50008))
+    #sock_right.bind(('127.0.0.1', 50009))
     #宮本研HP
     #sock_left.bind(('192.168.11.34', 50008))
     #sock_right.bind(('192.168.11.34', 50009))
     #異なるPC間
     #sock.bind(('0.0.0.0',50008))
-    #実機HP_PC
-    #sock_left.connect(('192.168.179.2', 50008))
-    #sock_right.connect(('192.168.179.2', 50009))
-    #sock_left.bind(('0.0.0.0', 50008))
-    #sock_right.bind(('0.0.0.0', 50009))
+    #実機HP_PC ポケットwihi
+    #sock_left.connect(('192.168.179.2', 49665))
+    #sock_right.connect(('192.168.179.2', 49666))
+    sock_left.bind(('0.0.0.0', 49665))
+    sock_right.bind(('0.0.0.0', 49666))
     # 接続(最大2)
     sock_left.listen(2)
     sock_right.listen(2)
