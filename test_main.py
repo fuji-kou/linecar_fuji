@@ -54,6 +54,9 @@ def main():
         except KeyboardInterrupt:
             m1.stop()
             p1.start(0)
+            with open('output.csv', 'w') as csv_out:
+                writer = csv.writer(csv_out, lineterminator='\n')
+                writer.writerows(record)
     終了処理
     m1.stop()
     p1.start(0)

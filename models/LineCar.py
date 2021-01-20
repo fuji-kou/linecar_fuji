@@ -84,7 +84,7 @@ class LineCar(object):
         
     def get_current_angle(self):
         
-        current_angle = 
+        current_angle = 1
         
         return current_angle
 #     def get_current_angle(self):
