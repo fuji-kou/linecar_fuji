@@ -89,6 +89,26 @@ while True:
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
 
+
+    # if data == (b'turn_left1!'):
+    #     pass
+    # #範囲から出たとき
+    # if data == (b'turn_left2!'):
+    #     print(data)
+    #     mv_angle(15)
+    #     GPIO.output(sets.DIR, GPIO.HIGH)
+    #     p1.start(sets.turn_SPEED)
+    # if data == (b'turn_right1!'):
+    #     pass
+    # #範囲から出たとき
+    # if data == (b'turn_right2!'):
+    #     print(data)
+    #     mv_angle(-15)
+    #     GPIO.output(sets.DIR, GPIO.HIGH)
+    #     p1.start(sets.turn_SPEED)
+
+
+
     if data == 0:
         mv_angle(0)
         break
