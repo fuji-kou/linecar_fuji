@@ -29,6 +29,7 @@ def mv_angle(angle):
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
 
 mv_angle(0)
+p1.start(40)
     
 def main():
     record = []
@@ -39,7 +40,7 @@ def main():
     m1.controller.prepare()
     # 発進
     GPIO.output(sets.DIR, GPIO.HIGH)  
-    p1.start(sets.SPEED)
+    p1.start(20)
     # 操作ループ
     while(True):
         try:
@@ -49,15 +50,13 @@ def main():
             record.append(m1.get_status())
             print(record[-1])
             if m1.controller.is_finished():
-                 p1.start(0)
+                 p1.start(10)
                  break
         except KeyboardInterrupt:
             m1.stop()
-            p1.start(0)
-            with open('output.csv', 'w') as csv_out:
-                writer = csv.writer(csv_out, lineterminator='\n')
-                writer.writerows(record)
-    終了処理
+            p1.start(10)
+
+    #終了処理
     m1.stop()
     p1.start(0)
 
