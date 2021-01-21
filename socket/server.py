@@ -46,11 +46,11 @@ def camera_measurement():
 
         cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
         cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
-        cv2.line(resultImg,(400,0),(400,720),(255,0,0),3)
+        cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
 
         cv2.line(resultImg,(640,0),(640,720),(0,255,0),3)
 
-        cv2.line(resultImg,(880,0),(880,720),(0,0,255),3)
+        cv2.line(resultImg,(780,0),(780,720),(0,0,255),3)
         cv2.line(resultImg,(1030,0),(1030,720),(0,0,255),3)
         cv2.line(resultImg,(1130,0),(1130,720),(0,0,255),3)
 
@@ -66,12 +66,17 @@ def camera_measurement():
                 thickness=3, lineType=cv2.LINE_AA)  
 
         #面積最大ブロブの中心座標を取得
-        if tar_x1 <= 640:
+        if tar_x1 <= tar_x2:
             (area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        if tar_x1 > 640:
+        if tar_x1 > tar_x2:
             (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-        else:
-            area1 = target['area1']
+        if tar_x2 == None:
+            if tar_x1 <= 640:
+                area1 = target['area1']
+            if tar_x1 > 640:
+                area2 = target['area1']
+        
+
 
         #２つの計測対象の面積をリストに格納
         #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
@@ -150,29 +155,34 @@ def main():
         distance_left,distance_lright,tar_x1,tar_x2 = camera_measurement()
         print(distance_left,distance_lright)
         #print(tar_x1,tar_x2)
-        if distance_left >= 120 and 400 <= tar_x1 <= 600:
+        if distance_left >= 300 and 250 <= tar_x1 <= 500:
             conn_left.sendall(b'Go1')
-        if distance_lright >= 120 and 680 <= tar_x2 <= 880:
+        if distance_lright >= 300 and 780 <= tar_x2 <= 1030:
             conn_right.sendall(b'Go2')
 
-        if distance_left < 120:
+        if distance_left < 300:
             conn_left.sendall(b'Stop1')
-        if distance_lright < 120:
+        if distance_lright < 300:
             conn_right.sendall(b'Stop2')
 
-        if distance_left >= 120 and tar_x1 < 400:
+        if distance_left >= 300 and tar_x1 < 250:
             conn_left.sendall(b'turn_left1')
-        if distance_lright >= 120 and tar_x2 < 680:
+        if distance_lright >= 300 and tar_x2 < 780:
             conn_right.sendall(b'turn_left2')
 
-        # if distance_left >= 120 and tar_x1 > 600:
+        if distance_left >= 300 and tar_x1 > 500:
+            conn_left.sendall(b'turn_right1')
+        if distance_lright >= 300 and tar_x2 > 1030:
+            conn_right.sendall(b'turn_right2')
+
+        # if distance_left >= 300 and tar_x1 > 600:
         #     conn_left.sendall(b'turn_right!1')
-        # if distance_lright >= 120 and tar_x2 > 880:
+        # if distance_lright >= 300 and tar_x2 > 880:
         #     conn_right.sendall(b'turn_right!2')
 
-        # if distance_left >= 120 and tar_x1 > 600:
+        # if distance_left >= 300 and tar_x1 > 600:
         #     conn_left.sendall(b'turn_right!!1')
-        # if distance_lright >= 120 and tar_x2 > 880:
+        # if distance_lright >= 300 and tar_x2 > 880:
         #     conn_right.sendall(b'turn_right2!!')
 
 
