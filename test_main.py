@@ -22,7 +22,8 @@ sleep(1)
 p1 = GPIO.PWM(sets.pwm, 100)            #pwmピンの設定
 Servo = GPIO.PWM(sets.Servo_pin, 50) 
 Servo.start(0)                      
-
+GPIO.output(sets.DIR, GPIO.HIGH)  
+p1.start(sets.SPEED)
 # servo
 def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
