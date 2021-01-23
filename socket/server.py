@@ -10,7 +10,7 @@ from camera_settings import camera
 #カメラキャプチャ
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
 
-TMP_FOLDER_PATH = "../cali/tmp/"
+TMP_FOLDER_PATH = ".../cali/tmp/"
 MTX_PATH = TMP_FOLDER_PATH + "mtx2.csv"
 DIST_PATH = TMP_FOLDER_PATH + "dist2.csv"
 
@@ -43,52 +43,10 @@ def camera_measurement():
             
         tar_x2 = int(target["center2"][0])
         tar_y2 = int(target["center2"][1])
-<<<<<<< HEAD
-        cv2.line(resultImg,(400,0),(400,720),(0,255,0),3)
-        cv2.line(resultImg,(640,0),(640,720),(0,200,0),3)
-        cv2.line(resultImg,(880,0),(880,720),(0,200,0),3)
-
-        #フレームに面積最大ブロブの中心周囲を円で描く
-        cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
-                thickness=3, lineType=cv2.LINE_AA)
-            
-        if tar_x2 == 0:
-            pass
-            
-        else:
-            cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
-                thickness=3, lineType=cv2.LINE_AA)  
-
-        #面積最大ブロブの中心座標を取得
-        if tar_x1 <= 640:
-            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        if tar_x1 > 640:
-            (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-        else:
-            area1 = target['area1']
-
-        #２つの計測対象の面積をリストに格納
-        #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
-        #距離計算の選択
-        (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
-        # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
-        # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
-        
-        distance_left = area1
-        distance_right = area2
-        #real_distance_list1.append(area1)
-        #real_distance_list2.append(area2)
-    #表示
-    cv2.imshow('Frame', resultImg)
-    #cv2.imshow("Mask", mask)
-    return distance_left , distance_right , tar_x1 , tar_x2
-=======
 
         cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
         cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
         cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
->>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
 
         cv2.line(resultImg,(640,0),(640,720),(0,255,0),3)
 
@@ -144,24 +102,6 @@ def main():
     
 
     count = 0
-<<<<<<< HEAD
-    sock_left = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
-    sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    #ソケット作成
-    # IPアドレスとポートを指定
-    #同端末
-    #sock_left.bind(('127.0.0.1', 50008))
-    #sock_right.bind(('127.0.0.1', 50009))
-    #宮本研HP
-    #sock_left.bind(('192.168.11.34', 50008))
-    #sock_right.bind(('192.168.11.34', 50009))
-    #異なるPC間
-    #sock.bind(('0.0.0.0',50008))
-    #実機HP_PC ポケットwihi
-    #sock_left.connect(('192.168.179.2', 49665))
-    #sock_right.connect(('192.168.179.2', 49666))
-    sock_left.bind(('0.0.0.0', 49665))
-    sock_right.bind(('0.0.0.0', 49666))
-=======
     # ソケット作成
     sock_left = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
     sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
@@ -185,7 +125,6 @@ def main():
     #sock_left.bind(('0.0.0.0', 50008))
     #sock_right.bind(('0.0.0.0', 50009))
 
->>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
     # 接続(最大2)
     sock_left.listen(2)
     sock_right.listen(2)
@@ -208,33 +147,6 @@ def main():
                 count +=1
                 data_left = 0
                 data_right = 0
-<<<<<<< HEAD
-
-
-        distance_left,distance_lright,tar_x1,tar_x2 = camera_measurement()
-        print(distance_left,distance_lright)
-        #print(tar_x1,tar_x2)
-        if distance_left >= 100 and 400 <= tar_x1 <= 640:
-            conn_left.sendall(b'Go1')
-        if distance_lright >= 100 and 640 <= tar_x2 <= 880:
-            conn_right.sendall(b'Go2')
-
-        if distance_left < 100:
-            conn_left.sendall(b'Stop1')
-        if distance_lright < 100:
-            conn_right.sendall(b'Stop2')
-
-        if distance_left >= 100 and tar_x1 < 400:
-            conn_left.sendall(b'turn_left1')
-        if distance_lright >= 100 and tar_x2 < 640:
-            conn_right.sendall(b'turn_left2')
-
-        if distance_left >= 100 and tar_x1 > 640:
-            conn_left.sendall(b'turn_right1')
-        if distance_lright >= 100 and tar_x2 > 880:
-            conn_right.sendall(b'turn_right2')
-
-=======
             #print(1)
             #data = 10
             #ループ抜けだし
@@ -274,7 +186,6 @@ def main():
         #     conn_right.sendall(b'turn_right2!!')
 
 
->>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
         # #中心座標
         # center_x = 640
         # center_y = 360
@@ -313,9 +224,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
 
