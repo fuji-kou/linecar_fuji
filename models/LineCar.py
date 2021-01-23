@@ -81,16 +81,11 @@ class LineCar(object):
 #     def currentdirection( self ):
 #         return self.direction
   
-#     # ラインカーに目標舵角を送信
-#     def mv_angle(self, angle):    
-#         duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180     # 角度からデューティ比を求める
-#         self.Servo.ChangeDutyCycle(duty)                   # デューティ比を変更
-#         time.sleep(0.3)
         
     def get_current_angle(self):
         
-
-
+        current_angle = 1
+        
         return current_angle
 #     def get_current_angle(self):
 #         """ラインカーから現在の舵角を教えてもらう．
@@ -148,8 +143,7 @@ class LineCar(object):
             [type] -- [description]
         """        
         status = self.gpsinfo[0:7]
-        cur_angle = 1
-        #self.get_current_angle()
+        cur_angle = self.get_current_angle()
         ctrl_iv = self.controller.get_internal_variables()
 
         status.append(cur_angle)

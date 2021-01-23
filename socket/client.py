@@ -30,8 +30,16 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #同端末
 #sock.connect(('127.0.0.1', 50007))
 #ファーウェイタブ（ラズパイとの通信）
+<<<<<<< HEAD
 #sock.connect(('192.168.43.198', 50007))
 sock.bind(('192.168.11.34',50008))
+=======
+sock.connect(('192.168.43.198', 50007))
+#実機パソコン
+#sock.connect(('192.168.179.2', 50007))
+#sock.connect(('192.168.11.34',50008))
+
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
 # サーバにメッセージを送る
 while True:
     sock.sendall(b'connect')
@@ -45,10 +53,23 @@ while True:
         #data = 0
     if data == (b'Go!!!!'):
         print(data)
+<<<<<<< HEAD
         # p1.start(15)
     if data == (b'Stop!!!!'):
         print(data)
         # p1.start(0)
+=======
+        p1.start(10)
+    if data == (b'Go'):
+        print(data)
+        p1.start(10)
+    if data == (b'Stop!!!!'):
+        print(data)
+        p1.start(0)
+    if data == (b'Stop'):
+        print(data)
+        p1.start(0)
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
 
     if data == 0:
         break

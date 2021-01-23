@@ -19,7 +19,7 @@ def mv_angle(angle):
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
     time.sleep(0.3)
 
-
+print(GPIO.input(Servo_pin))
 
 #動作テスト：サーボモータの角度をデューティ比で制御(デューティ比[0-100%])
 

@@ -2,11 +2,16 @@ import socket
 from time import sleep
 import sys
 import os
+<<<<<<< HEAD
 #import RPi.GPIO as GPIO
+=======
+import RPi.GPIO as GPIO
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
 # sys.path.append('..')
 import linecar_settings as sets
 
 # pin設定
+<<<<<<< HEAD
 # GPIO.setmode(GPIO.BCM)      
 # GPIO.setwarnings(False)             #GPIOからの警告を有効にする
 
@@ -23,19 +28,48 @@ import linecar_settings as sets
 # def mv_angle(angle):
 #     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
 #     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
+=======
+GPIO.setmode(GPIO.BCM)      
+GPIO.setwarnings(False)             #GPIOからの警告を有効にする
+
+GPIO.setup(sets.pwm, GPIO.OUT)      #出力設定          
+GPIO.setup(sets.DIR, GPIO.OUT)
+GPIO.setup(sets.Servo_pin, GPIO.OUT)  
+sleep(1)
+
+p1 = GPIO.PWM(sets.pwm, 100)            #pwmピンの設定
+Servo = GPIO.PWM(sets.Servo_pin, 50) 
+Servo.start(0)                      
+
+# servo
+def mv_angle(angle):
+    duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
+    Servo.ChangeDutyCycle(duty)     #デューティ比を変更
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # サーバを指定
 #同端末
+<<<<<<< HEAD
 sock.connect(('127.0.0.1', 50009))
+=======
+#sock.connect(('127.0.0.1', 50008))
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
 #宮本研DELL 
 #sock.connect(('192.168.11.12', 50006))
 
 #ファーウェイタブ（ラズパイとの通信）DELL
+<<<<<<< HEAD
 #sock.connect(('192.168.43.198', 50007))
 #実機HP_PC
 #sock.connect(('192.168.179.2', 50009)) #ポケットwihi
+=======
+sock.connect(('192.168.43.198', 50007))
+#sock.connect(('192.168.179.4', 50007))
+#実機HP_PC
+#sock.connect(('192.168.179.2',54163)) #ポケットwihi
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
 #sock.connect(('192.168.11.34',50009))#恐らく宮本研wihi
 
 # サーバにメッセージを送る
@@ -56,6 +90,7 @@ while True:
     #離れすぎたら前に出る
     if data == (b'Go2'):
         print(data)
+<<<<<<< HEAD
         # mv_angle(0)
         # GPIO.output(sets.DIR, GPIO.HIGH)
         # p1.start(sets.SPEED)
@@ -64,32 +99,82 @@ while True:
         print(data)
         # GPIO.output(sets.DIR, GPIO.HIGH)
         # p1.start(0)
+=======
+        mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.SPEED)
+    #flout
+    if data == (b'stop!!'):
+        print(data)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(0)
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
     if data == (b'Stop1'):
         pass
     #前出すぎたらストップ
     if data == (b'Stop2'):
         print(data)
+<<<<<<< HEAD
         # GPIO.output(sets.DIR, GPIO.HIGH)
         # p1.start(0)
+=======
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(0)
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
     if data == (b'turn_left1'):
         pass
     #範囲から出たとき
     if data == (b'turn_left2'):
         print(data)
+<<<<<<< HEAD
         # mv_angle(10)
         # GPIO.output(sets.DIR, GPIO.HIGH)
         # p1.start(sets.turn_SPEED)
+=======
+        mv_angle(15)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED)
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
     if data == (b'turn_right1'):
         pass
     #範囲から出たとき
     if data == (b'turn_right2'):
         print(data)
+<<<<<<< HEAD
         # mv_angle(-10)
         # GPIO.output(sets.DIR, GPIO.HIGH)
         # p1.start(sets.turn_SPEED)
 
     if data == 0:
         #mv_angle(0)
+=======
+        mv_angle(-15)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED)
+
+
+    # if data == (b'turn_left1!'):
+    #     pass
+    # #範囲から出たとき
+    # if data == (b'turn_left2!'):
+    #     print(data)
+    #     mv_angle(15)
+    #     GPIO.output(sets.DIR, GPIO.HIGH)
+    #     p1.start(sets.turn_SPEED)
+    # if data == (b'turn_right1!'):
+    #     pass
+    # #範囲から出たとき
+    # if data == (b'turn_right2!'):
+    #     print(data)
+    #     mv_angle(-15)
+    #     GPIO.output(sets.DIR, GPIO.HIGH)
+    #     p1.start(sets.turn_SPEED)
+
+
+
+    if data == 0:
+        mv_angle(0)
+>>>>>>> fcf57261f394e97c09bf3e6c2fe22428f069de3d
         break
 
 
