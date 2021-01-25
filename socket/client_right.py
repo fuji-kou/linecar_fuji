@@ -84,6 +84,18 @@ while True:
         pass
     #範囲から出たとき
     if data == (b'turn_right2'):
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         print(data)
         mv_angle(-15)
         GPIO.output(sets.DIR, GPIO.HIGH)
