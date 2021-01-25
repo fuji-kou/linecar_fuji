@@ -36,7 +36,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect(('192.168.43.198', 50007))
 #sock.connect(('192.168.179.4', 50007))
 #実機HP_PC
-#sock.connect(('192.168.179.2',54163)) #ポケットwihi
+#sock.connect(('192.168.179.2',50009)) #ポケットwihi
 #sock.connect(('192.168.11.34',50009))#恐らく宮本研wihi
 
 # サーバにメッセージを送る
