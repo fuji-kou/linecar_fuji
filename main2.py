@@ -197,9 +197,9 @@ def main():
 
                 else:
                     if fix_or_float == 2:
-                        pass
-                input_angle = m1.controller.get_input_angle(now_latlon)
-                m1.mv_angle(round(input_angle, 1))
+                        fix_or_float = 1
+                    input_angle = m1.controller.get_input_angle(now_latlon)
+                    m1.mv_angle(round(input_angle, 1))
 
                 record.append(m1.get_status())
 
