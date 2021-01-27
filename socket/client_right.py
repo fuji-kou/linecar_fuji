@@ -33,12 +33,13 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect(('192.168.11.12', 50006))
 
 #ファーウェイタブ（ラズパイとの通信）DELL
-sock.connect(('192.168.43.198', 50007))
+#sock.connect(('192.168.43.198', 50007))
+#sock.connect(('172.20.10.7', 50007))
 #sock.connect(('192.168.179.4', 50007))
 #実機HP_PC
-#sock.connect(('192.168.179.2',50009)) #ポケットwihi
+#sock.connect(('192.168.179.4',50009)) #ポケットwihi
 #sock.connect(('192.168.11.34',50009))#恐らく宮本研wihi
-
+sock.connect(('192.168.43.252',50009))
 # サーバにメッセージを送る
 while True:
     sock.sendall(b'connect')
