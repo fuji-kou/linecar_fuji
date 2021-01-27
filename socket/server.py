@@ -105,6 +105,10 @@ def main():
     #ファーウェイタブ（ラズパイとの通信)DELL
     sock_left.bind(('192.168.43.198', 50006))
     sock_right.bind(('192.168.43.198', 50007))
+
+    #iphone
+    #sock_left.bind(('172.20.10.7', 50006))
+    #sock_right.bind(('172.20.10.7', 50007))
     #sock_left.connect(('0.0.0.0', 50006))
     #sock_right.connect(('0.0.0.0', 50007))
     
