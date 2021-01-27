@@ -120,8 +120,10 @@ def main():
     #sock_right.connect(('0.0.0.0', 50007))
     
     #実機HP_PC
-    sock_left.bind(('192.168.179.2', 50008))
-    sock_right.bind(('192.168.179.2', 50009))
+    #sock_left.bind(('192.168.179.4', 50008))
+    #sock_right.bind(('192.168.179.4', 50009))
+    sock_left.bind(('192.168.43.252', 50008))
+    sock_right.bind(('192.168.43.252', 50009))
     #sock_left.bind(('0.0.0.0', 50008))
     #sock_right.bind(('0.0.0.0', 50009))
 
