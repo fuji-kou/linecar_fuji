@@ -57,7 +57,19 @@ class camera():
 
         # 面積最大ブロブの各種情報を取得
         if len(data2) == 0:
-            pass
+            maxblob["upper_left1"] = None# 左上座標
+            maxblob["width1"] = None  # 幅
+            maxblob["height1"] = None  # 高さ
+            maxblob["area1"] = None   # 面積
+            maxblob["center1"] = None
+
+
+            maxblob["upper_left2"] = None# 左上座標
+            maxblob["width2"] = None  # 幅
+            maxblob["height2"] = None  # 高さ
+            maxblob["area2"] = None   # 面積
+            maxblob["center2"] = None
+
         if len(data2) == 1:
             if (data2[-1][0]+data2[-1][2]/2) <= 640:
                 #red1
@@ -104,7 +116,7 @@ class camera():
                 maxblob["area2"] = data2[-2][4]   # 面積
                 maxblob["center2"] = (data2[-2][0]+data2[-2][2]/2,data2[-2][1]+data2[-2][3]/2)  # 中心座標
 
-            if (data2[-1][0]+data2[-1][2]/2) <= (data2[-2][0]+data2[-2][2]):
+            if (data2[-1][0]+data2[-1][2]/2) > (data2[-2][0]+data2[-2][2]):
                 #camera1
                 maxblob["upper_left2"] = (data2[-1][0], data2[-1][1]) # 左上座標
                 maxblob["width2"] = data2[-1][2]  # 幅

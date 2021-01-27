@@ -104,7 +104,7 @@ class camera():
                 maxblob["area2"] = data2[-2][4]   # 面積
                 maxblob["center2"] = (data2[-2][0]+data2[-2][2]/2,data2[-2][1]+data2[-2][3]/2)  # 中心座標
 
-            if (data2[-1][0]+data2[-1][2]/2) <= (data2[-2][0]+data2[-2][2]):
+            if (data2[-1][0]+data2[-1][2]/2) > (data2[-2][0]+data2[-2][2]):
                 #camera1
                 maxblob["upper_left2"] = (data2[-1][0], data2[-1][1]) # 左上座標
                 maxblob["width2"] = data2[-1][2]  # 幅
