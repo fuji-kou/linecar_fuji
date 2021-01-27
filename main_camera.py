@@ -31,7 +31,6 @@ def camera_measurement():
     #赤色検出
     mask = camera.red_detect(resultImg)
     w, h = mask.shape
-        
     empty_image = np.zeros((w,h), dtype = np.uint8)
     dif = mask - empty_image
     if dif.any() == 0:      #零行列の場合
@@ -40,10 +39,6 @@ def camera_measurement():
     else:
         #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
         target = camera.analysis_blob(mask)
-            
-        cv2.line(resultImg,(400,0),(400,720),(0,255,0),3)
-        cv2.line(resultImg,(640,0),(640,720),(0,200,0),3)
-        cv2.line(resultImg,(880,0),(880,720),(0,200,0),3)   
 
         if target["center1"] == None:
             tar_x1 = None
@@ -53,8 +48,6 @@ def camera_measurement():
         else:
             tar_x1 = int(target["center1"][0])
             tar_y1 = int(target["center1"][1])
-            cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
-                thickness=3, lineType=cv2.LINE_AA)
             (area1, area2) = (target['area1'], None)       #赤の面積
             (area1, area2) = (area1/(1280*720)*100, None)       #割合
             (area1, area2) = (round(159.55*area1**(-0.525)), None) #10-780
@@ -69,29 +62,12 @@ def camera_measurement():
         else:
             tar_x2 = int(target["center2"][0])
             tar_y2 = int(target["center2"][1])
-            cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
-                thickness=3, lineType=cv2.LINE_AA)  
             (area1, area2) = (area1, target['area2'])       #赤の面積
             (area1, area2) = (area1, area2/(1280*720)*100)       #割合
             (area1, area2) = (area1, round(159.55*area2**(-0.525))) #10-780
             distance_right = area2
             difference_right = tar_x2 - center_x
         #フレームに面積最大ブロブの中心周囲を円で描く
-
-        #面積最大ブロブの中心座標を取得
-#        if tar_x1 <= tar_x2:
-#            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
-#        if tar_x1 > tar_x2:
-#            (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-#        if tar_x2 == None:
-#            if tar_x1 <= 640:
-#                area1 = target['area1']
-#            if tar_x1 > 640:
-#                area2 = target['area1']
-
-        #２つの計測対象の面積をリストに格納
-        #中心からのx座標の差
-        # print(difference_left , difference_right)
 
     #表示
     #cv2.imshow('Frame', resultImg)
@@ -100,6 +76,7 @@ def camera_measurement():
 
 def main():
     record = []
+    position_record = [sets.POSITION_START[0], sets.POSITION_START[1], sets.POSITION_END[0], sets.POSITION_END[1]]
     count = 0
     m1 = LineCar()
     m1.setup4experiment()
@@ -127,28 +104,44 @@ def main():
                     m1.mv_wheel(0)
                     m1.mv_angle(0)
                 else:
-                    if difference_left > difference_right:
-                        angle = math.atan(distance_left/((difference_left - difference_right)/2))
-
+                    if tar_x1 <= 640 and tar_x2 <= 640:
+                        angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
                         angle = angle*0.1
-                        print(angle,"a")
-                        m1.mv_angle(angle)
-                    if difference_left == difference_right:
-                        m1.mv_angle(0)
-                    if difference_left < difference_right:
-                        angle = math.atan(distance_right/((difference_right - difference_left)/2))
-
+                        print(angle,"left_side")
+                    if tar_x1 > 640 and tar_x2 > 640:
+                        angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
                         angle = angle*0.1
-                        print(angle,"b")
-                        m1.mv_angle(-angle)
+                        print(angle,"right_side")
+                    else:
+                        if difference_left > difference_right:
+                            angle = math.atan(distance_left/((difference_left - difference_right)/2))
+
+                            angle = angle*6400/(2*math.pi)
+                            angle = angle*0.1
+                            print(angle,"left")
+                        if difference_left == difference_right:
+                            angle = 0
+                            print(angle,"=")
+                        if difference_left < difference_right:
+                            angle = math.atan(distance_right/((difference_right - difference_left)/2))
+
+                            angle = angle*6400/(2*math.pi)
+                            angle = angle*0.1
+                            angle = -1*angle
+                            print(angle,"right")
+                    m1.mv_angle(angle)
                     record.append(m1.get_status())
                     #floutのとき
                     if m1.controller.is_finished():
                         m1.mv_wheel(0)
                         break
             except KeyboardInterrupt:
+                with open('./output.csv', 'w') as csv_out:
+                    writer = csv.writer(csv_out, lineterminator='\n')
+                    writer.writerows([position_record])
+                    writer.writerows(record)
                 m1.stop()
 
     # 終了処理
@@ -158,6 +151,7 @@ def main():
 
     with open('./output.csv', 'w') as csv_out:
         writer = csv.writer(csv_out, lineterminator='\n')
+        writer.writerows([position_record])
         writer.writerows(record)
 
 
