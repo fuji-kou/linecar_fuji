@@ -49,7 +49,7 @@ class FujitaControl(Control):
 #         Returns:
 #             [bool] -- 終わってたらTrueを返す．
 #         """
-        return self.distance_s2r > 5
+        return self.distance_s2r > 10
 
 
 

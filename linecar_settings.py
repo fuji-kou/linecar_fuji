@@ -5,23 +5,36 @@
 # TIMEOUT = 0.1
 
 # raspi(pin)
-Servo_pin = 18
-pwm = 23                           #pwmピンを23に設定
-DIR = 24                           #DIRピンを24に設定
+#Servo_pin = 18
+#pwm = 23                           #pwmピンを23に設定
+#DIR = 24                           #DIRピンを24に設定
+#
+## socket
+##ADDRESS = '127.0.0.1'
+##ADDRESS = '192.168.43.199' #fawey
+#ADDRESS = '192.168.43.114' #fawey
+#PORT_NUM = 52002
+#BUFSIZE = 256
+#
+##FujitaControl
+#GAIN_FJT = 5
+#SPEED = 10
+COM_PORT = 'COM4'
+BAUDRATE = '38400'
+TIMEOUT = 0.1
 
 # socket
-#ADDRESS = '127.0.0.1'
-#ADDRESS = '192.168.43.199' #fawey
-ADDRESS = '192.168.43.114' #fawey
+ADDRESS = '127.0.0.1'
 PORT_NUM = 52002
 BUFSIZE = 256
 
 #FujitaControl
 GAIN_FJT = 5
-SPEED = 15
-REFERENCE_POINT = [33.89099751, 130.71552712]
-POSITION_END = [33.89099958, 130.71550786]
-POSITION_START = [33.89099751, 130.71552712]
+SPEED = 10
+WHEELBASE = 0.8
+REFERENCE_POINT = [33.8896742608679, 130.709434303226]
+POSITION_END = [33.8895196064363, 130.708842956254]
+POSITION_START = [33.8896742608679, 130.709434303226]
 
 # # FixedAngleTest
 # INPUT_ANGLE = 530.0

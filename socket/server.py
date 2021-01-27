@@ -34,16 +34,6 @@ def camera_measurement():
         pass
 
     else:
-        #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
-        target = camera.analysis_blob(mask)
-            
-        #面積最大ブロブの中心座標を取得
-        tar_x1 = int(target["center1"][0])
-        tar_y1 = int(target["center1"][1])
-            
-        tar_x2 = int(target["center2"][0])
-        tar_y2 = int(target["center2"][1])
-
         cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
         cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
         cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
@@ -53,47 +43,52 @@ def camera_measurement():
         cv2.line(resultImg,(780,0),(780,720),(0,0,255),3)
         cv2.line(resultImg,(1030,0),(1030,720),(0,0,255),3)
         cv2.line(resultImg,(1130,0),(1130,720),(0,0,255),3)
-
-        #フレームに面積最大ブロブの中心周囲を円で描く
-        cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
-                thickness=3, lineType=cv2.LINE_AA)
+        #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
+        target = camera.analysis_blob(mask)
             
-        if tar_x2 == 0:
-            pass
-            
+        #面積最大ブロブの中心座標を取得
+        if target["center1"] == None:
+            tar_x1 = None
+            tar_y1 = None       
+            distance_left = None
         else:
+            tar_x1 = int(target["center1"][0])
+            tar_y1 = int(target["center1"][1])
+            cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
+                thickness=3, lineType=cv2.LINE_AA)
+            (area1, area2) = (target['area1'], None)       #赤の面積
+            (area1, area2) = (area1/(1280*720)*100, None)       #割合
+            (area1, area2) = (round(159.55*area1**(-0.525)), None) #10-780
+            distance_left = area1
+
+        if target["center2"] == None:
+            tar_x2 = None
+            tar_y2 = None       
+            distance_right = None
+        else:
+            tar_x2 = int(target["center2"][0])
+            tar_y2 = int(target["center2"][1])
             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
                 thickness=3, lineType=cv2.LINE_AA)  
+            (area1, area2) = (area1, target['area2'])       #赤の面積
+            (area1, area2) = (area1, area2/(1280*720)*100)       #割合
+            (area1, area2) = (area1, round(159.55*area2**(-0.525))) #10-780
+            distance_right = area2
+
+
+        #フレームに面積最大ブロブの中心周囲を円で描く
 
         #面積最大ブロブの中心座標を取得
-        if tar_x1 <= tar_x2:
-            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        if tar_x1 > tar_x2:
-            (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-        if tar_x2 == None:
-            if tar_x1 <= 640:
-                area1 = target['area1']
-            if tar_x1 > 640:
-                area2 = target['area1']
-        
-
-
         #２つの計測対象の面積をリストに格納
-        #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
         #距離計算の選択
-        (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
         # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
         # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
-        
-        distance_left = area1
-        distance_right = area2
         #real_distance_list1.append(area1)
         #real_distance_list2.append(area2)
     #表示
     cv2.imshow('Frame', resultImg)
     #cv2.imshow("Mask", mask)
-    return distance_left , distance_right , tar_x1 , tar_x2
+    return distance_left, distance_right, tar_x1, tar_x2
 
 def main():    
     # データ格納用のリスト
@@ -154,7 +149,7 @@ def main():
             #ループ抜けだし
 #            if data == 10:
 #                break
-        distance_left,distance_lright,tar_x1,tar_x2 = camera_measurement()
+        distance_left, distance_lright, tar_x1, tar_x2 = camera_measurement()
         print(distance_left,distance_lright)
         #print(tar_x1,tar_x2)
         if distance_left >= 300 and 250 <= tar_x1 <= 500:
