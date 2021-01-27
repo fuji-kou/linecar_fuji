@@ -4,7 +4,7 @@ import csv
 import socket
 import cv2
 from camera_settings import camera
-
+from time import sleep
 import linecar_settings as sets
 from models.LineCar import LineCar
 from controllers.FujitaControl import FujitaControl
@@ -60,16 +60,9 @@ def camera_measurement():
             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
                     thickness=3, lineType=cv2.LINE_AA)  
 
-        #面積最大ブロブの中心座標を取得
-        if tar_x1 <= 640:
-            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        if tar_x1 > 640:
-            (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-        else:
-            area1 = target['area1']
 
         #２つの計測対象の面積をリストに格納
-        #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
+        (area1, area2) = (target['area1'], target['area2'])       #赤の面積
         (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
         #距離計算の選択
         (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
@@ -93,6 +86,7 @@ def camera_measurement():
 def main():
     record = []
     count = 0
+    fix_or_float = 1
     # ソケット作成
     sock_left = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
     sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
@@ -144,13 +138,16 @@ def main():
         # 操作ループ
         while(True):
             try:  
+                m1.mv_wheel(sets.SPEED)
                 now_latlon = m1.get_current_position()
                 distance_left,distance_right,tar_x1,tar_x2,difference_left,difference_right = camera_measurement()
                 if now_latlon[3] == 2:
                     m1.mv_wheel(0)
                     m1.mv_angle(0)
-                    conn_left.sendall(b'Stop1')
-                    conn_right.sendall(b'Stop2')
+                    if fix_or_float == 1:
+                        conn_left.sendall(b'Stop1')
+                        conn_right.sendall(b'Stop2')
+                        fix_or_float = 2
                     print(distance_left,distance_right)
 
                     if distance_left >= 100 and 400 <= tar_x1 <= 640:
@@ -181,12 +178,13 @@ def main():
                     # if difference_left < difference_right:
                     #     angle = math.atan(distance_right/((difference_right - difference_left)/2))
                     #     m1.mv_angle(-angle)
-                        
-           
+
                 else:
-                    m1.mv_wheel(sets.SPEED)
+                    if fix_or_float == 2:
+                        fix_or_float = 1
                     input_angle = m1.controller.get_input_angle(now_latlon)
                     m1.mv_angle(round(input_angle, 1))
+
 
                 record.append(m1.get_status())
                 #floutのとき

@@ -64,22 +64,11 @@ def camera_measurement():
         else:
             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
                 thickness=3, lineType=cv2.LINE_AA)  
-
-        #面積最大ブロブの中心座標を取得
-        if tar_x1 <= tar_x2:
-            (area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        if tar_x1 > tar_x2:
-            (area1, area2) = (target['area2'], target['area1'])       #赤の面積
-        if tar_x2 == None:
-            if tar_x1 <= 640:
-                area1 = target['area1']
-            if tar_x1 > 640:
-                area2 = target['area1']
-        
+       
 
 
         #２つの計測対象の面積をリストに格納
-        #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
+        (area1, area2) = (target['area1'], target['area2'])       #赤の面積
         (area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
         #距離計算の選択
         (area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
