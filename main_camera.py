@@ -106,6 +106,7 @@ def main():
                 if difference_left == None or difference_right == None:
                     m1.mv_wheel(0)
                     m1.mv_angle(0)
+                    
                 else:
                     if tar_x1 <= 640 and tar_x2 <= 640:
                         angle = (tar_x2 - tar_x1)/2 - 640
@@ -114,8 +115,6 @@ def main():
                         type_area = "left_side"
                         print(angle,type_area)
 
-
-
                     elif tar_x1 > 640 and tar_x2 > 640:
                         angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
@@ -123,29 +122,24 @@ def main():
                         type_area = "right_side"
                         print(angle,type_area)
 
-
-
                     else:
                         if difference_left > difference_right:
                             #angle = math.atan(distance_left/((difference_left - difference_right)/2))
-                            angle = 640 - (tar_x2 - tar_x1)/2
+                            angle = difference_left - difference_right
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
                             angle = -1*angle
                             type_area = "left"
                             print(angle,type_area)
 
-
                         if difference_left == difference_right:
                             angle = 0
                             type_area = "="
                             print(angle,type_area)
 
-
-
                         if difference_left < difference_right:
                             #angle = math.atan(distance_right/((difference_right - difference_left)/2))
-                            angle = 640 - (tar_x2 - tar_x1)/2
+                            angle = difference_right - difference_left
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
                             type_area = "right"
@@ -159,6 +153,7 @@ def main():
                     if m1.controller.is_finished():
                         m1.mv_wheel(0)
                         break
+
             except KeyboardInterrupt:
                 with open('./output.csv', 'w') as csv_out:
                     writer = csv.writer(csv_out, lineterminator='\n')
