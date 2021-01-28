@@ -76,7 +76,9 @@ def camera_measurement():
 
 def main():
     record = []
+    type_area = "="
     position_record = [sets.POSITION_START[0], sets.POSITION_START[1], sets.POSITION_END[0], sets.POSITION_END[1]]
+    camera_record = []
     count = 0
     m1 = LineCar()
     m1.setup4experiment()
@@ -108,11 +110,13 @@ def main():
                         angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
                         angle = angle*0.1
+                        type_area = "left_side"
                         print(angle,"left_side")
                     if tar_x1 > 640 and tar_x2 > 640:
                         angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
                         angle = angle*0.1
+                        type_area = "right_side"
                         print(angle,"right_side")
                     else:
                         if difference_left > difference_right:
@@ -120,9 +124,11 @@ def main():
 
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
+                            type_area = "left"
                             print(angle,"left")
                         if difference_left == difference_right:
                             angle = 0
+                            type_area = "="
                             print(angle,"=")
                         if difference_left < difference_right:
                             angle = math.atan(distance_right/((difference_right - difference_left)/2))
@@ -130,9 +136,12 @@ def main():
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
                             angle = -1*angle
+                            type_area = "right"
                             print(angle,"right")
                     m1.mv_angle(angle)
                     record.append(m1.get_status())
+                    camera_record.append(tar_x1,tar_x2,angle,type_area)
+                    record = record + camera_record
                     #floutのとき
                     if m1.controller.is_finished():
                         m1.mv_wheel(0)
