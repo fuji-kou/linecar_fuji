@@ -18,7 +18,6 @@ DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
 cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
 def camera_measurement():
     ret, frame = cap.read()
     #キャリブレーション適用
@@ -38,15 +37,15 @@ def camera_measurement():
         pass
 
     else:
-        # cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
-        # cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
-        # cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
+        cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
+        cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
+        cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
 
-        # cv2.line(resultImg,(640,0),(640,720),(0,255,0),3)
+        cv2.line(resultImg,(640,0),(640,720),(0,255,0),3)
 
-        # cv2.line(resultImg,(780,0),(780,720),(0,0,255),3)
-        # cv2.line(resultImg,(1030,0),(1030,720),(0,0,255),3)
-        # cv2.line(resultImg,(1130,0),(1130,720),(0,0,255),3)
+        cv2.line(resultImg,(780,0),(780,720),(0,0,255),3)
+        cv2.line(resultImg,(1030,0),(1030,720),(0,0,255),3)
+        cv2.line(resultImg,(1130,0),(1130,720),(0,0,255),3)
         #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
         target = camera.analysis_blob(mask)
             
@@ -61,8 +60,8 @@ def camera_measurement():
             tar_x1 = int(target["center1"][0])
             tar_y1 = int(target["center1"][1])
             #フレームに面積最大ブロブの中心周囲を円で描く
-            # cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
-            #         thickness=3, lineType=cv2.LINE_AA)
+            cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
+                    thickness=3, lineType=cv2.LINE_AA)
             (area1, area2) = (target['area1'], None)
             (area1, area2) = (area1/(1280*720)*100, None)       #割合
             #距離計算の選択
@@ -76,8 +75,8 @@ def camera_measurement():
         else:   
             tar_x2 = int(target["center2"][0])
             tar_y2 = int(target["center2"][1])
-            # cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
-            #     thickness=3, lineType=cv2.LINE_AA)  
+            cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
+                thickness=3, lineType=cv2.LINE_AA)  
             (area1, area2) = (area1, target['area2'])
             (area1, area2) = (area1, area2/(1280*720)*100)       #割合
             #距離計算の選択
@@ -98,7 +97,7 @@ def camera_measurement():
         #real_distance_list1.append(area1)
         #real_distance_list2.append(area2)
     #表示
-    #cv2.imshow('Frame', resultImg)
+    cv2.imshow('Frame', resultImg)
     #cv2.imshow("Mask", mask)
     return distance_left , distance_right , tar_x1 , tar_x2
 
