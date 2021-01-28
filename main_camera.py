@@ -21,6 +21,7 @@ cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
+
 def camera_measurement():
     ret, frame = cap.read()
     center_x = 640
@@ -107,37 +108,49 @@ def main():
                     m1.mv_angle(0)
                 else:
                     if tar_x1 <= 640 and tar_x2 <= 640:
-                        angle = 640 - (tar_x2 - tar_x1)/2
+                        angle = (tar_x2 - tar_x1)/2 - 640
                         angle = angle*6400/(2*math.pi)
-                        angle = angle*0.1
+                        angle = angle*0.001
                         type_area = "left_side"
-                        print(angle,"left_side")
-                    if tar_x1 > 640 and tar_x2 > 640:
+                        print(angle,type_area)
+
+
+
+                    elif tar_x1 > 640 and tar_x2 > 640:
                         angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
-                        angle = angle*0.1
+                        angle = angle*0.001
                         type_area = "right_side"
-                        print(angle,"right_side")
+                        print(angle,type_area)
+
+
+
                     else:
                         if difference_left > difference_right:
-                            angle = math.atan(distance_left/((difference_left - difference_right)/2))
-
-                            angle = angle*6400/(2*math.pi)
-                            angle = angle*0.1
-                            type_area = "left"
-                            print(angle,"left")
-                        if difference_left == difference_right:
-                            angle = 0
-                            type_area = "="
-                            print(angle,"=")
-                        if difference_left < difference_right:
-                            angle = math.atan(distance_right/((difference_right - difference_left)/2))
-
+                            #angle = math.atan(distance_left/((difference_left - difference_right)/2))
+                            angle = 640 - (tar_x2 - tar_x1)/2
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
                             angle = -1*angle
+                            type_area = "left"
+                            print(angle,type_area)
+
+
+                        if difference_left == difference_right:
+                            angle = 0
+                            type_area = "="
+                            print(angle,type_area)
+
+
+
+                        if difference_left < difference_right:
+                            #angle = math.atan(distance_right/((difference_right - difference_left)/2))
+                            angle = 640 - (tar_x2 - tar_x1)/2
+                            angle = angle*6400/(2*math.pi)
+                            angle = angle*0.1
                             type_area = "right"
-                            print(angle,"right")
+                            print(angle,type_area)
+
                     m1.mv_angle(angle)
                     record.append(m1.get_status())
                     camera_record.append(tar_x1,tar_x2,angle,type_area)
