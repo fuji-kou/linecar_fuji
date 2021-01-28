@@ -105,14 +105,14 @@ def main():
                     m1.mv_angle(0)
                 else:
                     if tar_x1 <= 640 and tar_x2 <= 640:
-                        angle = 640 - (tar_x2 - tar_x1)/2
+                        angle = (tar_x2 - tar_x1)/2 -640
                         angle = angle*6400/(2*math.pi)
-                        angle = angle*0.1
+                        angle = angle*0.0001
                         print(angle,"left_side")
-                    if tar_x1 > 640 and tar_x2 > 640:
+                    elif tar_x1 > 640 and tar_x2 > 640:
                         angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
-                        angle = angle*0.1
+                        angle = angle*0.0001
                         print(angle,"right_side")
                     else:
                         if difference_left > difference_right:
@@ -120,6 +120,7 @@ def main():
 
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
+                            angle = -1*angle
                             print(angle,"left")
                         if difference_left == difference_right:
                             angle = 0
@@ -129,7 +130,6 @@ def main():
 
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
-                            angle = -1*angle
                             print(angle,"right")
                     m1.mv_angle(angle)
                     record.append(m1.get_status())
