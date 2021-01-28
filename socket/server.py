@@ -38,15 +38,15 @@ def camera_measurement():
         pass
 
     else:
-        cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
-        cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
-        cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
+        # cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
+        # cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
+        # cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
 
-        cv2.line(resultImg,(640,0),(640,720),(0,255,0),3)
+        # cv2.line(resultImg,(640,0),(640,720),(0,255,0),3)
 
-        cv2.line(resultImg,(780,0),(780,720),(0,0,255),3)
-        cv2.line(resultImg,(1030,0),(1030,720),(0,0,255),3)
-        cv2.line(resultImg,(1130,0),(1130,720),(0,0,255),3)
+        # cv2.line(resultImg,(780,0),(780,720),(0,0,255),3)
+        # cv2.line(resultImg,(1030,0),(1030,720),(0,0,255),3)
+        # cv2.line(resultImg,(1130,0),(1130,720),(0,0,255),3)
         #マスク画像をブロブ解析（面積最大のブロブ情報を取得）
         target = camera.analysis_blob(mask)
             
@@ -61,8 +61,8 @@ def camera_measurement():
             tar_x1 = int(target["center1"][0])
             tar_y1 = int(target["center1"][1])
             #フレームに面積最大ブロブの中心周囲を円で描く
-            cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
-                    thickness=3, lineType=cv2.LINE_AA)
+            # cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
+            #         thickness=3, lineType=cv2.LINE_AA)
             (area1, area2) = (target['area1'], None)
             (area1, area2) = (area1/(1280*720)*100, None)       #割合
             #距離計算の選択
@@ -76,8 +76,8 @@ def camera_measurement():
         else:   
             tar_x2 = int(target["center2"][0])
             tar_y2 = int(target["center2"][1])
-            cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
-                thickness=3, lineType=cv2.LINE_AA)  
+            # cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
+            #     thickness=3, lineType=cv2.LINE_AA)  
             (area1, area2) = (area1, target['area2'])
             (area1, area2) = (area1, area2/(1280*720)*100)       #割合
             #距離計算の選択
@@ -98,7 +98,7 @@ def camera_measurement():
         #real_distance_list1.append(area1)
         #real_distance_list2.append(area2)
     #表示
-    cv2.imshow('Frame', resultImg)
+    #cv2.imshow('Frame', resultImg)
     #cv2.imshow("Mask", mask)
     return distance_left , distance_right , tar_x1 , tar_x2
 
@@ -158,11 +158,7 @@ def main():
                 count +=1
                 data_left = 0
                 data_right = 0
-            #print(1)
-            #data = 10
-            #ループ抜けだし
-#            if data == 10:
-#                break
+ 
         distance_left,distance_lright,tar_x1,tar_x2 = camera_measurement()
         print(distance_left,distance_lright)
         #print(tar_x1,tar_x2)
@@ -190,43 +186,7 @@ def main():
             if distance_lright >= 300 and tar_x2 > 1030:
                 conn_right.sendall(b'turn_right2')
 
-        # if distance_left >= 300 and tar_x1 > 600:
-        #     conn_left.sendall(b'turn_right!1')
-        # if distance_lright >= 300 and tar_x2 > 880:
-        #     conn_right.sendall(b'turn_right!2')
 
-        # if distance_left >= 300 and tar_x1 > 600:
-        #     conn_left.sendall(b'turn_right!!1')
-        # if distance_lright >= 300 and tar_x2 > 880:
-        #     conn_right.sendall(b'turn_right2!!')
-
-
-        # #中心座標
-        # center_x = 640
-        # center_y = 360
-
-        # #中心ピクセルから認識した赤色の中心までを直線描画，cv2.line(画像,座標1,座標2,色,太さ)
-        # cv2.line(resultImg,(tar_x1, tar_y1),(640,360),(0,255,0),3)
-        # cv2.line(resultImg,(tar_x2, tar_y2),(640,360),(0,200,0),3)
-
-        # #x座標とy座標をピクセルからcmに変換
-        # dif_x1 = round(abs(center_x - tar_x1) * (398/1280))
-        # dif_y1 = round(abs(center_y - tar_y1) * (107/360))
-
-        # dif_x2 = round(abs(center_x - tar_x2) * (398/1280))
-        # dif_y2 = round(abs(center_y - tar_y2) * (107/360))            
-
-        # distance_left = math.sqrt(dif_x1^2 + dif_y1^2)
-        # distance_lright = math.sqrt(dif_x2^2 + dif_y2^2)
-        # print(distance_left)
-        # print(distance_lright)
-
-        #結果表示
-        #cv2.imshow('Frame', resultImg)
-        #cv2.imshow("Mask", mask)
-
-        #保存
-        #writer.write(resultImg)
 
         #qキーが押されたら途中終了
         if cv2.waitKey(25) & 0xFF == ord('q'):
