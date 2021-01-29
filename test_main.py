@@ -23,15 +23,19 @@ p1 = GPIO.PWM(sets.pwm, 100)            #pwmピンの設定
 Servo = GPIO.PWM(sets.Servo_pin, 50) 
 Servo.start(0)                      
 GPIO.output(sets.DIR, GPIO.HIGH)  
-p1.start(sets.SPEED)
+p1.start(5)
 # servo
 def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
 
 mv_angle(0)
+<<<<<<< HEAD
 GPIO.output(sets.DIR, GPIO.HIGH)  
 p1.start(10)
+=======
+
+>>>>>>> 1e09f96ca72aaea963c02883f59369dffeedba77
     
 def main():
     record = []
@@ -42,7 +46,7 @@ def main():
     m1.controller.prepare()
     # 発進
     GPIO.output(sets.DIR, GPIO.HIGH)  
-    p1.start(20)
+    p1.start(10)
     # 操作ループ
     while(True):
         try:

@@ -21,6 +21,7 @@ cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
+
 def camera_measurement():
     ret, frame = cap.read()
     center_x = 640
@@ -76,7 +77,9 @@ def camera_measurement():
 
 def main():
     record = []
+    type_area = "="
     position_record = [sets.POSITION_START[0], sets.POSITION_START[1], sets.POSITION_END[0], sets.POSITION_END[1]]
+    camera_record = []
     count = 0
     m1 = LineCar()
     m1.setup4experiment()
@@ -103,40 +106,54 @@ def main():
                 if difference_left == None or difference_right == None:
                     m1.mv_wheel(0)
                     m1.mv_angle(0)
+                    
                 else:
                     if tar_x1 <= 640 and tar_x2 <= 640:
+                        angle = (tar_x2 - tar_x1)/2 - 640
+                        angle = angle*6400/(2*math.pi)
+                        angle = angle*0.001
+                        type_area = "left_side"
+                        print(angle,type_area)
+
+                    elif tar_x1 > 640 and tar_x2 > 640:
                         angle = 640 - (tar_x2 - tar_x1)/2
                         angle = angle*6400/(2*math.pi)
-                        angle = angle*0.1
-                        print(angle,"left_side")
-                    if tar_x1 > 640 and tar_x2 > 640:
-                        angle = 640 - (tar_x2 - tar_x1)/2
-                        angle = angle*6400/(2*math.pi)
-                        angle = angle*0.1
-                        print(angle,"right_side")
+                        angle = angle*0.001
+                        type_area = "right_side"
+                        print(angle,type_area)
+
                     else:
                         if difference_left > difference_right:
-                            angle = math.atan(distance_left/((difference_left - difference_right)/2))
-
-                            angle = angle*6400/(2*math.pi)
-                            angle = angle*0.1
-                            print(angle,"left")
-                        if difference_left == difference_right:
-                            angle = 0
-                            print(angle,"=")
-                        if difference_left < difference_right:
-                            angle = math.atan(distance_right/((difference_right - difference_left)/2))
-
+                            #angle = math.atan(distance_left/((difference_left - difference_right)/2))
+                            angle = difference_left - difference_right
                             angle = angle*6400/(2*math.pi)
                             angle = angle*0.1
                             angle = -1*angle
-                            print(angle,"right")
+                            type_area = "left"
+                            print(angle,type_area)
+
+                        if difference_left == difference_right:
+                            angle = 0
+                            type_area = "="
+                            print(angle,type_area)
+
+                        if difference_left < difference_right:
+                            #angle = math.atan(distance_right/((difference_right - difference_left)/2))
+                            angle = difference_right - difference_left
+                            angle = angle*6400/(2*math.pi)
+                            angle = angle*0.1
+                            type_area = "right"
+                            print(angle,type_area)
+
                     m1.mv_angle(angle)
                     record.append(m1.get_status())
+                    camera_record.append(tar_x1,tar_x2,angle,type_area)
+                    record = record + camera_record
                     #floutのとき
                     if m1.controller.is_finished():
                         m1.mv_wheel(0)
                         break
+
             except KeyboardInterrupt:
                 with open('./output.csv', 'w') as csv_out:
                     writer = csv.writer(csv_out, lineterminator='\n')
