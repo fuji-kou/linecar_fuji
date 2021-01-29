@@ -165,25 +165,47 @@ def main():
             conn_left.sendall(b'Stop1')
             conn_right.sendall(b'Stop2')
         else:
-            if distance_left >= 300 and 250 <= tar_x1 <= 500:
+            if distance_left >= 120 and 250 <= tar_x1 <= 500:
                 conn_left.sendall(b'Go1')
-            if distance_lright >= 300 and 780 <= tar_x2 <= 1030:
+            if distance_lright >= 120 and 780 <= tar_x2 <= 1030:
                 conn_right.sendall(b'Go2')
 
-            if distance_left < 300:
+            if distance_left < 120:
                 conn_left.sendall(b'Stop1')
-            if distance_lright < 300:
+            if distance_lright < 120:
                 conn_right.sendall(b'Stop2')
 
-            if distance_left >= 300 and tar_x1 < 250:
+            if distance_left >= 120 and tar_x1 < 250:
                 conn_left.sendall(b'turn_left1')
-            if distance_lright >= 300 and tar_x2 < 780:
-                conn_right.sendall(b'turn_left2')
+                if tar_x1 >= 250:
+                    conn_left.sendall(b'turn_right2')
+                    if tar_x1 >= 375:
+                        conn_left.sendall(b'turn_right3')
 
-            if distance_left >= 300 and tar_x1 > 500:
+            if distance_left >= 120 and tar_x1 > 500:
                 conn_left.sendall(b'turn_right1')
-            if distance_lright >= 300 and tar_x2 > 1030:
-                conn_right.sendall(b'turn_right2')
+                if tar_x1 < 500:
+                    conn_left.sendall(b'turn_left2')
+                    if tar_x1 < 375:
+                        conn_left.sendall(b'turn_left3')
+
+
+
+            if distance_lright >= 120 and tar_x2 < 780:
+                conn_right.sendall(b'turn_left1')
+                if tar_x2 > 780:
+                    conn_right.sendall(b'turn_right2')
+                    if tar_x2 > 905:
+                        conn_right.sendall(b'turn_right3')
+
+
+            if distance_lright >= 120 and tar_x2 > 1030:
+                conn_right.sendall(b'turn_right1')
+                if tar_x2 < 1030:
+                    conn_right.sendall(b'turn_left2')
+                    if tar_x2 < 905:
+                        conn_right.sendall(b'turn_left3')
+
 
 
 
