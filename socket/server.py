@@ -83,17 +83,6 @@ def camera_measurement():
             (area1, area2) = (area1, round(159.55*area2**(-0.525))) #10-780
             distance_right = area2
 
-
-        #２つの計測対象の面積をリストに格納
-        #(area1, area2) = (target['area1'], target['area2'])       #赤の面積
-        #(area1, area2) = (area1/(1280*720)*100, area2/(1280*720)*100)       #割合
-        #距離計算の選択
-        #(area1, area2) = (round(159.55*area1**(-0.525)), round(159.55*area2**(-0.525))) #10-780
-        # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
-        # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
-        
-        
-
         #real_distance_list1.append(area1)
         #real_distance_list2.append(area2)
     #表示
@@ -115,25 +104,10 @@ def main():
     #同端末DELL
     #sock_left.bind(('127.0.0.1', 50006))
     #sock_right.bind(('127.0.0.1', 50007))
-    #宮本研DELL
-    # sock_left.bind(('192.168.11.12', 50006))
-    # sock_right.bind(('192.168.11.12', 50007))
 
     #ファーウェイタブ（ラズパイとの通信)DELL
     sock_left.bind(('192.168.43.198', 50006))
     sock_right.bind(('192.168.43.198', 50007))
-
-    #iphone
-    #sock_left.bind(('172.20.10.7', 50006))
-    #sock_right.bind(('172.20.10.7', 50007))
-    #sock_left.connect(('0.0.0.0', 50006))
-    #sock_right.connect(('0.0.0.0', 50007))
-    
-    #実機HP_PC
-    #sock_left.connect(('192.168.179.2', 50008))
-    #sock_right.connect(('192.168.179.2', 50009))
-    #sock_left.bind(('0.0.0.0', 50008))
-    #sock_right.bind(('0.0.0.0', 50009))
 
     # 接続(最大2)
     sock_left.listen(2)
@@ -158,56 +132,74 @@ def main():
                 data_left = 0
                 data_right = 0
  
-        distance_left,distance_lright,tar_x1,tar_x2 = camera_measurement()
-        print(distance_left,distance_lright)
+        distance_left,distance_right,tar_x1,tar_x2 = camera_measurement()
+        print(distance_left,distance_right)
         #print(tar_x1,tar_x2)
-        if distance_left == None or distance_lright == None:
-            conn_left.sendall(b'Stop1')
-            conn_right.sendall(b'Stop2')
+        if distance_left == None or distance_right == None:
+            conn_left.sendall(b'Stop')
+            conn_right.sendall(b'Stop')
         else:
-            if distance_left >= 120 and 250 <= tar_x1 <= 500:
-                conn_left.sendall(b'Go1')
-            if distance_lright >= 120 and 780 <= tar_x2 <= 1030:
-                conn_right.sendall(b'Go2')
+            if distance_left >= 120 and tar_x1 == 375:
+                conn_left.sendall(b'Go')
+            if distance_right >= 120 and tar_x2 == 905:
+                conn_right.sendall(b'Go')
 
             if distance_left < 120:
-                conn_left.sendall(b'Stop1')
-            if distance_lright < 120:
-                conn_right.sendall(b'Stop2')
+                conn_left.sendall(b'Stop')
+            if distance_right < 120:
+                conn_right.sendall(b'Stop')
 
+            # left
             if distance_left >= 120 and tar_x1 < 250:
                 conn_left.sendall(b'turn_left1')
-                if tar_x1 >= 250:
-                    conn_left.sendall(b'turn_right2')
-                    if tar_x1 >= 375:
-                        conn_left.sendall(b'turn_right3')
+            if distance_left >= 120 and 250 <= tar_x1 <= 375:
+                conn_left.sendall(b'turn_left2')
 
             if distance_left >= 120 and tar_x1 > 500:
                 conn_left.sendall(b'turn_right1')
-                if tar_x1 < 500:
-                    conn_left.sendall(b'turn_left2')
-                    if tar_x1 < 375:
-                        conn_left.sendall(b'turn_left3')
-
-
-
-            if distance_lright >= 120 and tar_x2 < 780:
+            if distance_left >= 120 and 375 < tar_x1 <= 500:
+                conn_left.sendall(b'turn_right2')
+            
+            # right
+            if distance_right >= 120 and tar_x2 < 780:
                 conn_right.sendall(b'turn_left1')
-                if tar_x2 > 780:
-                    conn_right.sendall(b'turn_right2')
-                    if tar_x2 > 905:
-                        conn_right.sendall(b'turn_right3')
-
-
-            if distance_lright >= 120 and tar_x2 > 1030:
+            if distance_right >= 120 and 780 < tar_x2 < 905:
+                conn_right.sendall(b'turn_left2')
+                           
+            if distance_right >= 120 and tar_x2 > 1030:
                 conn_right.sendall(b'turn_right1')
-                if tar_x2 < 1030:
-                    conn_right.sendall(b'turn_left2')
-                    if tar_x2 < 905:
-                        conn_right.sendall(b'turn_left3')
+            if distance_right >= 120 and 905 <= tar_x2 < 1030:
+                conn_right.sendall(b'turn_right2')
 
 
 
+
+
+            #     if tar_x1 >= 250:
+            #         conn_left.sendall(b'turn_right2')
+            #         if tar_x1 >= 375:
+            #             conn_left.sendall(b'turn_right3')
+
+            # if distance_left >= 120 and tar_x1 > 500:
+            #     conn_left.sendall(b'turn_right1')
+            #     if tar_x1 < 500:
+            #         conn_left.sendall(b'turn_left2')
+            #         if tar_x1 < 375:
+            #             conn_left.sendall(b'turn_left3')
+
+            # if distance_right >= 120 and tar_x2 < 780:
+            #     conn_right.sendall(b'turn_left1')
+            #     if tar_x2 > 780:
+            #         conn_right.sendall(b'turn_right2')
+            #         if tar_x2 > 905:
+            #             conn_right.sendall(b'turn_right3')
+
+            # if distance_right >= 120 and tar_x2 > 1030:
+            #     conn_right.sendall(b'turn_right1')
+            #     if tar_x2 < 1030:
+            #         conn_right.sendall(b'turn_left2')
+            #         if tar_x2 < 905:
+            #             conn_right.sendall(b'turn_left3')
 
         #qキーが押されたら途中終了
         if cv2.waitKey(25) & 0xFF == ord('q'):
