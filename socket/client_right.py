@@ -50,9 +50,9 @@ while True:
     #開始・floutからの復帰    
     if data == (b'start!!'):
         print(data)
-        # mv_angle(0)
-        # GPIO.output(sets.DIR, GPIO.HIGH)
-        # p1.start(sets.SPEED)
+        mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.SPEED)
     if data == (b'Go1'):
         pass
     #離れすぎたら前に出る
@@ -78,7 +78,7 @@ while True:
     #範囲から出たとき
     if data == (b'turn_left2'):
         print(data)
-        mv_angle(15)
+        mv_angle(5)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
     if data == (b'turn_right1'):
@@ -86,7 +86,7 @@ while True:
     #範囲から出たとき
     if data == (b'turn_right2'):
         print(data)
-        mv_angle(-15)
+        mv_angle(-5)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
 
