@@ -37,7 +37,7 @@ def camera_measurement():
         pass
 
     else:
-        cv2.line(resultImg,(150,0),(150,720),(255,0,0),3)
+        cv2.line(resultImg,(375,0),(375,720),(255,0,0),3)
         cv2.line(resultImg,(250,0),(250,720),(255,0,0),3)
         cv2.line(resultImg,(500,0),(500,720),(255,0,0),3)
 

@@ -127,7 +127,7 @@ def main():
                             #angle = math.atan(distance_left/((difference_left - difference_right)/2))
                             angle = difference_left - difference_right
                             angle = angle*6400/(2*math.pi)
-                            angle = angle*0.1
+                            angle = angle*0.001
                             angle = -1*angle
                             type_area = "left"
                             print(angle,type_area)
@@ -141,7 +141,7 @@ def main():
                             #angle = math.atan(distance_right/((difference_right - difference_left)/2))
                             angle = difference_right - difference_left
                             angle = angle*6400/(2*math.pi)
-                            angle = angle*0.1
+                            angle = angle*0.001
                             type_area = "right"
                             print(angle,type_area)
 

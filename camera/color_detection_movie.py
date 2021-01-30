@@ -2,7 +2,7 @@ import numpy as np
 import math
 import cv2
 import datetime as dt
-from camera_settings import camera
+from camera_settings1 import camera
 
 
 #カメラキャプチャ
@@ -62,23 +62,23 @@ def main():
             tar_y2 = int(target["center2"][1])
         
             #フレームに面積最大ブロブの中心周囲を円で描く
-            cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
-                    thickness=3, lineType=cv2.LINE_AA)
+            # cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
+            #         thickness=3, lineType=cv2.LINE_AA)
             
-            if tar_x2 == 0:
-                pass
+            # if tar_x2 == 0:
+            #     pass
             
-            else:
-                cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
-                        thickness=3, lineType=cv2.LINE_AA)                    
+            # else:
+            #     cv2.circle(resultImg, (tar_x2, tar_y2), 30, (0, 255, 0),
+            #             thickness=3, lineType=cv2.LINE_AA)                    
 
             #中心座標
             center_x = 640
             center_y = 360
 
             #中心ピクセルから認識した赤色の中心までを直線描画，cv2.line(画像,座標1,座標2,色,太さ)
-            cv2.line(resultImg,(tar_x1, tar_y1),(640,360),(0,255,0),3)
-            cv2.line(resultImg,(tar_x2, tar_y2),(640,360),(0,200,0),3)
+            # cv2.line(resultImg,(tar_x1, tar_y1),(640,360),(0,255,0),3)
+            # cv2.line(resultImg,(tar_x2, tar_y2),(640,360),(0,200,0),3)
 
             #x座標とy座標をピクセルからcmに変換
             dif_x1 = round(abs(center_x - tar_x1) * (398/1280))
@@ -93,8 +93,9 @@ def main():
             print(distance2)
 
         #結果表示
-        cv2.imshow('Frame', resultImg)
-        cv2.imshow("Mask", mask)
+        cv2.imshow('Frame', frame)
+        #cv2.imshow('Frame', resultImg)
+        #cv2.imshow("Mask", mask)
 
         #保存
         #writer.write(resultImg)
