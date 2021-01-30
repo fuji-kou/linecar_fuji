@@ -67,13 +67,13 @@ while True:
     #tar_x1 < 250
     if data == (b'turn_left1'):
         print(data)
-        mv_angle(5)
+        mv_angle(-30)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED) 
     #tar_x1 < 500
     if data == (b'turn_left2'):
         print(data)
-        mv_angle(3)
+        mv_angle(-20)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED) 
     #tar_x1 < 375
@@ -86,13 +86,13 @@ while True:
     #tar_x1 > 500
     if data == (b'turn_right1'):
         print(data)
-        mv_angle(-5)
+        mv_angle(30)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
     #375 < tar_x1 <= 500
     if data == (b'turn_right2'):
         print(data)
-        mv_angle(-3)
+        mv_angle(20)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
     # if data == (b'turn_right3'):
