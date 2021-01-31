@@ -112,7 +112,7 @@ def main():
                         type_area = "left_side"
                         print(angle,"left_side")
                     elif tar_x1 > 640 and tar_x2 > 640:
-                        angle = 640 - (tar_x2 - tar_x1)/2
+                        angle =  (tar_x2 - tar_x1)/2 - 640
                         angle = angle*6400/(2*math.pi)
                         angle = angle*0.0001
                         type_area = "rught_side"
