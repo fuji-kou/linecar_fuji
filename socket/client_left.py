@@ -31,16 +31,6 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #sock.connect(('127.0.0.1', 50009))
 #ファーウェイタブ（ラズパイとの通信）DELL
 sock.connect(('192.168.43.198', 50006))
-#宮本研DELL 
-#sock.connect(('192.168.11.12', 50006))
-
-
-#sock.connect(('192.168.179.4', 50006))
-#実機HP_PC
-#sock.connect(('192.168.179.2', 54202))#ポケットwihi
-#sock.connect(('192.168.11.34',50008))#恐らく宮本研wihi
-
-#sock.connect(('192.168.11.12',50008))
 
 # サーバにメッセージを送る
 while True:
@@ -58,86 +48,61 @@ while True:
         p1.start(sets.SPEED)
         
     #離れすぎたら前に出る
-    if data == (b'Go1'):
+    if data == (b'Go'):
         print(data)
-        mv_angle(0)
+        #mv_angle(0)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.SPEED)
-    if data == (b'Go2'):
-        pass
     #flout
-    if data == (b'stop!!'):
+    if data == (b'f_stop'):
         print(data)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
     #前出すぎたらストップ
-    if data == (b'Stop1'):
+    if data == (b'Stop'):
         print(data)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
-    if data == (b'Stop2'):
-        pass
-    #範囲から出たとき
+
+    #tar_x1 < 250
     if data == (b'turn_left1'):
         print(data)
-        mv_angle(20)
+        mv_angle(-30)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED) 
+    #tar_x1 < 500
     if data == (b'turn_left2'):
-        pass
-    #範囲から出たとき
-    if data == (b'turn_right1'):
         print(data)
         mv_angle(-20)
         GPIO.output(sets.DIR, GPIO.HIGH)
-        p1.start(sets.turn_SPEED)
-    if data == (b'turn_right2'):
-        pass
-
-    # if data == (b'turn_left1!'):
+        p1.start(sets.turn_SPEED) 
+    #tar_x1 < 375
+    # if data == (b'turn_left3'):
     #     print(data)
-    #     mv_angle(20)
+    #     mv_angle(2)
     #     GPIO.output(sets.DIR, GPIO.HIGH)
     #     p1.start(sets.turn_SPEED) 
-    # if data == (b'turn_left2!'):
-    #     pass
-    # #範囲から出たとき
-    # if data == (b'turn_right1!'):
+
+    #tar_x1 > 500
+    if data == (b'turn_right1'):
+        print(data)
+        mv_angle(30)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED)
+    #375 < tar_x1 <= 500
+    if data == (b'turn_right2'):
+        print(data)
+        mv_angle(20)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED)
+    # if data == (b'turn_right3'):
     #     print(data)
-    #     mv_angle(-20)
+    #     mv_angle(-2)
     #     GPIO.output(sets.DIR, GPIO.HIGH)
     #     p1.start(sets.turn_SPEED)
-    # if data == (b'turn_right2!'):
-    #     pass
-
-
 
     if data == 0:
         mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(0)
         break
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

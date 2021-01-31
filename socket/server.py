@@ -18,7 +18,6 @@ DIST_PATH = TMP_FOLDER_PATH + "dist2.csv"
 cap.set(cv2.CAP_PROP_FPS, 30)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
 def camera_measurement():
     ret, frame = cap.read()
     #キャリブレーション適用
@@ -27,9 +26,13 @@ def camera_measurement():
     #赤色検出
     mask = camera.red_detect(resultImg)
     w, h = mask.shape
-        
+    tar_x1 = None
+    distance_left = None   
+    tar_x2 = None
+    distance_right = None     
     empty_image = np.zeros((w,h), dtype = np.uint8)
     dif = mask - empty_image
+
     if dif.any() == 0:      #零行列の場合
         pass
 
@@ -49,40 +52,37 @@ def camera_measurement():
         #面積最大ブロブの中心座標を取得
         if target["center1"] == None:
             tar_x1 = None
-            tar_y1 = None       
+            tar_y1 = None
             distance_left = None
+            (area1, area2) = (target['area1'], None)
         else:
+
             tar_x1 = int(target["center1"][0])
             tar_y1 = int(target["center1"][1])
+            #フレームに面積最大ブロブの中心周囲を円で描く
             cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
-                thickness=3, lineType=cv2.LINE_AA)
-            (area1, area2) = (target['area1'], None)       #赤の面積
+                    thickness=3, lineType=cv2.LINE_AA)
+            (area1, area2) = (target['area1'], None)
             (area1, area2) = (area1/(1280*720)*100, None)       #割合
+            #距離計算の選択
             (area1, area2) = (round(159.55*area1**(-0.525)), None) #10-780
             distance_left = area1
 
         if target["center2"] == None:
             tar_x2 = None
-            tar_y2 = None       
+            tar_y2 = None
             distance_right = None
-        else:
+        else:   
             tar_x2 = int(target["center2"][0])
             tar_y2 = int(target["center2"][1])
             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
                 thickness=3, lineType=cv2.LINE_AA)  
-            (area1, area2) = (area1, target['area2'])       #赤の面積
+            (area1, area2) = (area1, target['area2'])
             (area1, area2) = (area1, area2/(1280*720)*100)       #割合
+            #距離計算の選択
             (area1, area2) = (area1, round(159.55*area2**(-0.525))) #10-780
             distance_right = area2
 
-
-        #フレームに面積最大ブロブの中心周囲を円で描く
-
-        #面積最大ブロブの中心座標を取得
-        #２つの計測対象の面積をリストに格納
-        #距離計算の選択
-        # (area1, area2) = (round(161.24*area1**(-0.553)), round(161.24*area2**(-0.553))) #10-480  
-        # (area1, area2) = (round(162.89*area1**(-0.51)), round(162.89*area2**(-0.51))) #400-780
         #real_distance_list1.append(area1)
         #real_distance_list2.append(area2)
     #表示
@@ -104,23 +104,10 @@ def main():
     #同端末DELL
     #sock_left.bind(('127.0.0.1', 50006))
     #sock_right.bind(('127.0.0.1', 50007))
-    #宮本研DELL
-    # sock_left.bind(('192.168.11.12', 50006))
-    # sock_right.bind(('192.168.11.12', 50007))
 
     #ファーウェイタブ（ラズパイとの通信)DELL
-    #sock_left.bind(('192.168.43.198', 50006))
-    #sock_right.bind(('192.168.43.198', 50007))
-    #sock_left.connect(('0.0.0.0', 50006))
-    #sock_right.connect(('0.0.0.0', 50007))
-    
-    #実機HP_PC
-    #sock_left.bind(('192.168.179.4', 50008))
-    #sock_right.bind(('192.168.179.4', 50009))
-    sock_left.bind(('192.168.43.252', 50008))
-    sock_right.bind(('192.168.43.252', 50009))
-    #sock_left.bind(('0.0.0.0', 50008))
-    #sock_right.bind(('0.0.0.0', 50009))
+    sock_left.bind(('192.168.43.198', 50006))
+    sock_right.bind(('192.168.43.198', 50007))
 
     # 接続(最大2)
     sock_left.listen(2)
@@ -152,63 +139,71 @@ def main():
         distance_left, distance_lright, tar_x1, tar_x2 = camera_measurement()
         print(distance_left,distance_lright)
         #print(tar_x1,tar_x2)
-        if distance_left >= 300 and 250 <= tar_x1 <= 500:
-            conn_left.sendall(b'Go1')
-        if distance_lright >= 300 and 780 <= tar_x2 <= 1030:
-            conn_right.sendall(b'Go2')
+        if distance_left == None or distance_right == None:
+            conn_left.sendall(b'Stop')
+            conn_right.sendall(b'Stop')
+        else:
+            if distance_left >= 120 and tar_x1 == 375:
+                conn_left.sendall(b'Go')
+            if distance_right >= 120 and tar_x2 == 905:
+                conn_right.sendall(b'Go')
 
-        if distance_left < 300:
-            conn_left.sendall(b'Stop1')
-        if distance_lright < 300:
-            conn_right.sendall(b'Stop2')
+            if distance_left < 120:
+                conn_left.sendall(b'Stop')
+            if distance_right < 120:
+                conn_right.sendall(b'Stop')
 
-        if distance_left >= 300 and tar_x1 < 250:
-            conn_left.sendall(b'turn_left1')
-        if distance_lright >= 300 and tar_x2 < 780:
-            conn_right.sendall(b'turn_left2')
+            # left
+            if distance_left >= 120 and tar_x1 < 250:
+                conn_left.sendall(b'turn_left1')
+            if distance_left >= 120 and 250 <= tar_x1 <= 375:
+                conn_left.sendall(b'turn_left2')
 
-        if distance_left >= 300 and tar_x1 > 500:
-            conn_left.sendall(b'turn_right1')
-        if distance_lright >= 300 and tar_x2 > 1030:
-            conn_right.sendall(b'turn_right2')
+            if distance_left >= 120 and tar_x1 > 500:
+                conn_left.sendall(b'turn_right1')
+            if distance_left >= 120 and 375 < tar_x1 <= 500:
+                conn_left.sendall(b'turn_right2')
+            
+            # right
+            if distance_right >= 120 and tar_x2 < 780:
+                conn_right.sendall(b'turn_left1')
+            if distance_right >= 120 and 780 < tar_x2 < 905:
+                conn_right.sendall(b'turn_left2')
+                           
+            if distance_right >= 120 and tar_x2 > 1030:
+                conn_right.sendall(b'turn_right1')
+            if distance_right >= 120 and 905 <= tar_x2 < 1030:
+                conn_right.sendall(b'turn_right2')
 
-        # if distance_left >= 300 and tar_x1 > 600:
-        #     conn_left.sendall(b'turn_right!1')
-        # if distance_lright >= 300 and tar_x2 > 880:
-        #     conn_right.sendall(b'turn_right!2')
-
-        # if distance_left >= 300 and tar_x1 > 600:
-        #     conn_left.sendall(b'turn_right!!1')
-        # if distance_lright >= 300 and tar_x2 > 880:
-        #     conn_right.sendall(b'turn_right2!!')
 
 
-        # #中心座標
-        # center_x = 640
-        # center_y = 360
 
-        # #中心ピクセルから認識した赤色の中心までを直線描画，cv2.line(画像,座標1,座標2,色,太さ)
-        # cv2.line(resultImg,(tar_x1, tar_y1),(640,360),(0,255,0),3)
-        # cv2.line(resultImg,(tar_x2, tar_y2),(640,360),(0,200,0),3)
 
-        # #x座標とy座標をピクセルからcmに変換
-        # dif_x1 = round(abs(center_x - tar_x1) * (398/1280))
-        # dif_y1 = round(abs(center_y - tar_y1) * (107/360))
+            #     if tar_x1 >= 250:
+            #         conn_left.sendall(b'turn_right2')
+            #         if tar_x1 >= 375:
+            #             conn_left.sendall(b'turn_right3')
 
-        # dif_x2 = round(abs(center_x - tar_x2) * (398/1280))
-        # dif_y2 = round(abs(center_y - tar_y2) * (107/360))            
+            # if distance_left >= 120 and tar_x1 > 500:
+            #     conn_left.sendall(b'turn_right1')
+            #     if tar_x1 < 500:
+            #         conn_left.sendall(b'turn_left2')
+            #         if tar_x1 < 375:
+            #             conn_left.sendall(b'turn_left3')
 
-        # distance_left = math.sqrt(dif_x1^2 + dif_y1^2)
-        # distance_lright = math.sqrt(dif_x2^2 + dif_y2^2)
-        # print(distance_left)
-        # print(distance_lright)
+            # if distance_right >= 120 and tar_x2 < 780:
+            #     conn_right.sendall(b'turn_left1')
+            #     if tar_x2 > 780:
+            #         conn_right.sendall(b'turn_right2')
+            #         if tar_x2 > 905:
+            #             conn_right.sendall(b'turn_right3')
 
-        #結果表示
-        #cv2.imshow('Frame', resultImg)
-        #cv2.imshow("Mask", mask)
-
-        #保存
-        #writer.write(resultImg)
+            # if distance_right >= 120 and tar_x2 > 1030:
+            #     conn_right.sendall(b'turn_right1')
+            #     if tar_x2 < 1030:
+            #         conn_right.sendall(b'turn_left2')
+            #         if tar_x2 < 905:
+            #             conn_right.sendall(b'turn_left3')
 
         #qキーが押されたら途中終了
         if cv2.waitKey(25) & 0xFF == ord('q'):

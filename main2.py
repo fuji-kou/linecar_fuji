@@ -4,7 +4,7 @@ import csv
 import socket
 import cv2
 from camera_settings import camera
-
+from time import sleep
 import linecar_settings as sets
 from models.LineCar import LineCar
 from controllers.FujitaControl import FujitaControl
@@ -60,6 +60,8 @@ def camera_measurement():
             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
                     thickness=3, lineType=cv2.LINE_AA)  
 
+<<<<<<< HEAD
+=======
         #面積最大ブロブの中心座標を取得
         #if tar_x1 <= tar_x2:
         #    (area1, area2) = (target['area1'], target['area2'])       #赤の面積
@@ -76,6 +78,7 @@ def camera_measurement():
         #    if tar_x1 > 640:
         #        area2 = target['area1']
         #        (area2_x, area2_y) = (target['center1'][0], target['center1'][1])
+>>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
 
         #２つの計測対象の面積をリストに格納
         (area1, area2) = (target['area1'], target['area2'])       #赤の面積
@@ -109,10 +112,12 @@ def main():
     # IPアドレスとポートを指定
     #ファーウェイタブ（ラズパイとの通信）
     #sock.bind(('192.168.43.198', 50007))
+    #ファーウェイタブ（ラズパイとの通信)DELL
+    sock_left.bind(('192.168.43.198', 50006))
+    sock_right.bind(('192.168.43.198', 50007))    
     #linecar用モバイルルータ
-    #実機環境
-    sock_left.connect(('192.168.179.2', 50008))
-    sock_right.connect(('192.168.179.2', 50009))
+    #sock_left.connect(('192.168.179.2', 50008))
+    #sock_right.connect(('192.168.179.2', 50009))
     #sock_left.bind(('0.0.0.0', 50008))
     #sock_right.bind(('0.0.0.0', 50009))
     # 接続(最大2)
@@ -200,6 +205,7 @@ def main():
                         fix_or_float = 1
                     input_angle = m1.controller.get_input_angle(now_latlon)
                     m1.mv_angle(round(input_angle, 1))
+
 
                 record.append(m1.get_status())
 

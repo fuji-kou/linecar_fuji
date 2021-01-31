@@ -29,16 +29,11 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # サーバを指定
 #同端末
 #sock.connect(('127.0.0.1', 50008))
-#宮本研DELL 
-#sock.connect(('192.168.11.12', 50006))
 
 #ファーウェイタブ（ラズパイとの通信）DELL
 sock.connect(('192.168.43.198', 50007))
+#sock.connect(('172.20.10.7', 50007))
 #sock.connect(('192.168.179.4', 50007))
-#実機HP_PC
-#sock.connect(('192.168.179.2',54163)) #ポケットwihi
-#sock.connect(('192.168.11.34',50009))#恐らく宮本研wihi
-
 # サーバにメッセージを送る
 while True:
     sock.sendall(b'connect')
@@ -49,15 +44,13 @@ while True:
     #開始・floutからの復帰    
     if data == (b'start!!'):
         print(data)
-        # mv_angle(0)
-        # GPIO.output(sets.DIR, GPIO.HIGH)
-        # p1.start(sets.SPEED)
-    if data == (b'Go1'):
-        pass
-    #離れすぎたら前に出る
-    if data == (b'Go2'):
-        print(data)
         mv_angle(0)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.SPEED)
+    #離れすぎたら前に出る
+    if data == (b'Go'):
+        print(data)
+        #mv_angle(0)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.SPEED)
     #flout
@@ -65,27 +58,33 @@ while True:
         print(data)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
-    if data == (b'Stop1'):
-        pass
     #前出すぎたらストップ
-    if data == (b'Stop2'):
+    if data == (b'Stop'):
         print(data)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(0)
+    #tar_x2 < 780
     if data == (b'turn_left1'):
-        pass
-    #範囲から出たとき
+        print(data)
+        mv_angle(5)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED) 
+    #780 < tar_x2 < 905
     if data == (b'turn_left2'):
         print(data)
-        mv_angle(15)
+        mv_angle(3)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
+    #tar_x2 > 1030
     if data == (b'turn_right1'):
-        pass
-    #範囲から出たとき
+        print(data)
+        mv_angle(-5)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED)
+    #905 <= tar_x2 < 1030
     if data == (b'turn_right2'):
         print(data)
-        mv_angle(-15)
+        mv_angle(-3)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
 

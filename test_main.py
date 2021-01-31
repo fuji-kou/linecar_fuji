@@ -22,13 +22,20 @@ sleep(1)
 p1 = GPIO.PWM(sets.pwm, 100)            #pwmピンの設定
 Servo = GPIO.PWM(sets.Servo_pin, 50) 
 Servo.start(0)                      
-
+GPIO.output(sets.DIR, GPIO.HIGH)  
+p1.start(5)
 # servo
 def mv_angle(angle):
     duty = 2.5 + (12.0 - 2.5) * (angle + 90) / 180   #角度からデューティ比を求める
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
 
 mv_angle(0)
+<<<<<<< HEAD
+GPIO.output(sets.DIR, GPIO.HIGH)  
+p1.start(10)
+=======
+
+>>>>>>> 1e09f96ca72aaea963c02883f59369dffeedba77
     
 def main():
     record = []
@@ -39,7 +46,7 @@ def main():
     m1.controller.prepare()
     # 発進
     GPIO.output(sets.DIR, GPIO.HIGH)  
-    p1.start(sets.SPEED)
+    p1.start(10)
     # 操作ループ
     while(True):
         try:
@@ -49,15 +56,13 @@ def main():
             record.append(m1.get_status())
             print(record[-1])
             if m1.controller.is_finished():
-                 p1.start(0)
+                 p1.start(10)
                  break
         except KeyboardInterrupt:
             m1.stop()
-            p1.start(0)
-            with open('output.csv', 'w') as csv_out:
-                writer = csv.writer(csv_out, lineterminator='\n')
-                writer.writerows(record)
-    終了処理
+            p1.start(10)
+
+    #終了処理
     m1.stop()
     p1.start(0)
 

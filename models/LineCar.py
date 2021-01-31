@@ -149,6 +149,6 @@ class LineCar(object):
         ctrl_iv = self.controller.get_internal_variables()
 
         status.append(cur_angle)
-        status = status + ctrl_iv
+        status = status + ctrl_iv 
 
         return status
