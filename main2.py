@@ -80,23 +80,124 @@ def camera_measurement():
     return distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right
 
 def linecar_control_fix():
-    pass
+    m1 = LineCar()
+    now_latlon = m1.get_current_position()
+    input_angle = m1.controller.get_input_angle(now_latlon)
 
-def linecar_control_float():
-    pass
+    return input_angle
 
-def left_control_fix():
-    pass
+def linecar_control_float(difference_left, difference_right):
+    distance_left, difference_right, tar_x1, tar_x2 = camera_measurement()
+    if tar_x1 <= 640 and tar_x2 <= 640:
+        angle = (tar_x2 - tar_x1)/2 -640
+        angle = angle*6400/(2*math.pi)
+        angle = angle*0.0001
+        type_area = "left_side"
+        print(angle,"left_side")
+    elif tar_x1 > 640 and tar_x2 > 640:
+        angle = 640 - (tar_x2 - tar_x1)/2
+        angle = angle*6400/(2*math.pi)
+        angle = angle*0.0001
+        type_area = "right_side"
+        print(angle,"right_side")
+    else:
+        if difference_left > difference_right:
+            #angle = math.atan(distance_left/((difference_left - difference_right)/2))
+            angle = difference_left - difference_right
+            angle = angle*6400/(2*math.pi)
+            angle = angle*0.001
+            angle = -1*angle
+            type_area = "left"
+            print(angle,"left")
+        if difference_left == difference_right:
+            angle = 0
+            type_area = "="
+            print(angle,"=")
+        if difference_left < difference_right:
+            angle = difference_left - difference_right
+            #angle = math.atan(distance_right/((difference_right - difference_left)/2))
+            angle = angle*6400/(2*math.pi)
+            angle = angle*0.001
+            type_area = "right"
+            print(angle,"right")
 
-def left_control_float():
-    pass
+    return angle
+
+def left_control_fix(distance_left, tar_x1):
+    distance_left, tar_x1 = camera_measurement()
+    if distance_left >= 120 and tar_x1 == 375:
+        left_control = b'Go'
+    if distance_left < 120 or distance_left == None:
+        left_control = b'Stop'
+
+    if distance_left >= 120 and tar_x1 < 250:
+        left_control = b'turn_left1'
+    if distance_left >= 120 and 250 <= tar_x1 <= 375:
+        left_control = b'turn_left2'
+
+    if distance_left >= 120 and tar_x1 > 500:
+        left_control = b'turn_right1'
+    if distance_left >= 120 and 375 < tar_x1 <= 500:
+        left_control = b'turn_right2'
+
+    return left_control
+                            
+def left_control_float(distance_left, tar_x1):
+    distance_left, tar_x1 = camera_measurement()
+    if distance_left >= 400 and tar_x1 == 375:
+        left_control = b'Go'
+    if distance_left < 400 or distance_left == None:
+        left_control = b'Stop'
+
+    if distance_left >= 400 and tar_x1 < 250:
+        left_control = b'turn_left1'
+    if distance_left >= 400 and 250 <= tar_x1 <= 375:
+        left_control = b'turn_left2'
+
+    if distance_left >= 400 and tar_x1 > 500:
+        left_control = b'turn_right1'
+    if distance_left >= 400 and 375 < tar_x1 <= 500:
+        left_control = b'turn_right2'
+
+    return left_control
 
 def right_control_fix():
-    pass
+    distance_right, tar_x2 = camera_measurement(distance_right, tar_x2)
+    if distance_right >= 120 and tar_x2 == 905:
+        right_control = b'Go'
+    if distance_right < 120 or distance_right == None:
+        right_control = b'Stop'
+
+    if distance_right >= 120 and tar_x2 < 780:
+        right_control = b'turn_left1'
+    if distance_right >= 120 and 780 < tar_x2 < 905:
+        right_control = b'turn_left2'
+                                        
+    if distance_right >= 120 and tar_x2 > 1030:
+        right_control = b'turn_right1'
+    if distance_right >= 120 and 905 <= tar_x2 < 1030:
+        right_control = b'turn_right2'
+
+    return right_control
 
 def right_control_float():
-    pass
+    distance_right, tar_x2 = camera_measurement(distance_right, tar_x2)
+    if distance_right >= 400 and tar_x2 == 905:
+        right_control = b'Go'
+    if distance_right < 400 or distance_right == None:
+        right_control = b'Stop'
 
+    if distance_right >= 400 and tar_x2 < 780:
+        right_control = b'turn_left1'
+    if distance_right >= 400 and 780 < tar_x2 < 905:
+        right_control = b'turn_left2'
+                                        
+    if distance_right >= 400 and tar_x2 > 1030:
+        right_control = b'turn_right1'
+    if distance_right >= 400 and 905 <= tar_x2 < 1030:
+        right_control = b'turn_right2'
+
+    return right_control
 
 
 def main():
@@ -153,52 +254,20 @@ def main():
         while(True):
             try:  
                 m1.mv_wheel(sets.SPEED)
-                now_latlon = m1.get_current_position()
+
                 distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right = camera_measurement()
+                # fix
                 if now_latlon[3] == 1:
                     if fix_or_float == 2:
                         fix_or_float = 1
-                        
-                    
                     else:
-                        if distance_left == None or distance_right == None:
-                            conn_left.sendall(b'Stop')
-                            conn_right.sendall(b'Stop')
-                        else:
-                            if distance_left >= 120 and tar_x1 == 375:
-                                conn_left.sendall(b'Go')
-                            if distance_right >= 120 and tar_x2 == 905:
-                                conn_right.sendall(b'Go')
-
-                            if distance_left < 120:
-                                conn_left.sendall(b'Stop')
-                            if distance_right < 120:
-                                conn_right.sendall(b'Stop')
-
-                            # left
-                            if distance_left >= 120 and tar_x1 < 250:
-                                conn_left.sendall(b'turn_left1')
-                            if distance_left >= 120 and 250 <= tar_x1 <= 375:
-                                conn_left.sendall(b'turn_left2')
-
-                            if distance_left >= 120 and tar_x1 > 500:
-                                conn_left.sendall(b'turn_right1')
-                            if distance_left >= 120 and 375 < tar_x1 <= 500:
-                                conn_left.sendall(b'turn_right2')
-                            
-                            # right
-                            if distance_right >= 120 and tar_x2 < 780:
-                                conn_right.sendall(b'turn_left1')
-                            if distance_right >= 120 and 780 < tar_x2 < 905:
-                                conn_right.sendall(b'turn_left2')
-                                        
-                            if distance_right >= 120 and tar_x2 > 1030:
-                                conn_right.sendall(b'turn_right1')
-                            if distance_right >= 120 and 905 <= tar_x2 < 1030:
-                                conn_right.sendall(b'turn_right2')
-                    input_angle = m1.controller.get_input_angle(now_latlon)
-                    m1.mv_angle(round(input_angle, 1))
-
+                        input_angle = linecar_control_fix()
+                        m1.mv_angle(input_angle)
+                        left_control = left_control_fix()
+                        right_control = right_control_fix()
+                        conn_left.sendall(left_control)
+                        conn_right.sendall(right_control)
+                # float 
                 if now_latlon[3] == 2:
                     m1.mv_wheel(0)
                     time.sleep(2)
@@ -214,76 +283,13 @@ def main():
                             m1.mv_wheel(0)
                             m1.mv_angle(0)
                         else:
-                            if distance_left >= 120 and tar_x1 == 375:
-                                conn_left.sendall(b'Go')
-                            if distance_right >= 120 and tar_x2 == 905:
-                                conn_right.sendall(b'Go')
+                            left_control = left_control_float()
+                            right_control = right_control_float()
+                            conn_left.sendall(left_control)
+                            conn_right.sendall(right_control)
 
-                            if distance_left < 400:
-                                conn_left.sendall(b'Stop')
-                            if distance_right < 400:
-                                conn_right.sendall(b'Stop')
-
-                            # left
-                            if distance_left >= 400 and tar_x1 < 250:
-                                conn_left.sendall(b'turn_left1')
-                            if distance_left >= 400 and 250 <= tar_x1 <= 375:
-                                conn_left.sendall(b'turn_left2')
-
-                            if distance_left >= 400 and tar_x1 > 500:
-                                conn_left.sendall(b'turn_right1')
-                            if distance_left >= 400 and 375 < tar_x1 <= 500:
-                                conn_left.sendall(b'turn_right2')
-                                    
-                            # right
-                            if distance_right >= 400 and tar_x2 < 780:
-                                conn_right.sendall(b'turn_left1')
-                            if distance_right >= 400 and 780 < tar_x2 < 905:
-                                conn_right.sendall(b'turn_left2')
-                                                
-                            if distance_right >= 400 and tar_x2 > 1030:
-                                conn_right.sendall(b'turn_right1')
-                            if distance_right >= 400 and 905 <= tar_x2 < 1030:
-                                conn_right.sendall(b'turn_right2')
-
-                        
-                            if tar_x1 <= 640 and tar_x2 <= 640:
-                                ang
-                                le = (tar_x2 - tar_x1)/2 -640
-                                angle = angle*6400/(2*math.pi)
-                                angle = angle*0.0001
-                                type_area = "left_side"
-                                print(angle,"left_side")
-                            elif tar_x1 > 640 and tar_x2 > 640:
-                                angle = 640 - (tar_x2 - tar_x1)/2
-                                angle = angle*6400/(2*math.pi)
-                                angle = angle*0.0001
-                                type_area = "right_side"
-                                print(angle,"right_side")
-                            else:
-                                if difference_left > difference_right:
-                                    angle = math.atan(distance_left/((difference_left - difference_right)/2))
-
-                                    angle = angle*6400/(2*math.pi)
-                                    angle = angle*0.1
-                                    angle = -1*angle
-                                    type_area = "left"
-                                    print(angle,"left")
-                                if difference_left == difference_right:
-                                    angle = 0
-                                    type_area = "="
-                                    print(angle,"=")
-                                if difference_left < difference_right:
-                                    angle = math.atan(distance_right/((difference_right - difference_left)/2))
-
-                                    angle = angle*6400/(2*math.pi)
-                                    angle = angle*0.1
-                                    type_area = "right"
-                                    print(angle,"right")
+                            angle = linecar_control_float()
                         m1.mv_angle(angle)
-
-                
-                    
 
                 record.append(m1.get_status())
                 camera_record.append(tar_x1,tar_x2,angle,type_area)
