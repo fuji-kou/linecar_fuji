@@ -3,8 +3,9 @@ import math
 import csv
 import socket
 import cv2
+import time
 from camera_settings import camera
-from time import sleep
+
 import linecar_settings as sets
 from models.LineCar import LineCar
 from controllers.FujitaControl import FujitaControl
@@ -12,9 +13,9 @@ from controllers.FujitaControl import FujitaControl
 #カメラキャプチャ
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
 
-TMP_FOLDER_PATH = ".cali/tmp/"
-MTX_PATH = TMP_FOLDER_PATH + "mtx2.csv"
-DIST_PATH = TMP_FOLDER_PATH + "dist2.csv"
+TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
+MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
+DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
 
 #FPS,解像度の設定
 cap.set(cv2.CAP_PROP_FPS, 30)
@@ -45,9 +46,6 @@ def camera_measurement():
             
         tar_x2 = int(target["center2"][0])
         tar_y2 = int(target["center2"][1])
-        cv2.line(resultImg,(400,0),(400,720),(0,255,0),3)
-        cv2.line(resultImg,(640,0),(640,720),(0,200,0),3)
-        cv2.line(resultImg,(880,0),(880,720),(0,200,0),3)   
 
         #フレームに面積最大ブロブの中心周囲を円で描く
         cv2.circle(resultImg, (tar_x1, tar_y1), 30, (0, 255, 0),
@@ -57,8 +55,8 @@ def camera_measurement():
             pass
             
         else:
-            cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
-                    thickness=3, lineType=cv2.LINE_AA)  
+             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
+                     thickness=3, lineType=cv2.LINE_AA)  
 
 
         #２つの計測対象の面積をリストに格納
@@ -79,28 +77,23 @@ def camera_measurement():
         # print(difference_left , difference_right)
 
     #表示
-    cv2.imshow('Frame', resultImg)
-    return distance_left , distance_right , tar_x1 , tar_x2 , difference_left , difference_right
+    #cv2.imshow('Frame', resultImg)
+    return distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right
 
 
 def main():
     record = []
+    position_record = [sets.POSITION_START[0], sets.POSITION_START[1], sets.POSITION_END[0], sets.POSITION_END[1]]
+    camera_record = []
     count = 0
     fix_or_float = 1
     # ソケット作成
     sock_left = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
     sock_right = socket.socket(socket.AF_INET, socket.SOCK_STREAM)    
     # IPアドレスとポートを指定
-    #ファーウェイタブ（ラズパイとの通信）
-    #sock.bind(('192.168.43.198', 50007))
-    #ファーウェイタブ（ラズパイとの通信)DELL
     sock_left.bind(('192.168.43.198', 50006))
-    sock_right.bind(('192.168.43.198', 50007))    
-    #linecar用モバイルルータ
-    #sock_left.connect(('192.168.179.2', 50008))
-    #sock_right.connect(('192.168.179.2', 50009))
-    #sock_left.bind(('0.0.0.0', 50008))
-    #sock_right.bind(('0.0.0.0', 50009))
+    sock_right.bind(('192.168.43.198', 50007))
+
     # 接続(最大2)
     sock_left.listen(2)
     sock_right.listen(2)
@@ -128,7 +121,8 @@ def main():
                 conn_left.sendall(b'start!!')
                 conn_right.sendall(b'start!!')
                 count +=1
-
+                data_left = 0
+                data_right = 0
 
         #保存
         #writer.write(resultImg)
@@ -142,61 +136,149 @@ def main():
             try:  
                 m1.mv_wheel(sets.SPEED)
                 now_latlon = m1.get_current_position()
-                distance_left,distance_right,tar_x1,tar_x2,difference_left,difference_right = camera_measurement()
-                if now_latlon[3] == 2:
-                    m1.mv_wheel(0)
-                    m1.mv_angle(0)
-                    if fix_or_float == 1:
-                        conn_left.sendall(b'Stop1')
-                        conn_right.sendall(b'Stop2')
-                        fix_or_float = 2
-                    print(distance_left,distance_right)
-
-                    if distance_left >= 100 and 400 <= tar_x1 <= 640:
-                        conn_left.sendall(b'Go1')
-                    if distance_right >= 100 and 640 <= tar_x2 <= 880:
-                        conn_right.sendall(b'Go2')
-
-                    if distance_left < 100:
-                        conn_left.sendall(b'Stop1')
-                    if distance_right < 100:
-                        conn_right.sendall(b'Stop2')
-
-                    if distance_left >= 100 and tar_x1 < 400:
-                        conn_left.sendall(b'turn_left1')
-                    if distance_right >= 100 and tar_x2 < 640:
-                        conn_right.sendall(b'turn_left2')
-
-                    if distance_left >= 100 and tar_x1 > 640:
-                        conn_left.sendall(b'turn_right1')
-                    if distance_right >= 100 and tar_x2 > 880:
-                        conn_right.sendall(b'turn_right2')
-                    
-                    # if difference_left > difference_right:
-                    #     angle = math.atan(distance_left/((difference_left - difference_right)/2))
-                    #     m1.mv_angle(angle)
-                    # if difference_left == difference_right:
-                    #     m1.mv_angle(0)
-                    # if difference_left < difference_right:
-                    #     angle = math.atan(distance_right/((difference_right - difference_left)/2))
-                    #     m1.mv_angle(-angle)
-
-                else:
+                distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right = camera_measurement()
+                if now_latlon[3] == 1:
                     if fix_or_float == 2:
                         fix_or_float = 1
+                        
+                    
+                    else:
+                        if distance_left == None or distance_right == None:
+                            conn_left.sendall(b'Stop')
+                            conn_right.sendall(b'Stop')
+                        else:
+                            if distance_left >= 120 and tar_x1 == 375:
+                                conn_left.sendall(b'Go')
+                            if distance_right >= 120 and tar_x2 == 905:
+                                conn_right.sendall(b'Go')
+
+                            if distance_left < 120:
+                                conn_left.sendall(b'Stop')
+                            if distance_right < 120:
+                                conn_right.sendall(b'Stop')
+
+                            # left
+                            if distance_left >= 120 and tar_x1 < 250:
+                                conn_left.sendall(b'turn_left1')
+                            if distance_left >= 120 and 250 <= tar_x1 <= 375:
+                                conn_left.sendall(b'turn_left2')
+
+                            if distance_left >= 120 and tar_x1 > 500:
+                                conn_left.sendall(b'turn_right1')
+                            if distance_left >= 120 and 375 < tar_x1 <= 500:
+                                conn_left.sendall(b'turn_right2')
+                            
+                            # right
+                            if distance_right >= 120 and tar_x2 < 780:
+                                conn_right.sendall(b'turn_left1')
+                            if distance_right >= 120 and 780 < tar_x2 < 905:
+                                conn_right.sendall(b'turn_left2')
+                                        
+                            if distance_right >= 120 and tar_x2 > 1030:
+                                conn_right.sendall(b'turn_right1')
+                            if distance_right >= 120 and 905 <= tar_x2 < 1030:
+                                conn_right.sendall(b'turn_right2')
                     input_angle = m1.controller.get_input_angle(now_latlon)
                     m1.mv_angle(round(input_angle, 1))
 
+                if now_latlon[3] == 2:
+                    m1.mv_wheel(0)
+                    time.sleep(2)
+                    m1.mv_wheel(sets.SPEED)
+                    
+                    if fix_or_float == 1:
+                        conn_left.sendall(b'Stop')
+                        conn_right.sendall(b'Stop')
+                        fix_or_float = 2
+                    #print(distance_left,distance_right)
+                    else:
+                        if difference_left == None or difference_right == None:
+                            m1.mv_wheel(0)
+                            m1.mv_angle(0)
+                        else:
+                            if distance_left >= 120 and tar_x1 == 375:
+                                conn_left.sendall(b'Go')
+                            if distance_right >= 120 and tar_x2 == 905:
+                                conn_right.sendall(b'Go')
+
+                            if distance_left < 400:
+                                conn_left.sendall(b'Stop')
+                            if distance_right < 400:
+                                conn_right.sendall(b'Stop')
+
+                            # left
+                            if distance_left >= 400 and tar_x1 < 250:
+                                conn_left.sendall(b'turn_left1')
+                            if distance_left >= 400 and 250 <= tar_x1 <= 375:
+                                conn_left.sendall(b'turn_left2')
+
+                            if distance_left >= 400 and tar_x1 > 500:
+                                conn_left.sendall(b'turn_right1')
+                            if distance_left >= 400 and 375 < tar_x1 <= 500:
+                                conn_left.sendall(b'turn_right2')
+                                    
+                            # right
+                            if distance_right >= 400 and tar_x2 < 780:
+                                conn_right.sendall(b'turn_left1')
+                            if distance_right >= 400 and 780 < tar_x2 < 905:
+                                conn_right.sendall(b'turn_left2')
+                                                
+                            if distance_right >= 400 and tar_x2 > 1030:
+                                conn_right.sendall(b'turn_right1')
+                            if distance_right >= 400 and 905 <= tar_x2 < 1030:
+                                conn_right.sendall(b'turn_right2')
+
+                        
+                            if tar_x1 <= 640 and tar_x2 <= 640:
+                                ang
+                                le = (tar_x2 - tar_x1)/2 -640
+                                angle = angle*6400/(2*math.pi)
+                                angle = angle*0.0001
+                                type_area = "left_side"
+                                print(angle,"left_side")
+                            elif tar_x1 > 640 and tar_x2 > 640:
+                                angle = 640 - (tar_x2 - tar_x1)/2
+                                angle = angle*6400/(2*math.pi)
+                                angle = angle*0.0001
+                                type_area = "right_side"
+                                print(angle,"right_side")
+                            else:
+                                if difference_left > difference_right:
+                                    angle = math.atan(distance_left/((difference_left - difference_right)/2))
+
+                                    angle = angle*6400/(2*math.pi)
+                                    angle = angle*0.1
+                                    angle = -1*angle
+                                    type_area = "left"
+                                    print(angle,"left")
+                                if difference_left == difference_right:
+                                    angle = 0
+                                    type_area = "="
+                                    print(angle,"=")
+                                if difference_left < difference_right:
+                                    angle = math.atan(distance_right/((difference_right - difference_left)/2))
+
+                                    angle = angle*6400/(2*math.pi)
+                                    angle = angle*0.1
+                                    type_area = "right"
+                                    print(angle,"right")
+                        m1.mv_angle(angle)
+
+                
+                    
 
                 record.append(m1.get_status())
-                #floutのとき
-
-
+                camera_record.append(tar_x1,tar_x2,angle,type_area)
+                record = record + camera_record
 
                 if m1.controller.is_finished():
                     m1.mv_wheel(0)
                     break
             except KeyboardInterrupt:
+                with open('./output.csv', 'w') as csv_out:
+                    writer = csv.writer(csv_out, lineterminator='\n')
+                    writer.writerows([position_record])
+                    writer.writerows(record)
                 m1.stop()
 
     # 終了処理
@@ -206,6 +288,7 @@ def main():
 
     with open('./output.csv', 'w') as csv_out:
         writer = csv.writer(csv_out, lineterminator='\n')
+        writer.writerows([position_record])
         writer.writerows(record)
 
 
