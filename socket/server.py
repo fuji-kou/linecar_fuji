@@ -10,9 +10,9 @@ from camera_settings import camera
 #カメラキャプチャ
 cap = cv2.VideoCapture(0+cv2.CAP_DSHOW)
 
-TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
-MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
-DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
+TMP_FOLDER_PATH = ".../cali/tmp/"
+MTX_PATH = TMP_FOLDER_PATH + "mtx2.csv"
+DIST_PATH = TMP_FOLDER_PATH + "dist2.csv"
 
 #FPS,解像度の設定
 cap.set(cv2.CAP_PROP_FPS, 30)
@@ -88,7 +88,7 @@ def camera_measurement():
     #表示
     cv2.imshow('Frame', resultImg)
     #cv2.imshow("Mask", mask)
-    return distance_left , distance_right , tar_x1 , tar_x2
+    return distance_left, distance_right, tar_x1, tar_x2
 
 def main():    
     # データ格納用のリスト
@@ -131,9 +131,13 @@ def main():
                 count +=1
                 data_left = 0
                 data_right = 0
- 
-        distance_left,distance_right,tar_x1,tar_x2 = camera_measurement()
-        print(distance_left,distance_right)
+            #print(1)
+            #data = 10
+            #ループ抜けだし
+#            if data == 10:
+#                break
+        distance_left, distance_lright, tar_x1, tar_x2 = camera_measurement()
+        print(distance_left,distance_lright)
         #print(tar_x1,tar_x2)
         if distance_left == None or distance_right == None:
             conn_left.sendall(b'Stop')
@@ -212,7 +216,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
 

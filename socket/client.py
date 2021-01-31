@@ -63,19 +63,7 @@ while True:
         break
 
 
-
-
-
-
-
-
-
-
-
         #print(repr(data))
     #p1.start(sets.SPEED)
     # if data == (b'start!!!!'):
     #     print(b'Received: ' + data)
-
-
-

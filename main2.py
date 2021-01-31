@@ -60,6 +60,25 @@ def camera_measurement():
             cv2.circle(resultImg, (tar_x2, tar_y2), 30, (255, 0, 0),
                     thickness=3, lineType=cv2.LINE_AA)  
 
+<<<<<<< HEAD
+=======
+        #面積最大ブロブの中心座標を取得
+        #if tar_x1 <= tar_x2:
+        #    (area1, area2) = (target['area1'], target['area2'])       #赤の面積
+        #    (area1_x, area1_y) = (target['center1'][0], target['center1'][1])
+        #    (area2_x, area2_y) = (target['center2'][0], target['center2'][1])
+        #if tar_x1 > tar_x2:
+        #    (area1, area2) = (target['area2'], target['area1'])       #赤の面積
+        #    (area1_x, area1_y) = (target['center2'][0], target['center2'][1])
+        #    (area2_x, area2_y) = (target['center1'][0], target['center1'][1])
+        #if tar_x2 == None:
+        #    if tar_x1 <= 640:
+        #        area1 = target['area1']
+        #        (area1_x, area1_y) = (target['center1'][0], target['center1'][1])
+        #    if tar_x1 > 640:
+        #        area2 = target['area1']
+        #        (area2_x, area2_y) = (target['center1'][0], target['center1'][1])
+>>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
 
         #２つの計測対象の面積をリストに格納
         (area1, area2) = (target['area1'], target['area2'])       #赤の面積
@@ -80,7 +99,7 @@ def camera_measurement():
 
     #表示
     cv2.imshow('Frame', resultImg)
-    return distance_left , distance_right , tar_x1 , tar_x2 , difference_left , difference_right
+    return distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right
 
 
 def main():
@@ -142,7 +161,7 @@ def main():
             try:  
                 m1.mv_wheel(sets.SPEED)
                 now_latlon = m1.get_current_position()
-                distance_left,distance_right,tar_x1,tar_x2,difference_left,difference_right = camera_measurement()
+                distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right = camera_measurement()
                 if now_latlon[3] == 2:
                     m1.mv_wheel(0)
                     m1.mv_angle(0)
@@ -189,9 +208,6 @@ def main():
 
 
                 record.append(m1.get_status())
-                #floutのとき
-
-
 
                 if m1.controller.is_finished():
                     m1.mv_wheel(0)

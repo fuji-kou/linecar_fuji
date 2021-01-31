@@ -77,7 +77,10 @@ def camera_measurement():
 
 def main():
     record = []
+<<<<<<< HEAD
     type_area = "="
+=======
+>>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
     position_record = [sets.POSITION_START[0], sets.POSITION_START[1], sets.POSITION_END[0], sets.POSITION_END[1]]
     camera_record = []
     count = 0
@@ -106,6 +109,7 @@ def main():
                 if difference_left == None or difference_right == None:
                     m1.mv_wheel(0)
                     m1.mv_angle(0)
+<<<<<<< HEAD
                     
                 else:
                     if tar_x1 <= 640 and tar_x2 <= 640:
@@ -149,11 +153,53 @@ def main():
                     record.append(m1.get_status())
                     camera_record.append(tar_x1,tar_x2,angle,type_area)
                     record = record + camera_record
+=======
+                else:
+                    if tar_x1 <= 640 and tar_x2 <= 640:
+                        angle = (tar_x2 - tar_x1)/2 -640
+                        angle = angle*6400/(2*math.pi)
+                        angle = angle*0.0001
+                        type_area = "left_side"
+                        print(angle,"left_side")
+                    elif tar_x1 > 640 and tar_x2 > 640:
+                        angle = 640 - (tar_x2 - tar_x1)/2
+                        angle = angle*6400/(2*math.pi)
+                        angle = angle*0.0001
+                        type_area = "rught_side"
+                        print(angle,"right_side")
+                    else:
+                        if difference_left > difference_right:
+                            angle = difference_left - difference_right
+
+                            angle = angle*6400/(2*math.pi)
+                            angle = angle*0.001
+                            angle = -1*angle
+                            type_area = "left"
+                            print(angle,"left")
+                        if difference_left == difference_right:
+                            angle = 0
+                            type_area = "="
+                            print(angle,"=")
+                        if difference_left < difference_right:
+                            angle = difference_right - difference_left
+
+                            angle = angle*6400/(2*math.pi)
+                            angle = angle*0.001
+                            type_area = "right"
+                            print(angle,"right")
+                    m1.mv_angle(angle)
+                    record.append(m1.get_status())
+                    #camera_record.append(tar_x1,tar_x2,angle,type_area)
+                    #record = record + camera_record
+>>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
                     #floutのとき
                     if m1.controller.is_finished():
                         m1.mv_wheel(0)
                         break
+<<<<<<< HEAD
 
+=======
+>>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
             except KeyboardInterrupt:
                 with open('./output.csv', 'w') as csv_out:
                     writer = csv.writer(csv_out, lineterminator='\n')
