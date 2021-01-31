@@ -75,10 +75,28 @@ def camera_measurement():
         difference_left = center_x - tar_x1
         difference_right = tar_x2 - center_x
         # print(difference_left , difference_right)
-
     #表示
     #cv2.imshow('Frame', resultImg)
     return distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right
+
+def linecar_control_fix():
+    pass
+
+def linecar_control_float():
+    pass
+
+def left_control_fix():
+    pass
+
+def left_control_float():
+    pass
+
+def right_control_fix():
+    pass
+
+def right_control_float():
+    pass
+
 
 
 def main():
