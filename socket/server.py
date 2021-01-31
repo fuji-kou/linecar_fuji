@@ -175,10 +175,6 @@ def main():
             if distance_right >= 120 and 905 <= tar_x2 < 1030:
                 conn_right.sendall(b'turn_right2')
 
-
-
-
-
             #     if tar_x1 >= 250:
             #         conn_left.sendall(b'turn_right2')
             #         if tar_x1 >= 375:

@@ -107,34 +107,6 @@ while True:
     #     p1.start(sets.turn_SPEED)
 
 
-
     if data == 0:
         mv_angle(0)
         break
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

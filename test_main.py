@@ -30,12 +30,9 @@ def mv_angle(angle):
     Servo.ChangeDutyCycle(duty)     #デューティ比を変更
 
 mv_angle(0)
-<<<<<<< HEAD
 GPIO.output(sets.DIR, GPIO.HIGH)  
 p1.start(10)
-=======
 
->>>>>>> 1e09f96ca72aaea963c02883f59369dffeedba77
     
 def main():
     record = []
