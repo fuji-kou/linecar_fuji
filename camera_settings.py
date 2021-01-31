@@ -63,20 +63,13 @@ class camera():
             maxblob["area1"] = None   # 面積
             maxblob["center1"] = None
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
             maxblob["upper_left2"] = None# 左上座標
             maxblob["width2"] = None  # 幅
             maxblob["height2"] = None  # 高さ
             maxblob["area2"] = None   # 面積
             maxblob["center2"] = None
-<<<<<<< HEAD
 
-=======
             
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
         if len(data2) == 1:
             if (data2[-1][0]+data2[-1][2]/2) <= 640:
                 #red1
@@ -84,11 +77,7 @@ class camera():
                 maxblob["width1"] = data2[-1][2]  # 幅
                 maxblob["height1"] = data2[-1][3]  # 高さ
                 maxblob["area1"] = data2[-1][4]   # 面積
-<<<<<<< HEAD
                 maxblob["center1"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)  # 中心座標
-=======
-                maxblob["center1"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
 
                 #red2
                 maxblob["upper_left2"] = None# 左上座標
@@ -103,11 +92,7 @@ class camera():
                 maxblob["width2"] = data2[-1][2]  # 幅
                 maxblob["height2"] = data2[-1][3]  # 高さ
                 maxblob["area2"] = data2[-1][4]   # 面積
-<<<<<<< HEAD
                 maxblob["center2"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)  # 中心座標
-=======
-                maxblob["center2"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
 
                 #red2
                 maxblob["upper_left1"] = None# 左上座標
@@ -122,22 +107,14 @@ class camera():
                 maxblob["width1"] = data2[-1][2]  # 幅
                 maxblob["height1"] = data2[-1][3]  # 高さ
                 maxblob["area1"] = data2[-1][4]   # 面積
-<<<<<<< HEAD
                 maxblob["center1"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)  # 中心座標
-=======
-                maxblob["center1"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)  
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
 
                 #camera2
                 maxblob["upper_left2"] = (data2[-2][0], data2[-2][1]) # 左上座標
                 maxblob["width2"] = data2[-2][2]  # 幅
                 maxblob["height2"] = data2[-2][3]  # 高さ
                 maxblob["area2"] = data2[-2][4]   # 面積
-<<<<<<< HEAD
                 maxblob["center2"] = (data2[-2][0]+data2[-2][2]/2,data2[-2][1]+data2[-2][3]/2)  # 中心座標
-=======
-                maxblob["center2"] = (data2[-2][0]+data2[-2][2]/2,data2[-2][1]+data2[-2][3]/2)  
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
 
             if (data2[-1][0]+data2[-1][2]/2) > (data2[-2][0]+data2[-2][2]):
                 #camera1
@@ -145,22 +122,14 @@ class camera():
                 maxblob["width2"] = data2[-1][2]  # 幅
                 maxblob["height2"] = data2[-1][3]  # 高さ
                 maxblob["area2"] = data2[-1][4]   # 面積
-<<<<<<< HEAD
                 maxblob["center2"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)  # 中心座標
-=======
-                maxblob["center2"] = (data2[-1][0]+data2[-1][2]/2,data2[-1][1]+data2[-1][3]/2)  
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
 
                 #camera2
                 maxblob["upper_left1"] = (data2[-2][0], data2[-2][1]) # 左上座標
                 maxblob["width1"] = data2[-2][2]  # 幅
                 maxblob["height1"] = data2[-2][3]  # 高さ
                 maxblob["area1"] = data2[-2][4]   # 面積
-<<<<<<< HEAD
                 maxblob["center1"] = (data2[-2][0]+data2[-2][2]/2,data2[-2][1]+data2[-2][3]/2)  # 中心座標
-=======
-                maxblob["center1"] = (data2[-2][0]+data2[-2][2]/2,data2[-2][1]+data2[-2][3]/2)  
->>>>>>> 59e7ea7b7ebe247fb3426c53a58f4ba3e542dc57
         #     # print(maxblob)
             
         return maxblob
