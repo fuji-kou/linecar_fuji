@@ -21,8 +21,9 @@ def main():
     # データ格納用のリスト
     data = []
 
-    real_distance_list = []
-    distance = 65
+    real_distance_list1 = []
+    real_distance_list2 = []
+    distance = 50
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -48,10 +49,12 @@ def main():
             cv2.circle(resultImg, (tar_x, tar_y), 30, (0, 200, 0),
                     thickness=3, lineType=cv2.LINE_AA)
 
-            area = target['area']       #赤の面積
-            area = area/(1280*720)*100      #割合
-            area = round(159.55*area**(-0.525))
-            real_distance_list.append(area)
+            # area = target['area']       #赤の面積
+            # area = area/(1280*720)*100      #割合
+            # area = round(159.55*area**(-0.525))
+            # real_distance_list.append(area)
+            real_distance_list1.append(tar_x)
+            real_distance_list2.append(tar_y)
             
         # 結果表示
         cv2.imshow('Frame', resultImg)
@@ -62,11 +65,10 @@ def main():
             break
 
     #保存
-    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data_{distance}.csv", 'w') as f:
+    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data_{distance}_y.csv", 'w') as f:
         writer = csv.writer(f, lineterminator = '\n')
-        for i in range(len(real_distance_list)):
-            writer.writerows([[real_distance_list[i]]])
-
+        for i in range(len(real_distance_list1)):
+            writer.writerows([[real_distance_list1[i], real_distance_list2[i]]])
     cap.release()
     cv2.destroyAllWindows()
 
