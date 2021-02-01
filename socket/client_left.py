@@ -28,7 +28,7 @@ def mv_angle(angle):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # サーバを指定
 #同端末
-#sock.connect(('127.0.0.1', 50009))
+#sock.connect(('127.0.0.1', 50006))
 #ファーウェイタブ（ラズパイとの通信）DELL
 sock.connect(('192.168.43.198', 50006))
 
@@ -50,7 +50,7 @@ while True:
     #離れすぎたら前に出る
     if data == (b'Go'):
         print(data)
-        #mv_angle(0)
+        mv_angle(0)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.SPEED)
     #flout
@@ -77,11 +77,11 @@ while True:
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED) 
     #tar_x1 < 375
-    # if data == (b'turn_left3'):
-    #     print(data)
-    #     mv_angle(2)
-    #     GPIO.output(sets.DIR, GPIO.HIGH)
-    #     p1.start(sets.turn_SPEED) 
+    if data == (b'turn_left3'):
+        print(data)
+        mv_angle(2)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED) 
 
     #tar_x1 > 500
     if data == (b'turn_right1'):
@@ -95,11 +95,11 @@ while True:
         mv_angle(20)
         GPIO.output(sets.DIR, GPIO.HIGH)
         p1.start(sets.turn_SPEED)
-    # if data == (b'turn_right3'):
-    #     print(data)
-    #     mv_angle(-2)
-    #     GPIO.output(sets.DIR, GPIO.HIGH)
-    #     p1.start(sets.turn_SPEED)
+    if data == (b'turn_right3'):
+        print(data)
+        mv_angle(-2)
+        GPIO.output(sets.DIR, GPIO.HIGH)
+        p1.start(sets.turn_SPEED)
 
     if data == 0:
         mv_angle(0)
