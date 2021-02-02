@@ -23,7 +23,7 @@ def main():
 
     real_distance_list1 = []
     real_distance_list2 = []
-    distance = 50
+    distance = 400
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -66,7 +66,7 @@ def main():
             break
 
     #保存
-    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data_{distance}_y.csv", 'w') as f:
+    with open(f"C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\measurement\\data_{distance}_400.csv", 'w') as f:
         writer = csv.writer(f, lineterminator = '\n')
         for i in range(len(real_distance_list1)):
             writer.writerows([[real_distance_list1[i], real_distance_list2[i]]])
