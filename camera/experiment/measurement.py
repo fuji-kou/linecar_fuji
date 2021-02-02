@@ -44,7 +44,8 @@ def main():
             target = camera.analysis_blob(mask)
             #面積最大ブロブの中心座標を取得
             tar_x = int(target["center"][0])
-            tar_y = int(target["center"][1])            
+            tar_y = int(target["center"][1])
+            print(tar_x, tar_y)            
             #フレームに面積最大ブロブの中心周囲を円で描く
             cv2.circle(resultImg, (tar_x, tar_y), 30, (0, 200, 0),
                     thickness=3, lineType=cv2.LINE_AA)

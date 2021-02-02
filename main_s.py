@@ -87,6 +87,8 @@ def main():
 
                 if m1.controller.is_finished():
                     m1.mv_wheel(0)
+                    conn_left.sendall(b'Stop')
+                    conn_right.sendall(b'Stop')
                     break
 
             except KeyboardInterrupt:
