@@ -67,12 +67,12 @@ def main():
                 now_latlon = m1.get_current_position()
                 ret, frame = cap.read()
                 distance_left, distance_right, tar_x1, tar_x2, difference_left, difference_right = camera_measurement(ret, frame)
-                if now_latlon[3] == 1:
+                if now_latlon[2] == 1:
                     angle = m1.controller.get_input_angle(now_latlon)
                     order_left = order_left.order_fix(distance_left, tar_x1)
                     order_right = order_right.order_fix(distance_right, tar_x2)
                 
-                if now_latlon[3] == 2:
+                if now_latlon[2] == 2:
                     angle, type_area = order_linecar.order_float(tar_x1, tar_x2, difference_left, difference_right)
                     order_left = order_left.order_float(distance_left, tar_x1)
                     order_right = order_right.order_float(distance_right, tar_x2)
