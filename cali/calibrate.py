@@ -5,11 +5,11 @@ from time import sleep
 from datetime import datetime
 
 TMP_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\tmp"
-MTX_PATH = TMP_FOLDER_PATH + "\\mtx2.csv"
-DIST_PATH = TMP_FOLDER_PATH + "\\dist2.csv"
+MTX_PATH = TMP_FOLDER_PATH + "\\mtx3.csv"
+DIST_PATH = TMP_FOLDER_PATH + "\\dist3.csv"
 #print(MTX_PATH)
 #print(DIST_PATH)
-SAVE_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\result2"
+SAVE_FOLDER_PATH = "C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\result3"
 #print(SAVE_FOLDER_PATH)
 
 # メイン関数
@@ -20,7 +20,7 @@ def main():
 def calibrateImage():
     mtx, dist = loadCalibrationFile(MTX_PATH, DIST_PATH)
 
-    for fn in glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\calk2020_11_27\\*.jpg"):
+    for fn in glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\calk2020_0205\\*.jpg"):
         img = cv2.imread(fn,cv2.IMREAD_GRAYSCALE)
         resultImg = cv2.undistort(img, mtx, dist, None) # 内部パラメータを元に画像補正
         saveImgByTime(SAVE_FOLDER_PATH, resultImg)

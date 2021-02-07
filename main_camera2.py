@@ -3,7 +3,7 @@ import math
 import csv
 import socket
 import cv2
-from camera_settings import camera
+from camera.experiment.experiment_settings import camera
 
 import linecar_settings as sets
 from models.LineCar import LineCar
@@ -137,6 +137,7 @@ def main():
                             angle = -1*angle
                             type_area = "left"
                             print(angle,type_area)
+
 
                         if difference_left == difference_right:
                             angle = 0

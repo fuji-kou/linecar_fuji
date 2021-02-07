@@ -27,7 +27,7 @@ def calcCamera():
     obj_points = []
     img_points = []
     
-    files = glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\img\\*.jpg")
+    files = glob.glob("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\data\\img2\\*.jpg")
     for fn in files:
         # 画像の取得
         im = cv2.imread(fn,cv2.IMREAD_GRAYSCALE)
@@ -40,7 +40,7 @@ def calcCamera():
             corners2 = cv2.cornerSubPix(im, corner, (5,5), (-1,-1), term)
             # マークをつけて画像保存
             img = cv2.drawChessboardCorners(im, pattern_size, corners2, found)
-            saveImgByTime("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\calk2020_11_27\\", img)
+            saveImgByTime("C:\\Users\\admin.H120\\Documents\\git\\linecar_fuji\\cali\\calk2021_0205\\", img)
             sleep(1)
         # コーナーがない場合のエラー処理
         if not found:
